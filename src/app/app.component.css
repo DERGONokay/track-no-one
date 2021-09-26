@@ -1,0 +1,15 @@
+.container {
+    height: 100%;
+  }
+  
+  .sidenav {
+    padding: 5px;
+  }
+  
+  .sidenav-content {
+    height: 100%;
+  }
+  
+  .example-spacer {
+    flex: 1 1 auto;
+  }
