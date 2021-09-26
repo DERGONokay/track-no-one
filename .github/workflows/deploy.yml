@@ -11,8 +11,6 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
-      - name: Navigate to location
-        run: cd front
       - name: Install Dependencies
         run: npm install
       - name: Build
