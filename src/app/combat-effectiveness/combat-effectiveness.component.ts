@@ -8,6 +8,8 @@ import { OnlineStatus, OutfitService } from '../outfit.service';
 })
 export class CombatEffectivenessComponent implements OnInit {
 
+  loadingData = false
+
   playerName = ""
   outfitTag = ""
 
@@ -23,10 +25,10 @@ export class CombatEffectivenessComponent implements OnInit {
   }
 
   addOutfit() {
+    this.loadingData = true
     this.outfitService.findMembersByTag(this.outfitTag)
       .subscribe(
         (response) => {
-          debugger
           if(response.returned > 0) {
             let outfit = response.outfit_list[0]
             outfit.members.filter(c => c.online_status == OnlineStatus.ONLINE)
@@ -36,6 +38,11 @@ export class CombatEffectivenessComponent implements OnInit {
                 combatEffectiveness: 100
               }))
           }
+          this.loadingData = false
+        },
+
+        () => {
+          this.loadingData = false
         }
       )
     this.outfitTag = ""

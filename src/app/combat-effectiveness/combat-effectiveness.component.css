@@ -19,3 +19,9 @@
 .divider {
     padding: 1rem;
 }
+
+.spinner {
+    position: absolute;
+    top: 50%;
+    right: 50%;
+}
