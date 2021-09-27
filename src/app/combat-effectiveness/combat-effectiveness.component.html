@@ -1,1 +1,34 @@
-<p>combat-effectiveness works!</p>
+<h1 class="comef-title">Combat Effectiveness</h1>
+
+<mat-divider class="divider"></mat-divider>
+
+<mat-form-field class="inputs">
+    <mat-label>Player name</mat-label>
+    <input matInput type="text" [(ngModel)]="playerName">
+</mat-form-field>
+<button mat-icon-button (click)="addPlayer()">
+    <mat-icon>add</mat-icon>
+</button>
+
+<mat-form-field class="inputs">
+    <mat-label>Outfit tag</mat-label>
+    <input matInput type="text" [(ngModel)]="outfitTag">
+</mat-form-field>
+<button mat-icon-button (click)="addOutfit()">
+    <mat-icon>add</mat-icon>
+</button>
+
+<div class="tracking-list">
+    <mat-card>
+        <mat-card-title>Tracking</mat-card-title>
+        <mat-card-content>
+            <mat-selection-list #comefs [multiple]="false">
+                <mat-list-option *ngFor="let player of data" [value]="player">
+                    <label>
+                        [{{player.outfit.tag}}] {{player.name}} <a style="float: right;">{{player.combatEffectiveness}}</a>
+                    </label>
+                </mat-list-option>
+            </mat-selection-list>
+        </mat-card-content>
+    </mat-card>
+</div>
