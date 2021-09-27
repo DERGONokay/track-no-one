@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  censusHost: "https://census.daybreakgames.com/s:DERGON/get/ps2:v2"
 };
