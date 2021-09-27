@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import Swal from 'sweetalert2';
 import { OnlineStatus, OutfitService } from '../outfit.service';
 
 @Component({
@@ -21,6 +22,10 @@ export class CombatEffectivenessComponent implements OnInit {
   }
 
   addPlayer() {
+    Swal.fire({
+      title: "Feature not enabled yet!",
+      icon: "error"
+    })
     this.playerName = ""
   }
 
@@ -37,6 +42,11 @@ export class CombatEffectivenessComponent implements OnInit {
                 outfitTag: outfit.alias,
                 combatEffectiveness: 100
               }))
+          } else {
+            Swal.fire({
+              title: "Outfit not found",
+              icon: "warning"
+            })
           }
           this.loadingData = false
         },
