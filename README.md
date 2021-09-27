@@ -1,8 +1,8 @@
 # Track No one
 
-## Combat efficiency
+## Combat Effectiveness
 
-How we calculate a player's **combat efficiency**?
+How we calculate a player's **combat effectiveness**?
 
 ```
 Combat efficency = KILLER_STATS + OBJECTIVE_STATS + MEDIC_STATS + ENGI_STATS + SCOUT_STATS + LOGISTIC_STATS

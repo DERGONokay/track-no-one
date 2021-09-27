@@ -8,13 +8,16 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatCardModule } from '@angular/material/card';
 import { CombatEffectivenessComponent } from './combat-effectiveness/combat-effectiveness.component';
+import { UnderConstructionComponent } from './under-construction/under-construction.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    CombatEffectivenessComponent
+    CombatEffectivenessComponent,
+    UnderConstructionComponent
   ],
   imports: [
     BrowserModule,
@@ -23,7 +26,8 @@ import { CombatEffectivenessComponent } from './combat-effectiveness/combat-effe
     MatSidenavModule,
     MatButtonModule,
     MatIconModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]
