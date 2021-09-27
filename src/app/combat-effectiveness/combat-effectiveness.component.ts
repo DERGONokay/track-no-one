@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { OnlineStatus, OutfitService } from '../outfit.service';
 
 @Component({
   selector: 'app-combat-effectiveness',
@@ -10,42 +11,40 @@ export class CombatEffectivenessComponent implements OnInit {
   playerName = ""
   outfitTag = ""
 
-  data: Player[] = [
-    { name: "DERGON", outfit: { name: "Kneel no one", tag: "KN1"}, combatEffectiveness: 340 },
-    { name: "DERGON", outfit: { name: "Kneel no one", tag: "KN1"}, combatEffectiveness: 340 },
-    { name: "DERGON", outfit: { name: "Kneel no one", tag: "KN1"}, combatEffectiveness: 340 },
-    { name: "DERGON", outfit: { name: "Kneel no one", tag: "KN1"}, combatEffectiveness: 340 },
-    { name: "DERGON", outfit: { name: "Kneel no one", tag: "KN1"}, combatEffectiveness: 340 },
-    { name: "DERGON", outfit: { name: "Kneel no one", tag: "KN1"}, combatEffectiveness: 340 }
-  ]
+  data: Comef[] = []
 
-  constructor() { }
+  constructor(private outfitService: OutfitService) { }
 
   ngOnInit(): void {
   }
 
   addPlayer() {
-    this.data.push({name: this.playerName, outfit: { name: "Kneel no one", tag: "KN1"}, combatEffectiveness: 300})
     this.playerName = ""
   }
 
   addOutfit() {
-    this.data.push({name: "Player name", outfit: { name: this.outfitTag, tag: this.outfitTag}, combatEffectiveness: 300})
-    this.data.push({name: "Player name", outfit: { name: this.outfitTag, tag: this.outfitTag}, combatEffectiveness: 300})
-    this.data.push({name: "Player name", outfit: { name: this.outfitTag, tag: this.outfitTag}, combatEffectiveness: 300})
-    this.data.push({name: "Player name", outfit: { name: this.outfitTag, tag: this.outfitTag}, combatEffectiveness: 300})
+    this.outfitService.findMembersByTag(this.outfitTag)
+      .subscribe(
+        (response) => {
+          debugger
+          if(response.returned > 0) {
+            let outfit = response.outfit_list[0]
+            outfit.members.filter(c => c.online_status == OnlineStatus.ONLINE)
+              .forEach(m => this.data.push({
+                name: m.name.first,
+                outfitTag: outfit.alias,
+                combatEffectiveness: 100
+              }))
+          }
+        }
+      )
     this.outfitTag = ""
   }
 
 }
 
-interface Player {
+interface Comef {
   name: String
-  outfit: Outfit
+  outfitTag: String
   combatEffectiveness: number
-}
-
-interface Outfit {
-  name: String
-  tag: String
 }

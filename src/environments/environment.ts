@@ -3,7 +3,8 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  censusHost: "https://census.daybreakgames.com/s:DERGON/get/ps2:v2"
 };
 
 /*

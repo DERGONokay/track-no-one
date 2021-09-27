@@ -23,9 +23,9 @@
         <mat-card-title>Tracking</mat-card-title>
         <mat-card-content>
             <mat-selection-list #comefs [multiple]="false">
-                <mat-list-option *ngFor="let player of data" [value]="player">
+                <mat-list-option *ngFor="let character of data" [value]="character">
                     <label>
-                        [{{player.outfit.tag}}] {{player.name}} <a style="float: right;">{{player.combatEffectiveness}}</a>
+                        [{{character.outfitTag}}] {{character.name}} <a style="float: right;">{{character.combatEffectiveness}}</a>
                     </label>
                 </mat-list-option>
             </mat-selection-list>

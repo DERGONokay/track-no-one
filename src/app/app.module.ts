@@ -13,6 +13,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms'
+import { HttpClientModule } from '@angular/common/http';
 
 import { CombatEffectivenessComponent } from './combat-effectiveness/combat-effectiveness.component';
 import { UnderConstructionComponent } from './under-construction/under-construction.component';
@@ -36,7 +37,8 @@ import { UnderConstructionComponent } from './under-construction/under-construct
     MatListModule,
     MatInputModule,
     MatFormFieldModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
