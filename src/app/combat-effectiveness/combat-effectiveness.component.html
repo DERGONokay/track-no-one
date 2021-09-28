@@ -33,4 +33,14 @@
     </mat-card>
 </div>
 
+<mat-card style="height: 500px; overflow: scroll;">
+    <mat-card-title>Events</mat-card-title>
+    <mat-list *ngFor="let event of events">
+        <mat-list-item>
+            {{event.service}} - {{event.payload?.event_name}} - 
+            <a *ngIf="event.payload?.event_name=='GainExperience'"> Amount = {{event.payload?.amount}}</a>
+        </mat-list-item>
+    </mat-list>
+</mat-card>
+
 <mat-spinner *ngIf="loadingData" class="spinner"></mat-spinner>

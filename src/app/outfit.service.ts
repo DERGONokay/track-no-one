@@ -31,7 +31,7 @@ export interface Outfit {
 }
 
 export interface Character {
-  character_id: number
+  character_id: String
   online_status: OnlineStatus
   name: CharacterName
 }
