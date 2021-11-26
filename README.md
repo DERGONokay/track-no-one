@@ -5,7 +5,7 @@
 How we calculate a player's **combat effectiveness**?
 
 ```
-Combat efficency = KILLER_STATS + OBJECTIVE_STATS + MEDIC_STATS + ENGI_STATS + SCOUT_STATS + LOGISTIC_STATS
+Combat Effectiveness = KILLER_STATS + OBJECTIVE_STATS + MEDIC_STATS + ENGI_STATS + SCOUT_STATS + LOGISTIC_STATS
 ```
 
 `KDA = (K+A-TK/D) * 0.6`
@@ -31,7 +31,7 @@ Combat efficency = KILLER_STATS + OBJECTIVE_STATS + MEDIC_STATS + ENGI_STATS + S
   * D: Deaths
   * A: Assist
   * TK: Team kills
-* World activeness
+* Objective stats
   * FC: Facillities capture
   * FD: Facillities defended
   * CP: Capture points
