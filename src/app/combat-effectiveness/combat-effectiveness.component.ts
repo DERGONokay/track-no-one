@@ -63,7 +63,7 @@ export class CombatEffectivenessComponent implements OnInit {
         if(response.returned > 0) {
           const player = response.character_name_list[0]
 
-          if(this.data.find(p => p.id == player.character_id)) {
+          if(this.alreadyTracking(player.character_id)) {
             console.log("Already tracking " + player.name.first)
             return
           }
@@ -94,6 +94,10 @@ export class CombatEffectivenessComponent implements OnInit {
     this.playerName = ""
   }
 
+  private alreadyTracking(playerId: String): Boolean {
+    if(this.data.find(p => p.id == playerId)) { return true } else return false
+  }
+
   addOutfit() {
     this.loadingData = true
     this.outfitService.findMembersByTag(this.outfitTag)
@@ -103,13 +107,17 @@ export class CombatEffectivenessComponent implements OnInit {
             let outfit = response.outfit_list[0]
             outfit.members.filter(c => c.online_status == OnlineStatus.ONLINE)
               .forEach(m => {
-                console.log("Tracking " + m.name.first + ". ID = " + m.character_id)
-                this.data.push({
-                  id: m.character_id,
-                  name: m.name.first,
-                  outfitTag: outfit.alias,
-                  combatEffectiveness: 100
-                })
+                if(this.alreadyTracking(m.character_id)) {
+                  console.log("Already tracking " + m.name.first)
+                } else {
+                  console.log("Tracking " + m.name.first + ". ID = " + m.character_id)
+                  this.data.push({
+                    id: m.character_id,
+                    name: m.name.first,
+                    outfitTag: outfit.alias,
+                    combatEffectiveness: 100
+                  })
+                }
               })
               this.subject.next( {service:"event",action:"subscribe",characters:this.data.map(it => it.id),eventNames:[CensusEvent.KILL]})
           } else {
