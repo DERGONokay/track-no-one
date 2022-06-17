@@ -36,8 +36,9 @@
 <mat-card style="height: 500px; overflow: scroll;">
     <mat-card-title>Events</mat-card-title>
     <mat-list *ngFor="let event of events">
-        <mat-list-item>
-            {{event.service}} - {{event.payload?.event_name}} - 
+        <mat-list-item *ngIf="event.type == 'serviceMessage'">
+            {{ findPlayerNameById(event.payload?.attacker_character_id) }} killed {{ findPlayerNameById(event.payload?.character_id) }}
+            <a *ngIf="wasHeadshot(event.payload)"> with a HEADSHOT!</a>
             <a *ngIf="event.payload?.event_name=='GainExperience'"> Amount = {{event.payload?.amount}}</a>
         </mat-list-item>
     </mat-list>

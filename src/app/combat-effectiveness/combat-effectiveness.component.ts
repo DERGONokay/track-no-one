@@ -1,8 +1,11 @@
-import { Component, OnInit, OnDestroy} from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
 import { OnlineStatus, OutfitService } from '../outfit.service';
 import { webSocket, WebSocketSubject } from "rxjs/webSocket";
+import { Player, PlayerResponse, PlayerService } from '../player.service';
+import { waitForAsync } from '@angular/core/testing';
+import { throwToolbarMixedModesError } from '@angular/material/toolbar';
 
 @Component({
   selector: 'app-combat-effectiveness',
@@ -20,8 +23,12 @@ export class CombatEffectivenessComponent implements OnInit {
 
   data: Comef[] = []
   events: CensusMessage[] = []
+  players: Player[] = []
 
-  constructor(private outfitService: OutfitService) {
+  constructor(
+    private outfitService: OutfitService,
+    private playerService: PlayerService
+  ) {
     this.subject = webSocket(environment.wssHost)
     this.subject.subscribe(
       msg => {
@@ -48,10 +55,42 @@ export class CombatEffectivenessComponent implements OnInit {
   }
 
   addPlayer() {
-    Swal.fire({
-      title: "Feature not enabled yet!",
-      icon: "error"
-    })
+    this.loadingData = true
+
+    this.playerService.findPlayerByName(this.playerName).subscribe(
+      (response: PlayerResponse) => {
+        this.loadingData = false
+        if(response.returned > 0) {
+          const player = response.character_name_list[0]
+
+          if(this.data.find(p => p.id == player.character_id)) {
+            console.log("Already tracking " + player.name.first)
+            return
+          }
+          console.log("Tracking " + player.name.first + ". ID = " + player.character_id)
+
+          this.data.push({
+            id: player.character_id,
+            name: player.name.first,
+            outfitTag: "????",
+            combatEffectiveness: 100
+          })
+
+          this.subject.next( {
+            service:"event",
+            action:"subscribe",
+            characters: [player.character_id],
+            eventNames:[CensusEvent.KILL]
+          } )
+        } else {
+          Swal.fire({
+            title: "Player not found",
+            icon: "warning"
+          })
+        }
+      }
+    )
+
     this.playerName = ""
   }
 
@@ -64,6 +103,7 @@ export class CombatEffectivenessComponent implements OnInit {
             let outfit = response.outfit_list[0]
             outfit.members.filter(c => c.online_status == OnlineStatus.ONLINE)
               .forEach(m => {
+                console.log("Tracking " + m.name.first + ". ID = " + m.character_id)
                 this.data.push({
                   id: m.character_id,
                   name: m.name.first,
@@ -71,7 +111,7 @@ export class CombatEffectivenessComponent implements OnInit {
                   combatEffectiveness: 100
                 })
               })
-              this.subject.next( {service:"event",action:"subscribe",characters:this.data.map(it => it.id),eventNames:[CensusEvent.ALL]})
+              this.subject.next( {service:"event",action:"subscribe",characters:this.data.map(it => it.id),eventNames:[CensusEvent.KILL]})
           } else {
             Swal.fire({
               title: "Outfit not found",
@@ -88,6 +128,32 @@ export class CombatEffectivenessComponent implements OnInit {
     this.outfitTag = ""
   }
 
+  findPlayerNameById(playerId: String|undefined): String|undefined {
+    if (!playerId) {
+      return undefined
+    }
+
+    const playerName = this.players.find(p => p.character_id == playerId)?.name.first
+
+    if (!playerName) {
+      this.loadPlayer(playerId)
+    }
+
+    return playerName
+  }
+
+  private loadPlayer(playerId: String) {
+    this.playerService.findPlayerById(playerId).subscribe(
+      (response: PlayerResponse) => {
+        this.players.push(response.character_name_list[0])
+      }
+    )
+  }
+
+  wasHeadshot(eventPayload: CensusPayload): Boolean {
+    return eventPayload.is_headshot == "1"
+  }
+
 }
 
 interface Comef {
@@ -100,17 +166,21 @@ interface Comef {
 interface CensusMessage {
   service: String,
   event: String,
-  payload: CensusPayload
+  payload: CensusPayload,
+  type: String
 }
 
 interface CensusPayload {
+  attacker_character_id: String
+  character_id: String
   event_name: String
   amount: String
+  is_headshot: String
 }
 
 enum CensusEvent {
   ALL = "all",
-  KILL = "GainExperience_experience_id_1",
+  KILL = "Death",
   HEADSHOT_BONUS = "GainExperience_experience_id_37",
   RESS = "GainExperience_experience_id_293",
   SELF_HEAL = "GainExperience_experience_id_8",
