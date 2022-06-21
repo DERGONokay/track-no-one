@@ -23,9 +23,12 @@
         <mat-card-title>Tracking</mat-card-title>
         <mat-card-content>
             <mat-selection-list #comefs [multiple]="false">
-                <mat-list-option *ngFor="let character of data" [value]="character">
+                <mat-list-option *ngFor="let player of data" [value]="player">
                     <label>
-                        [{{character.outfitTag}}] {{character.name}} <a style="float: right;">{{character.combatEffectiveness}}</a>
+                        <button mat-icon-button (click)="removePlayer(player)">
+                            <mat-icon>highlight_off</mat-icon>
+                        </button>
+                        [{{player.outfitTag}}] {{player.name}} 
                     </label>
                 </mat-list-option>
             </mat-selection-list>
@@ -38,7 +41,7 @@
     <mat-list *ngFor="let event of events">
         <mat-list-item *ngIf="event.type == 'serviceMessage'">
             {{ findPlayerNameById(event.payload?.attacker_character_id) }} killed {{ findPlayerNameById(event.payload?.character_id) }}
-            <a *ngIf="wasHeadshot(event.payload)"> with a HEADSHOT!</a>
+            <a *ngIf="wasHeadshot(event.payload)">&nbsp;with a HEADSHOT!</a>
             <a *ngIf="event.payload?.event_name=='GainExperience'"> Amount = {{event.payload?.amount}}</a>
         </mat-list-item>
     </mat-list>

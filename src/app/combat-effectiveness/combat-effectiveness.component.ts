@@ -119,7 +119,7 @@ export class CombatEffectivenessComponent implements OnInit {
                   })
                 }
               })
-              this.subject.next( {service:"event",action:"subscribe",characters:this.data.map(it => it.id),eventNames:[CensusEvent.KILL]})
+              this.subject.next( {service:"event", action:"subscribe", characters:this.data.map(it => it.id), eventNames:[CensusEvent.KILL]})
           } else {
             Swal.fire({
               title: "Outfit not found",
@@ -160,6 +160,12 @@ export class CombatEffectivenessComponent implements OnInit {
 
   wasHeadshot(eventPayload: CensusPayload): Boolean {
     return eventPayload.is_headshot == "1"
+  }
+
+  removePlayer(player: Comef) {
+    console.log("Stopped tracking " + player.name)
+    this.data = this.data.filter(p => p.id != player.id)
+    this.subject.next( {service:"event", action:"clearSubscribe", characters: [player.id]} )
   }
 
 }
