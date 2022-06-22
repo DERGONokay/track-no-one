@@ -32,7 +32,7 @@ export class CombatEffectivenessComponent implements OnInit {
       msg => {
         let message = msg as CensusMessage
         console.log("Message received: " + message.service)
-        if(message.service == "event") {
+        if(message.service == "event" && message.type != "heartbeat") {
           this.events.unshift(message)
         }
       },
