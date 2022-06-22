@@ -8,28 +8,36 @@ import { environment } from 'src/environments/environment';
 })
 export class PlayerService {
 
-  findPlayerByName(playerName: String): Observable<PlayerResponse> {
-    return this.http.get<PlayerResponse>(`${environment.censusHost}/character_name/?name.first=${playerName}`)
-  }
-
   constructor(private http: HttpClient) { }
 
+  findPlayerByName(playerName: String): Observable<PlayerResponse> {
+    return this.http.get<PlayerResponse>(`${environment.censusHost}/character/?name.first=${playerName}&c:resolve=outfit`)
+  }
+
   findPlayerById(playerId: String): Observable<PlayerResponse> {
-    return this.http.get<PlayerResponse>(`${environment.censusHost}/character_name/?character_id=${playerId}`)
+    return this.http.get<PlayerResponse>(`${environment.censusHost}/character/?character_id=${playerId}&c:resolve=outfit`)
   }
 }
 
 export interface PlayerResponse {
-  character_name_list: Player[]
+  character_list: Player[]
   returned: Number
 }
 
 export interface Player {
   character_id: String,
-  name: PlayerName
+  name: PlayerName,
+  faction_id: String,
+  outfit?: Outfit
 }
 
 export interface PlayerName {
   first: String,
   first_lower: String
+}
+
+export interface Outfit {
+  outfit_id: String,
+  name: String,
+  alias: String
 }

@@ -24,10 +24,10 @@
         <mat-card-content>
             <mat-selection-list #comefs [multiple]="false">
                 <mat-list-option *ngFor="let player of data" [value]="player">
+                    <button mat-icon-button (click)="removePlayer(player)">
+                        <mat-icon>highlight_off</mat-icon>
+                    </button>
                     <label>
-                        <button mat-icon-button (click)="removePlayer(player)">
-                            <mat-icon>highlight_off</mat-icon>
-                        </button>
                         [{{player.outfitTag}}] {{player.name}} 
                     </label>
                 </mat-list-option>

@@ -32,7 +32,9 @@ export class CombatEffectivenessComponent implements OnInit {
       msg => {
         let message = msg as CensusMessage
         console.log("Message received: " + message.service)
-        this.events.unshift(message)
+        if(message.service == "event") {
+          this.events.unshift(message)
+        }
       },
 
       err => {
@@ -59,18 +61,19 @@ export class CombatEffectivenessComponent implements OnInit {
       (response: PlayerResponse) => {
         this.loadingData = false
         if(response.returned > 0) {
-          const player = response.character_name_list[0]
+          const player = response.character_list[0]
 
           if(this.alreadyTracking(player.character_id)) {
             console.log("Already tracking " + player.name.first)
             return
           }
+
           console.log("Tracking " + player.name.first + ". ID = " + player.character_id)
 
           this.data.push({
             id: player.character_id,
             name: player.name.first,
-            outfitTag: "????",
+            outfitTag: player.outfit?.alias || "UNKW",
             combatEffectiveness: 100
           })
 
@@ -139,21 +142,25 @@ export class CombatEffectivenessComponent implements OnInit {
       return undefined
     }
 
-    const playerName = this.players.find(p => p.character_id == playerId)?.name.first
-
-    if (!playerName) {
+    if (!this.playerExists(playerId) && !this.loadingData) {
       this.loadPlayer(playerId)
     }
 
-    return playerName
+    return this.players.find(p => p.character_id == playerId)?.name.first
   }
 
-  private loadPlayer(playerId: String) {
-    this.playerService.findPlayerById(playerId).subscribe(
-      (response: PlayerResponse) => {
-        this.players.push(response.character_name_list[0])
-      }
-    )
+  private playerExists(playerId: String) {
+    return this.players.find(p => p.character_id == playerId)
+  }
+
+  private async loadPlayer(playerId: String) {
+    this.loadingData = true
+    const response = await this.playerService.findPlayerById(playerId).toPromise()
+
+    if(response.returned > 0) {
+      this.players.push(response.character_list[0])
+    }
+    this.loadingData = false
   }
 
   wasHeadshot(eventPayload: CensusPayload): Boolean {
