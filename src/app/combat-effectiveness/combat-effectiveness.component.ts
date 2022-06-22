@@ -4,8 +4,6 @@ import Swal from 'sweetalert2';
 import { OnlineStatus, OutfitService } from '../outfit.service';
 import { webSocket, WebSocketSubject } from "rxjs/webSocket";
 import { Player, PlayerResponse, PlayerService } from '../player.service';
-import { waitForAsync } from '@angular/core/testing';
-import { throwToolbarMixedModesError } from '@angular/material/toolbar';
 
 @Component({
   selector: 'app-combat-effectiveness',

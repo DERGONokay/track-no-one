@@ -38,3 +38,15 @@ jobs:
           args: deploy --only hosting
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+  notify:
+    name: Notify Discord
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send noti to DERGON Discord
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DERGON_DISCORD_WEBHOOK }}
+          DISCORD_USERNAME: The DERGON Studios
+        uses: Ilshidur/action-discord@master
+        with:
+          args: "${{ github.event.head_commit.message }}"
