@@ -1,4 +1,10 @@
-<h1 class="comef-title">Combat Effectiveness</h1>
+<h1 class="comef-title">
+    Combat Effectiveness
+
+    <button mat-icon-button (click)="showCombatEffectivenessDialog()">
+        <mat-icon>help_outline</mat-icon>
+    </button>
+</h1>
 
 <mat-divider class="divider"></mat-divider>
 
@@ -28,7 +34,7 @@
                         <mat-icon>highlight_off</mat-icon>
                     </button>
                     <label>
-                        [{{player.outfitTag}}] {{player.name}} 
+                        [{{player.outfitTag}}] {{player.name}}
                     </label>
                 </mat-list-option>
             </mat-selection-list>

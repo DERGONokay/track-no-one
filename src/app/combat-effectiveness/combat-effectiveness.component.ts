@@ -173,6 +173,22 @@ export class CombatEffectivenessComponent implements OnInit {
     this.subject.next( {service:"event", action:"clearSubscribe", characters: [player.id]} )
   }
 
+  showCombatEffectivenessDialog() {
+    Swal.fire({
+      icon: "info",
+      title: "How is combat effectiveness calculated?",
+      html: "Combat effectiveness is the sum of different stats.<br>" +
+            "The current calculation uses: KILLER_STATS + OBJECTIVE_STATS + MEDIC_STATS + ENGI_STATS + SCOUT_STATS + LOGISTIC_STATS<br>" +
+            "Each one being:<br>" +
+            "KILLER_STATS = KDA * KPH<br>" +
+            "OBJECTIVE_STATS = FC * (FD*0.20) * CP<br>" +
+            "MEDIC_STATS = TR * ((TH + SH) * 0.1)<br>" +
+            "ENGI_STATS = SUP * REP/2<br>" +
+            "SCOUT_STATS = QS * MS<br>" +
+            "LOGISTIC_STATS = (SS + SQ*2) + TA + (BK + RK*4) * 20<br>"
+    })
+  }
+
 }
 
 interface Comef {
