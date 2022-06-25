@@ -34,7 +34,7 @@
                         <mat-icon>highlight_off</mat-icon>
                     </button>
                     <label>
-                        [{{player.outfitTag}}] {{player.name}}
+                        [{{player.outfitTag}}] {{player.name}} {{ player.combatEffectiveness | number: '1.2-2' }}
                     </label>
                 </mat-list-option>
             </mat-selection-list>
@@ -46,9 +46,11 @@
     <mat-card-title>Events</mat-card-title>
     <mat-list *ngFor="let event of events">
         <mat-list-item *ngIf="event.type == 'serviceMessage'">
-            {{ findPlayerNameById(event.payload?.attacker_character_id) }} killed {{ findPlayerNameById(event.payload?.character_id) }}
-            <a *ngIf="wasHeadshot(event.payload)">&nbsp;with a HEADSHOT!</a>
-            <a *ngIf="event.payload?.event_name=='GainExperience'"> Amount = {{event.payload?.amount}}</a>
+            <a *ngIf="event.payload?.event_name == 'Death'">
+                {{ findPlayerNameById(event.payload?.attacker_character_id) }} killed {{ findPlayerNameById(event.payload?.character_id) }}
+                <a *ngIf="wasHeadshot(event.payload)">&nbsp;with a HEADSHOT!</a>
+            </a>
+            <a *ngIf="event.payload?.event_name == 'GainExperience' && event.payload?.experience_id == '2'"> {{ findPlayerNameById(event.payload?.character_id) }} made an Assit!</a>
         </mat-list-item>
     </mat-list>
 </mat-card>

@@ -32,8 +32,20 @@ export class CombatEffectivenessComponent implements OnInit {
       msg => {
         let message = msg as CensusMessage
         console.log("Message received: " + message.service)
-        if(message.service == "event" && message.type != "heartbeat") {
+        if(message.service == "event" && message.type != "heartbeat" && message.type != "serviceStateChanged") {
+          this.preloadPlayers(message.payload)
           this.events.unshift(message)
+
+          if(message.payload.event_name == CensusEvent.DEATH) {
+            this.handleDeath(message);
+          } else if(message.payload.event_name == CensusEvent.ASSIST) {
+            const comef = this.data.find(p => p.id == message.payload.character_id);
+            if(comef) {
+              comef.assists += 1
+              this.updatePlayerComef(comef)
+            }
+          }
+
         }
       },
 
@@ -47,11 +59,51 @@ export class CombatEffectivenessComponent implements OnInit {
     )
   }
 
+  private handleDeath(message: CensusMessage) {
+    const event = message.payload;
+
+    const attacker = this.players.find(p => p.character_id == event.attacker_character_id);
+    const victim = this.players.find(p => p.character_id == event.character_id);
+    const comef = this.data.find(p => p.id == attacker?.character_id);
+
+    if (comef) { // If attacker is being tracked
+      //kill
+      if (attacker?.faction_id == victim?.faction_id) {
+        comef.teamKills += 1;
+      } else {
+        comef.kills += 1;
+      }
+      this.updatePlayerComef(comef);
+    } else {
+      const victimComef = this.data.find(p => p.id == victim?.character_id);
+      if (victimComef) {
+        victimComef.deaths += 1;
+        this.updatePlayerComef(victimComef);
+      }
+    }
+  }
+
   ngOnInit(): void {
   }
 
   ngOnDestroy() {
     this.subject.complete()
+  }
+
+  private preloadPlayers(event: CensusPayload) {
+    if (!this.playerExists(event.attacker_character_id)) {
+      this.loadPlayer(event.attacker_character_id);
+    }
+    if (!this.playerExists(event.character_id)) {
+      this.loadPlayer(event.character_id);
+    }
+  }
+
+  private updatePlayerComef(comef: Comef) {
+    const deaths = comef.deaths == 0 ? 1 : comef.deaths
+    const kda = ((comef.kills + comef.assists - comef.teamKills) / deaths) * 0.6
+    comef.combatEffectiveness = kda
+    console.log(comef.name + " new COMEF", comef)
   }
 
   addPlayer() {
@@ -74,15 +126,14 @@ export class CombatEffectivenessComponent implements OnInit {
             id: player.character_id,
             name: player.name.first,
             outfitTag: player.outfit?.alias || "UNKW",
-            combatEffectiveness: 100
+            combatEffectiveness: 0,
+            kills: 0,
+            deaths: 0,
+            assists: 0,
+            teamKills: 0
           })
 
-          this.subject.next( {
-            service:"event",
-            action:"subscribe",
-            characters: [player.character_id],
-            eventNames:[CensusEvent.KILL]
-          } )
+          this.startTracking(player);
         } else {
           Swal.fire({
             title: "Player not found",
@@ -93,6 +144,17 @@ export class CombatEffectivenessComponent implements OnInit {
     )
 
     this.playerName = ""
+  }
+
+  private startTracking(player: Player) {
+    this.players.push(player)
+
+    this.subject.next({
+      service: "event",
+      action: "subscribe",
+      characters: [player.character_id],
+      eventNames: [CensusEvent.DEATH, CensusEvent.ASSIST]
+    });
   }
 
   private alreadyTracking(playerId: String): Boolean {
@@ -116,11 +178,21 @@ export class CombatEffectivenessComponent implements OnInit {
                     id: m.character_id,
                     name: m.name.first,
                     outfitTag: outfit.alias,
-                    combatEffectiveness: 100
+                    combatEffectiveness: 0,
+                    kills: 0,
+                    deaths: 0,
+                    assists: 0,
+                    teamKills: 0
                   })
                 }
+                this.playerService.findPlayerById(m.character_id)
+                  .toPromise()
+                  .then(response => {
+                    if(response.returned > 0) {
+                      this.startTracking(response.character_list[0])
+                    }
+                  })
               })
-              this.subject.next( {service:"event", action:"subscribe", characters:this.data.map(it => it.id), eventNames:[CensusEvent.KILL]})
           } else {
             Swal.fire({
               title: "Outfit not found",
@@ -135,6 +207,15 @@ export class CombatEffectivenessComponent implements OnInit {
         }
       )
     this.outfitTag = ""
+  }
+
+  private refreshTracking() {
+    this.subject.next({ 
+      service: "event",
+      action: "subscribe",
+      characters: this.data.map(it => it.id),
+      eventNames: [CensusEvent.DEATH, CensusEvent.ASSIST] 
+    })
   }
 
   findPlayerNameById(playerId: String|undefined): String|undefined {
@@ -196,6 +277,10 @@ interface Comef {
   name: String
   outfitTag: String
   combatEffectiveness: number
+  kills: number
+  deaths: number
+  assists: number
+  teamKills: number
 }
 
 interface CensusMessage {
@@ -211,18 +296,18 @@ interface CensusPayload {
   event_name: String
   amount: String
   is_headshot: String
+  experience_id: String
 }
 
 enum CensusEvent {
   ALL = "all",
-  KILL = "Death",
+  DEATH = "Death",
+  ASSIST = "GainExperience_experience_id_2",
   HEADSHOT_BONUS = "GainExperience_experience_id_37",
   RESS = "GainExperience_experience_id_293",
   SELF_HEAL = "GainExperience_experience_id_8",
   RESUPPLY = "",
   REPAIR = "GainExperience_experience_id_9",
-  ASSIST = "",
-  TEAM_KILL = "",
   FACILITY_CAPTURE = "PlayerFacilityCapture",
   FACILITY_DEFEND = "PlayerFacilityDefend",
   FACILITY_CONTROL = "FacilityControl",
