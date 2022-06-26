@@ -15,12 +15,12 @@ export class CombatEffectivenessService {
     return this.playersCombatEffectivenessSubject.asObservable()
   }
 
-  set playersCombatEffectivesData(trackedPlayers: PlayerCombatEffectiveness[]) {
-    this.playersCombatEffectivenessSubject.next(trackedPlayers)
+  set playersCombatEffectivesData(playersCombatEffectiveness: PlayerCombatEffectiveness[]) {
+    this.playersCombatEffectivenessSubject.next(playersCombatEffectiveness)
   }
 
-  calculate(killerStats: KillerStats): number {
-    const normalizedDeaths = this.normalizeDeaths(killerStats.deaths)
+  calculateCombatEffectiveness(killerStats: KillerStats): number {
+    const normalizedDeaths = this.normalizeDeaths(killerStats.deaths) //to avoid divide by 0
     const kda = this.calculateKda(killerStats, normalizedDeaths)
     return kda
   }

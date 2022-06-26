@@ -73,7 +73,7 @@ export class CombatEffectivenessComponent implements OnInit, OnDestroy {
   }
 
   private updatePlayerComef(combatEffectiveness: PlayerCombatEffectiveness) {
-    combatEffectiveness.combatEffectiveness = this.combatEffectivenessService.calculate(combatEffectiveness.killerStats)
+    combatEffectiveness.combatEffectiveness = this.combatEffectivenessService.calculateCombatEffectiveness(combatEffectiveness.killerStats)
     this.combatEffectivenessService.playersCombatEffectivesData = this.trackedPlayers
   }
 
