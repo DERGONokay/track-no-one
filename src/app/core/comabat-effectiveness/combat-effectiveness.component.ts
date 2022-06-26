@@ -91,9 +91,9 @@ export class CombatEffectivenessComponent implements OnInit {
     this.loadingData = true
     this.playerName.disable()
 
-    this.playerRepository.findById(this.playerName.value)
+    this.playerRepository.findByName(this.playerName.value)
       .then(player => { this.startTracking(player) })
-      .catch(error => {
+      .catch(() => {
         Swal.fire({
           icon: "error",
           title: "Couldn't find " + this.playerName.value
