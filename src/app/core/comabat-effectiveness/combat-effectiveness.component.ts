@@ -47,9 +47,16 @@ export class CombatEffectivenessComponent implements OnInit {
         const victim = this.trackedPlayers.find(d => d.id == event.victimId);
 
         if (attacker) {
-          console.log(attacker.name + " achieved a kill")
-          attacker.kills += 1;
-          this.updatePlayerComef(attacker);
+          this.playerRepository.findById(event.victimId).then(killedPlayer => {
+            if(attacker.faction == killedPlayer.faction) {
+              console.log(attacker.name + " team killed " + killedPlayer.name)
+              attacker.teamKills += 1
+            } else {
+              console.log(attacker.name + " killed " + killedPlayer.name)
+              attacker.kills += 1;
+              this.updatePlayerComef(attacker);
+            }
+          })
         } else if (victim) {
           console.log(victim.name + " got killed")
           victim.deaths += 1;
@@ -65,7 +72,7 @@ export class CombatEffectivenessComponent implements OnInit {
         const player = this.trackedPlayers.find(d => d.id == event.playerId);
 
         if (player) {
-          console.log(player.name + "made an assist")
+          console.log(player.name + " made an assist")
           player.assists += 1;
           this.updatePlayerComef(player);
         }
@@ -123,6 +130,7 @@ export class CombatEffectivenessComponent implements OnInit {
     this.trackedPlayers.push({
       id: player.id,
       name: player.name,
+      faction: player.faction,
       outfitTag: player?.outfit?.tag,
       combatEffectiveness: 0.0,
       kills: 0,
