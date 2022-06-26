@@ -78,6 +78,8 @@ export class CombatEffectivenessComponent implements OnInit, OnDestroy {
   }
 
   addPlayer() {
+    if(this.loadingData) { return }
+
     this.loadingData = true
     this.playerName.disable()
 
@@ -98,6 +100,8 @@ export class CombatEffectivenessComponent implements OnInit, OnDestroy {
   }
 
   addOutfit() {
+    if(this.loadingData) { return }
+
     this.loadingData = true
     this.outfitTag.disable()
 
@@ -111,7 +115,7 @@ export class CombatEffectivenessComponent implements OnInit, OnDestroy {
       .catch(error => {
         Swal.fire({
           icon: error,
-          title: "Couldn't find outfit with tag " + this.outfitTag
+          title: "Couldn't find outfit with tag " + this.outfitTag.value
         })
       })
       .finally(() => {
@@ -144,9 +148,15 @@ export class CombatEffectivenessComponent implements OnInit, OnDestroy {
   }
 
   private startTracking(player: Player) {
-    this.trackingService.startTracking(player)
-    this.trackedPlayers.push(this.parseToPlayerCombatEffectiveness(player))
-    this.combatEffectivenessService.playersCombatEffectivesData = this.trackedPlayers
+    if(!this.isBeingTracked(player)) {
+      this.trackingService.startTracking(player)
+      this.trackedPlayers.push(this.parseToPlayerCombatEffectiveness(player))
+      this.combatEffectivenessService.playersCombatEffectivesData = this.trackedPlayers
+    }
+  }
+
+  private isBeingTracked(player: Player) {
+    return this.trackedPlayers.some(p => p.id == player.id);
   }
 
   private parseToPlayerCombatEffectiveness(player: Player): PlayerCombatEffectiveness {
