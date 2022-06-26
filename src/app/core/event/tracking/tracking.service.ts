@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { environment } from 'src/environments/environment';
+import { PlayerCombatEffectiveness } from '../../comabat-effectiveness/combat-effectiveness.model';
+import { Player } from '../../player/player.model';
 import { EventAdapterService } from '../event-adapter.service';
 import { CensusAction, CensusEvent, CensusService, MessageType } from './tracking.model';
 
@@ -29,22 +32,22 @@ export class TrackingService {
     this.subject.complete()
   }
 
-  startTracking(playerId: String) {
-    console.log("Start tracking player ID = " + playerId)
+  startTracking(player: Player) {
+    console.log("Start tracking player ID = " + player.id)
     this.subject.next({
       service: CensusService.EVENT,
       action: CensusAction.SUBSCRIBE,
-      characters: [playerId],
+      characters: [player.id],
       eventNames: [CensusEvent.DEATH, CensusEvent.ASSIST]
     })
   }
 
-  stopTracking(playerId: String) {
-    console.log("Stop tracking player ID = " + playerId)
+  stopTracking(player: Player) {
+    console.log("Stop tracking player ID = " + player.id)
     this.subject.next({
       service: CensusService.EVENT, 
       action: CensusAction.UNSUBSCRIBE, 
-      characters: [playerId]
+      characters: [player.id]
     })
   }
 

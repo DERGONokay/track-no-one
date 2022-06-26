@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnDestroy, OnInit} from '@angular/core';
 import Swal from 'sweetalert2';
 import { TrackingService } from '../event/tracking/tracking.service';
 import { EventService } from '../event/event.service';
@@ -7,13 +7,16 @@ import { OutfitRepository } from '../outfit/outfit.repository';
 import { Player } from '../player/player.model';
 import { PlayerCombatEffectiveness } from './combat-effectiveness.model';
 import { FormControl } from '@angular/forms';
+import { CombatEffectivenessService } from './combat-efectiveness.service';
+import { KillsHandlerService } from '../event/handler/kills-handler.service';
+import { AssistHandlerService } from '../event/handler/assist-handler.service';
 
 @Component({
   selector: 'app-combat-effectiveness',
   templateUrl: './combat-effectiveness.component.html',
   styleUrls: ['./combat-effectiveness.component.css']
 })
-export class CombatEffectivenessComponent implements OnInit {
+export class CombatEffectivenessComponent implements OnInit, OnDestroy {
 
   loadingData = false
 
@@ -26,65 +29,52 @@ export class CombatEffectivenessComponent implements OnInit {
     private outfitRepository: OutfitRepository,
     private playerRepository: PlayerRepository,
     private trackingService: TrackingService,
-    private eventService: EventService
+    private eventService: EventService,
+    private combatEffectivenessService: CombatEffectivenessService,
+    private killsHandler: KillsHandlerService,
+    private assistHandler: AssistHandlerService
   ) {
     this.trackingService.connect()
+    this.subscribeToPlayersCombatEffectiveness();
     this.subscribeToAssists();
     this.subscribeToKills();
   }
 
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void { }
+  
   ngOnDestroy() {
     this.trackingService.disconnect()
   }
 
+  private subscribeToPlayersCombatEffectiveness() {
+    this.combatEffectivenessService.playersCombatEffectivenessObservable.subscribe(
+      trackedPlayers => { this.trackedPlayers = trackedPlayers; }
+    );
+  }
+  
   private subscribeToKills() {
     this.eventService.killEventObservable.subscribe(
-      event => {
-        const attacker = this.trackedPlayers.find(d => d.id == event.attackerId);
-        const victim = this.trackedPlayers.find(d => d.id == event.victimId);
-
-        if (attacker) {
-          this.playerRepository.findById(event.victimId).then(killedPlayer => {
-            if(attacker.faction == killedPlayer.faction) {
-              console.log(attacker.name + " team killed " + killedPlayer.name)
-              attacker.killerStats.teamKills += 1
-            } else {
-              console.log(attacker.name + " killed " + killedPlayer.name)
-              attacker.killerStats.kills += 1;
-            }
-            this.updatePlayerComef(attacker);
-          })
-        } else if (victim) {
-          console.log(victim.name + " got killed")
-          victim.killerStats.deaths += 1;
-          this.updatePlayerComef(victim);
-        }
+      killEvent => {
+        this.killsHandler.handle(killEvent).then(
+          playerComef => { this.updatePlayerComef(playerComef) }
+        ).catch(err => console.error(err))
       }
     );
   }
 
   private subscribeToAssists() {
     this.eventService.assistEventObservable.subscribe(
-      event => {
-        const player = this.trackedPlayers.find(d => d.id == event.playerId);
-
-        if (player) {
-          console.log(player.name + " made an assist")
-          player.killerStats.assists += 1;
-          this.updatePlayerComef(player);
-        }
+      event => { 
+        this.assistHandler.handle(event).then(
+          playerComef => { this.updatePlayerComef(playerComef) }
+        ).catch((err) => { console.error(err)})
       }
     );
   }
 
   private updatePlayerComef(combatEffectiveness: PlayerCombatEffectiveness) {
-    const deaths = combatEffectiveness.killerStats.deaths == 0 ? 1 : combatEffectiveness.killerStats.deaths
-    const kda = ((combatEffectiveness.killerStats.kills + combatEffectiveness.killerStats.assists - combatEffectiveness.killerStats.teamKills) / deaths) * 0.6
-    combatEffectiveness.combatEffectiveness = kda
-    console.log(combatEffectiveness.name + " new COMEF", combatEffectiveness)
+    combatEffectiveness.combatEffectiveness = this.combatEffectivenessService.calculate(combatEffectiveness.killerStats)
+    this.combatEffectivenessService.playersComabatEffectivesData = this.trackedPlayers
   }
 
   addPlayer() {
@@ -131,26 +121,10 @@ export class CombatEffectivenessComponent implements OnInit {
       })
   }
 
-  private startTracking(player: Player) {
-    this.trackingService.startTracking(player.id)
-    this.trackedPlayers.push({
-      id: player.id,
-      name: player.name,
-      faction: player.faction,
-      outfitTag: player?.outfit?.tag,
-      combatEffectiveness: 0.0,
-      killerStats: {
-        kills: 0,
-        deaths: 0,
-        assists: 0,
-        teamKills: 0
-      }
-    })
-  }
-
   removePlayer(player: PlayerCombatEffectiveness) {
+    this.trackingService.stopTracking(player)
     this.trackedPlayers = this.trackedPlayers.filter(p => p.id != player.id)
-    this.trackingService.stopTracking(player.id)
+    this.combatEffectivenessService.playersComabatEffectivesData = this.trackedPlayers
   }
 
   showCombatEffectivenessDialog() {
@@ -167,6 +141,28 @@ export class CombatEffectivenessComponent implements OnInit {
             "SCOUT_STATS = QS * MS<br>" +
             "LOGISTIC_STATS = (SS + SQ*2) + TA + (BK + RK*4) * 20<br>"
     })
+  }
+
+  private startTracking(player: Player) {
+    this.trackingService.startTracking(player)
+    this.trackedPlayers.push(this.parseToPlayerCOmabtEffectiveness(player))
+    this.combatEffectivenessService.playersComabatEffectivesData = this.trackedPlayers
+  }
+
+  private parseToPlayerCOmabtEffectiveness(player: Player): PlayerCombatEffectiveness {
+    return {
+      id: player.id,
+      name: player.name,
+      faction: player.faction,
+      outfitTag: player?.outfit?.tag,
+      combatEffectiveness: 0.0,
+      killerStats: {
+        kills: 0,
+        deaths: 0,
+        assists: 0,
+        teamKills: 0
+      }
+    };
   }
 
 }
