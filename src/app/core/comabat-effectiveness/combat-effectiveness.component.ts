@@ -74,7 +74,7 @@ export class CombatEffectivenessComponent implements OnInit, OnDestroy {
 
   private updatePlayerComef(combatEffectiveness: PlayerCombatEffectiveness) {
     combatEffectiveness.combatEffectiveness = this.combatEffectivenessService.calculate(combatEffectiveness.killerStats)
-    this.combatEffectivenessService.playersComabatEffectivesData = this.trackedPlayers
+    this.combatEffectivenessService.playersCombatEffectivesData = this.trackedPlayers
   }
 
   addPlayer() {
@@ -124,7 +124,7 @@ export class CombatEffectivenessComponent implements OnInit, OnDestroy {
   removePlayer(player: PlayerCombatEffectiveness) {
     this.trackingService.stopTracking(player)
     this.trackedPlayers = this.trackedPlayers.filter(p => p.id != player.id)
-    this.combatEffectivenessService.playersComabatEffectivesData = this.trackedPlayers
+    this.combatEffectivenessService.playersCombatEffectivesData = this.trackedPlayers
   }
 
   showCombatEffectivenessDialog() {
@@ -145,11 +145,11 @@ export class CombatEffectivenessComponent implements OnInit, OnDestroy {
 
   private startTracking(player: Player) {
     this.trackingService.startTracking(player)
-    this.trackedPlayers.push(this.parseToPlayerCOmabtEffectiveness(player))
-    this.combatEffectivenessService.playersComabatEffectivesData = this.trackedPlayers
+    this.trackedPlayers.push(this.parseToPlayerCombatEffectiveness(player))
+    this.combatEffectivenessService.playersCombatEffectivesData = this.trackedPlayers
   }
 
-  private parseToPlayerCOmabtEffectiveness(player: Player): PlayerCombatEffectiveness {
+  private parseToPlayerCombatEffectiveness(player: Player): PlayerCombatEffectiveness {
     return {
       id: player.id,
       name: player.name,

@@ -15,7 +15,7 @@ export class CombatEffectivenessService {
     return this.playersCombatEffectivenessSubject.asObservable()
   }
 
-  set playersComabatEffectivesData(trackedPlayers: PlayerCombatEffectiveness[]) {
+  set playersCombatEffectivesData(trackedPlayers: PlayerCombatEffectiveness[]) {
     this.playersCombatEffectivenessSubject.next(trackedPlayers)
   }
 
