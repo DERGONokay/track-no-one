@@ -95,8 +95,8 @@ export class CombatEffectivenessComponent implements OnInit {
       .then(player => { this.startTracking(player) })
       .catch(error => {
         Swal.fire({
-          icon: error,
-          title: "Couldn't find " + this.playerName
+          icon: "error",
+          title: "Couldn't find " + this.playerName.value
         })
       })
       .finally(() => {
