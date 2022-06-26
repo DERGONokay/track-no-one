@@ -54,8 +54,8 @@ export class CombatEffectivenessComponent implements OnInit {
             } else {
               console.log(attacker.name + " killed " + killedPlayer.name)
               attacker.kills += 1;
-              this.updatePlayerComef(attacker);
             }
+            this.updatePlayerComef(attacker);
           })
         } else if (victim) {
           console.log(victim.name + " got killed")
