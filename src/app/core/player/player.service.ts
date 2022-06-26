@@ -11,7 +11,7 @@ export class PlayerService {
   constructor(private http: HttpClient) { }
 
   findPlayerByName(playerName: String): Observable<PlayersResponse> {
-    return this.http.get<PlayersResponse>(`${environment.censusHost}/character/?name.first=${playerName}&c:resolve=outfit`)
+    return this.http.get<PlayersResponse>(`${environment.censusHost}/character/?name.first_lower=${playerName.toLowerCase()}&c:resolve=outfit`)
   }
 
   findPlayerById(playerId: String): Observable<PlayersResponse> {

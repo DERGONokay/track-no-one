@@ -50,16 +50,16 @@ export class CombatEffectivenessComponent implements OnInit {
           this.playerRepository.findById(event.victimId).then(killedPlayer => {
             if(attacker.faction == killedPlayer.faction) {
               console.log(attacker.name + " team killed " + killedPlayer.name)
-              attacker.teamKills += 1
+              attacker.killerStats.teamKills += 1
             } else {
               console.log(attacker.name + " killed " + killedPlayer.name)
-              attacker.kills += 1;
+              attacker.killerStats.kills += 1;
             }
             this.updatePlayerComef(attacker);
           })
         } else if (victim) {
           console.log(victim.name + " got killed")
-          victim.deaths += 1;
+          victim.killerStats.deaths += 1;
           this.updatePlayerComef(victim);
         }
       }
@@ -73,7 +73,7 @@ export class CombatEffectivenessComponent implements OnInit {
 
         if (player) {
           console.log(player.name + " made an assist")
-          player.assists += 1;
+          player.killerStats.assists += 1;
           this.updatePlayerComef(player);
         }
       }
@@ -81,8 +81,8 @@ export class CombatEffectivenessComponent implements OnInit {
   }
 
   private updatePlayerComef(combatEffectiveness: PlayerCombatEffectiveness) {
-    const deaths = combatEffectiveness.deaths == 0 ? 1 : combatEffectiveness.deaths
-    const kda = ((combatEffectiveness.kills + combatEffectiveness.assists - combatEffectiveness.teamKills) / deaths) * 0.6
+    const deaths = combatEffectiveness.killerStats.deaths == 0 ? 1 : combatEffectiveness.killerStats.deaths
+    const kda = ((combatEffectiveness.killerStats.kills + combatEffectiveness.killerStats.assists - combatEffectiveness.killerStats.teamKills) / deaths) * 0.6
     combatEffectiveness.combatEffectiveness = kda
     console.log(combatEffectiveness.name + " new COMEF", combatEffectiveness)
   }
@@ -139,10 +139,12 @@ export class CombatEffectivenessComponent implements OnInit {
       faction: player.faction,
       outfitTag: player?.outfit?.tag,
       combatEffectiveness: 0.0,
-      kills: 0,
-      deaths: 0,
-      assists: 0,
-      teamKills: 0
+      killerStats: {
+        kills: 0,
+        deaths: 0,
+        assists: 0,
+        teamKills: 0
+      }
     })
   }
 

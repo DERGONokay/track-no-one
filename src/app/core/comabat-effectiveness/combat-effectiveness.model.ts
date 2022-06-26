@@ -6,6 +6,10 @@ export interface PlayerCombatEffectiveness {
     faction: Faction
     outfitTag?: String
     combatEffectiveness: number
+    killerStats: KillerStats
+  }
+
+  export interface KillerStats {
     kills: number
     deaths: number
     assists: number
