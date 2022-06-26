@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../environments/environment';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -17,23 +17,24 @@ export class OutfitService {
 }
 
 export interface OutfitResponse {
-  outfit_list: Outfit[]
+  outfit_list: OutfitRepresentation[]
   returned: number
 }
 
-export interface Outfit {
-  outfit_id: number
+export interface OutfitRepresentation {
+  outfit_id: String
   name: String
   name_lower: String
   alias: String
-  members: Character[]
+  members: CharacterRepresentation[]
   member_count: number
 }
 
-export interface Character {
+export interface CharacterRepresentation {
   character_id: String
   online_status: OnlineStatus
   name: CharacterName
+  faction_id: String
 }
 
 export interface CharacterName {

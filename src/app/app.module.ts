@@ -12,12 +12,12 @@ import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { FormsModule } from '@angular/forms'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { HttpClientModule } from '@angular/common/http';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-import { CombatEffectivenessComponent } from './combat-effectiveness/combat-effectiveness.component';
 import { UnderConstructionComponent } from './under-construction/under-construction.component';
+import { CombatEffectivenessComponent } from './core/comabat-effectiveness/combat-effectiveness.component';
 
 
 @NgModule({
@@ -40,7 +40,8 @@ import { UnderConstructionComponent } from './under-construction/under-construct
     MatFormFieldModule,
     FormsModule,
     HttpClientModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

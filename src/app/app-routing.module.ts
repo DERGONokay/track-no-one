@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CombatEffectivenessComponent } from './combat-effectiveness/combat-effectiveness.component';
+import { CombatEffectivenessComponent } from './core/comabat-effectiveness/combat-effectiveness.component';
 import { UnderConstructionComponent } from './under-construction/under-construction.component';
 
 const routes: Routes = [

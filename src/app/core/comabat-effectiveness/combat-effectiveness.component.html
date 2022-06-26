@@ -1,0 +1,47 @@
+<h1 class="comef-title">
+    Combat Effectiveness
+
+    <button mat-icon-button (click)="showCombatEffectivenessDialog()">
+        <mat-icon>help_outline</mat-icon>
+    </button>
+</h1>
+
+<mat-divider class="divider"></mat-divider>
+
+<mat-form-field class="inputs">
+    <mat-label>Player name</mat-label>
+    <input matInput type="text" [formControl]="playerName">
+</mat-form-field>
+<button mat-icon-button (click)="addPlayer()">
+    <mat-icon>add</mat-icon>
+</button>
+
+<mat-form-field class="inputs">
+    <mat-label>Outfit tag</mat-label>
+    <input matInput type="text" [formControl]="outfitTag">
+</mat-form-field>
+<button mat-icon-button (click)="addOutfit()">
+    <mat-icon>add</mat-icon>
+</button>
+
+<mat-spinner *ngIf="loadingData" class="spinner"></mat-spinner>
+
+<div class="tracking-list">
+    <mat-card>
+        <mat-card-title>Tracking</mat-card-title>
+        <mat-card-content>
+            <mat-selection-list #comefs [multiple]="false">
+                <mat-list-option *ngFor="let player of trackedPlayers" [value]="player">
+                    <div style="display: inline-block;">
+                        <button mat-icon-button (click)="removePlayer(player)">
+                            <mat-icon>highlight_off</mat-icon>
+                        </button>
+                        <label>
+                            [{{player.outfitTag}}] {{player.name}}. KDA = {{ player.combatEffectiveness | number: '1.2-2' }}
+                        </label>
+                    </div>
+                </mat-list-option>
+            </mat-selection-list>
+        </mat-card-content>
+    </mat-card>
+</div>
