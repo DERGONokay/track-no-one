@@ -89,6 +89,7 @@ export class CombatEffectivenessComponent implements OnInit {
 
   addPlayer() {
     this.loadingData = true
+    this.playerName.disable()
 
     this.playerRepository.findById(this.playerName.value)
       .then(player => { this.startTracking(player) })
@@ -98,14 +99,17 @@ export class CombatEffectivenessComponent implements OnInit {
           title: "Couldn't find " + this.playerName
         })
       })
+      .finally(() => {
+        this.loadingData = false
+        this.playerName.reset()
+        this.playerName.enable()
+      })
 
-
-    this.loadingData = false
-    this.playerName.reset()
   }
 
   addOutfit() {
     this.loadingData = true
+    this.outfitTag.disable()
 
     this.outfitRepository.findByTag(this.outfitTag.value)
       .then(outfit => {
@@ -120,9 +124,11 @@ export class CombatEffectivenessComponent implements OnInit {
           title: "Couldn't find outfit with tag " + this.outfitTag
         })
       })
-
-    this.loadingData = false
-    this.outfitTag.reset()
+      .finally(() => {
+        this.loadingData = false
+        this.outfitTag.reset()
+        this.outfitTag.enable()
+      })
   }
 
   private startTracking(player: Player) {
