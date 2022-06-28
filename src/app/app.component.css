@@ -1,15 +1,20 @@
 .container {
     height: 100%;
-  }
-  
-  .sidenav {
+}
+
+.sidenav {
     padding: 5px;
-  }
-  
-  .sidenav-content {
+}
+
+.sidenav-content {
     height: 100%;
-  }
-  
-  .example-spacer {
+}
+
+.example-spacer {
     flex: 1 1 auto;
-  }
+}
+
+.nav-button {
+    width: 100%;
+    margin-top: 0.5rem;
+}

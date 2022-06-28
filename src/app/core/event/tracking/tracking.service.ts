@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { environment } from 'src/environments/environment';
-import { PlayerCombatEffectiveness } from '../../comabat-effectiveness/combat-effectiveness.model';
 import { Player } from '../../player/player.model';
 import { EventAdapterService } from '../event-adapter.service';
 import { CensusAction, CensusEvent, CensusService, MessageType } from './tracking.model';

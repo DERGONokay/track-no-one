@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Faction, Outfit, Player } from './player.model';
-import { OutfitResponse, PlayerResponse, PlayerService, PlayersResponse } from './player.service';
+import { OutfitResponse, PlayerResponse, PlayerService } from './player.service';
 
 
 @Injectable({

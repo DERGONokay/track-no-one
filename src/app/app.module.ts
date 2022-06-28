@@ -15,16 +15,21 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { HttpClientModule } from '@angular/common/http';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTableModule } from '@angular/material/table';
+
 
 import { UnderConstructionComponent } from './under-construction/under-construction.component';
 import { CombatEffectivenessComponent } from './core/comabat-effectiveness/combat-effectiveness.component';
+import { ExperienceComponent } from './core/experience/experience.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     CombatEffectivenessComponent,
-    UnderConstructionComponent
+    UnderConstructionComponent,
+    ExperienceComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +46,9 @@ import { CombatEffectivenessComponent } from './core/comabat-effectiveness/comba
     FormsModule,
     HttpClientModule,
     MatProgressSpinnerModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatTableModule,
+    MatPaginatorModule
   ],
   providers: [],
   bootstrap: [AppComponent]

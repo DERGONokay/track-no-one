@@ -107,13 +107,14 @@ The following is an attempt to fill one of the biggest holes in Planetside 2 eve
 
 ### OBJECTIVE STATS Events
 
-- FACILITY_CAPTURE = 
-- FACILITY_DEFENSE = GainExperience_experience_id_20
+- FACILITY_CAPTURE = PlayerFacilityCapture
+- FACILITY_DEFENSE = PlayerFacilityDefend / GainExperience_experience_id_20
 - POINT_HOLD = GainExperience_experience_id_556
 - POINT_CAPTURE = GainExperience_experience_id_557
 
 ### ANTI-VEHICLE STATS Events
 
+- VEHICLE_DESTROY = VehicleDestroy
 - GROUND_TO_GROUND_DAMAGE = GainExperience_experience_id_1395
 - GROUND_TO_AIR_DAMAGE = GainExperience_experience_id_1647
 - AIR_TO_AIR_DAMAGE = 
