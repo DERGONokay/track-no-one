@@ -1,3 +1,10 @@
+<mat-toolbar color="primary">
+    <button mat-icon-button (click)="drawer.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span>Track No One</span>
+</mat-toolbar>
+
 <mat-drawer-container class="container" autosize>
     <mat-drawer #drawer class="sidenav" mode="side">
         <div>
@@ -14,15 +21,14 @@
 
     <div class="sidenav-content">
         <div>
-            <mat-toolbar color="primary">
-                <button mat-icon-button (click)="drawer.toggle()">
-          <mat-icon>menu</mat-icon>
-        </button>
-                <span>Track No One</span>
-            </mat-toolbar>
-        </div>
-        <div>
             <router-outlet></router-outlet>
         </div>
     </div>
 </mat-drawer-container>
+
+<mat-toolbar color="primary" class="footer">
+    <span style="font-size: small;">v0.1.0</span>
+    <span class="spacer"></span>
+    <span style="font-size: medium; float: right; margin-right: 0.5rem;">Copyright ® The DERGON Studios</span>
+    <img mat-img style="max-height: 50px;" src="../assets/img/tds.png">
+</mat-toolbar>
