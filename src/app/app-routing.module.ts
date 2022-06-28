@@ -7,7 +7,7 @@ import { UnderConstructionComponent } from './under-construction/under-construct
 const routes: Routes = [
   { path: "combat-effectiveness", component: CombatEffectivenessComponent },
   { path: "under-construction", component: UnderConstructionComponent },
-  { path: "experience", component: ExperienceComponent },
+  { path: "experience-events", component: ExperienceComponent },
   { path: "**", component: UnderConstructionComponent},
   { path: "", component: UnderConstructionComponent }
 ];
