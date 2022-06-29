@@ -10,21 +10,29 @@ export class AssistHandlerService {
 
   private trackedPlayers: PlayerCombatEffectiveness[] = []
 
-  constructor(combatEffectivenessService: CombatEffectivenessService) {
+  constructor(private combatEffectivenessService: CombatEffectivenessService) {
     combatEffectivenessService.playersCombatEffectivenessObservable.subscribe(
       playersComef => { this.trackedPlayers = playersComef }
     )
   }
 
-  async handle(event: AssistEvent): Promise<PlayerCombatEffectiveness> {
+  async handle(event: AssistEvent) {
     const player = this.trackedPlayers.find(d => d.id == event.playerId);
 
     if (player) {
       console.log(player.name + " made an assist")
       player.killerStats.assists += 1;
-      return player
-    } else {
-      throw new Error("Failed to handle Assist event. Player wiht ID = " + event.playerId + " was not being tracked")
+      this.updateCombatEffectiveness(player)
     }
+  }
+
+  private updateCombatEffectiveness(player: PlayerCombatEffectiveness) {
+    player.combatEffectiveness = this.combatEffectivenessService.calculateCombatEffectiveness(player.killerStats)
+    player.sessionLenghtInSeconds = this.calculateSessionLenght(player)
+    this.combatEffectivenessService.playersCombatEffectivesData = this.trackedPlayers
+  }
+
+  private calculateSessionLenght(playerComef: PlayerCombatEffectiveness): number {
+    return Math.floor((Date.now() - playerComef.sessionStart) / 1000);
   }
 }

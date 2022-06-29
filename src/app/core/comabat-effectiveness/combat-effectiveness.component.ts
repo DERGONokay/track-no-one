@@ -49,37 +49,19 @@ export class CombatEffectivenessComponent implements OnInit, OnDestroy {
   private subscribeToPlayersCombatEffectiveness() {
     this.combatEffectivenessService.playersCombatEffectivenessObservable.subscribe(
       trackedPlayers => { this.trackedPlayers = trackedPlayers; }
-    );
+    )
   }
   
   private subscribeToKills() {
     this.eventService.killEventObservable.subscribe(
-      killEvent => {
-        this.killsHandler.handle(killEvent).then(
-          playerComef => { this.updatePlayerComef(playerComef) }
-        ).catch(err => console.error(err))
-      }
-    );
+      killEvent => { this.killsHandler.handle(killEvent) }
+    )
   }
 
   private subscribeToAssists() {
     this.eventService.assistEventObservable.subscribe(
-      event => { 
-        this.assistHandler.handle(event).then(
-          playerComef => { this.updatePlayerComef(playerComef) }
-        ).catch((err) => { console.error(err)})
-      }
-    );
-  }
-
-  private updatePlayerComef(playerComef: PlayerCombatEffectiveness) {
-    playerComef.combatEffectiveness = this.combatEffectivenessService.calculateCombatEffectiveness(playerComef.killerStats)
-    playerComef.sessionLenghtInSeconds = this.calculateSessionLenght(playerComef)
-    this.combatEffectivenessService.playersCombatEffectivesData = this.trackedPlayers
-  }
-
-  private calculateSessionLenght(playerComef: PlayerCombatEffectiveness): number {
-    return Math.floor((Date.now() - playerComef.sessionStart) / 1000);
+      event => { this.assistHandler.handle(event) }
+    )
   }
 
   addPlayer() {

@@ -14,14 +14,14 @@ export class KillsHandlerService {
 
   constructor(
     private playerRepository: PlayerRepository,
-    combatEffectivenessService: CombatEffectivenessService
+    private combatEffectivenessService: CombatEffectivenessService
   ) {
     combatEffectivenessService.playersCombatEffectivenessObservable.subscribe(
       players => { this.trackedPlayers = players }
     )
   }
 
-  async handle(event: KillEvent): Promise<PlayerCombatEffectiveness> {
+  async handle(event: KillEvent) {
     const attacker = this.trackedPlayers.find(d => d.id == event.attackerId);
     const victim = this.trackedPlayers.find(d => d.id == event.victimId);
 
@@ -35,15 +35,21 @@ export class KillsHandlerService {
         console.log(attacker.name + " killed " + killedPlayer.name)
         attacker.killerStats.kills += 1;
       }
-
-      return attacker
+      this.updateCombatEffectiveness(attacker);
     } else if (victim) {
       console.log(victim.name + " got killed")
       victim.killerStats.deaths += 1;
-      return victim
-    } else {
-      throw new Error("Failed to handle Kill Event. Players with ID = " + event.attackerId + " and " + event.victimId + " are not being tracked")
+      this.updateCombatEffectiveness(victim)
     }
+  }
+  
+  private updateCombatEffectiveness(attacker: PlayerCombatEffectiveness) {
+    attacker.combatEffectiveness = this.combatEffectivenessService.calculateCombatEffectiveness(attacker.killerStats);
+    attacker.sessionLenghtInSeconds = this.calculateSessionLenght(attacker);
+    this.combatEffectivenessService.playersCombatEffectivesData = this.trackedPlayers;
+  }
 
+  private calculateSessionLenght(playerComef: PlayerCombatEffectiveness): number {
+    return Math.floor((Date.now() - playerComef.sessionStart) / 1000);
   }
 }
