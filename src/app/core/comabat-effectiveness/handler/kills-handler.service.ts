@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { CombatEffectivenessService } from '../../comabat-effectiveness/combat-efectiveness.service';
-import { PlayerCombatEffectiveness } from '../../comabat-effectiveness/combat-effectiveness.model';
+import { CombatEffectivenessService } from '../combat-efectiveness.service';
+import { PlayerCombatEffectiveness } from '../combat-effectiveness.model';
 import { PlayerRepository } from '../../player/player.repository';
-import { KillEvent } from '../event.model';
+import { KillEvent } from '../../event/event.model';
 
 @Injectable({
   providedIn: 'root'

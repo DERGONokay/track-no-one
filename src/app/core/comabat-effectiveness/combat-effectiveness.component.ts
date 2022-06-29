@@ -8,8 +8,8 @@ import { Player } from '../player/player.model';
 import { PlayerCombatEffectiveness } from './combat-effectiveness.model';
 import { FormControl } from '@angular/forms';
 import { CombatEffectivenessService } from './combat-efectiveness.service';
-import { KillsHandlerService } from '../event/handler/kills-handler.service';
-import { AssistHandlerService } from '../event/handler/assist-handler.service';
+import { KillsHandlerService } from './handler/kills-handler.service';
+import { AssistHandlerService } from './handler/assist-handler.service';
 
 @Component({
   selector: 'app-combat-effectiveness',
