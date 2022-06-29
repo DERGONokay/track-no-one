@@ -36,7 +36,12 @@ export class TrackingService {
       service: CensusService.EVENT,
       action: CensusAction.SUBSCRIBE,
       characters: [player.id],
-      eventNames: [CensusEvent.DEATH, CensusEvent.ASSIST]
+      eventNames: [
+        CensusEvent.DEATH, 
+        CensusEvent.ASSIST, 
+        CensusEvent.HIGH_THREAT_KILL_ASSIS, 
+        CensusEvent.EXTREME_THREAT_KILL_ASSIST
+      ]
     })
   }
 

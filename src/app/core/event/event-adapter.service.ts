@@ -14,7 +14,7 @@ export class EventAdapterService {
   adapt(message: CensusMessage) {
     const eventName = message.payload.event_name
 
-    if(eventName == CensusEvent.DEATH) {
+    if(this.isKill(eventName)) {
       this.adaptDeathEvent(message.payload)
     } else if(this.isAssist(message)) {
       this.adaptAssistEvent(message.payload)
@@ -23,9 +23,18 @@ export class EventAdapterService {
     }
   }
 
+  private isKill(eventName: String) {
+    return eventName == CensusEvent.DEATH;
+  }
+
   private isAssist(message: CensusMessage) {
-    return message.payload.event_name == CensusEvent.GAIN_EXPERIENCE 
-          && message.payload.experience_id == GainExperienceId.ASSIST
+    return message.payload.event_name == CensusEvent.GAIN_EXPERIENCE && this.isAssistExperienceId(message)
+  }
+
+  private isAssistExperienceId(message: CensusMessage) {
+    return message.payload.experience_id == GainExperienceId.ASSIST 
+        || message.payload.experience_id == GainExperienceId.HIGH_THREAT_KILL_ASSIS 
+        || message.payload.experience_id == GainExperienceId.EXTREME_THREAT_KILL_ASSIST
   }
 
   /**
