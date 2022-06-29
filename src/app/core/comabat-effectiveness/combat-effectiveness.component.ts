@@ -72,9 +72,14 @@ export class CombatEffectivenessComponent implements OnInit, OnDestroy {
     );
   }
 
-  private updatePlayerComef(combatEffectiveness: PlayerCombatEffectiveness) {
-    combatEffectiveness.combatEffectiveness = this.combatEffectivenessService.calculateCombatEffectiveness(combatEffectiveness.killerStats)
+  private updatePlayerComef(playerComef: PlayerCombatEffectiveness) {
+    playerComef.combatEffectiveness = this.combatEffectivenessService.calculateCombatEffectiveness(playerComef.killerStats)
+    playerComef.sessionLenghtInSeconds = this.calculateSessionLenght(playerComef)
     this.combatEffectivenessService.playersCombatEffectivesData = this.trackedPlayers
+  }
+
+  private calculateSessionLenght(playerComef: PlayerCombatEffectiveness): number {
+    return Math.floor((Date.now() - playerComef.sessionStart) / 1000);
   }
 
   addPlayer() {
@@ -166,6 +171,8 @@ export class CombatEffectivenessComponent implements OnInit, OnDestroy {
       faction: player.faction,
       outfitTag: player?.outfit?.tag,
       combatEffectiveness: 0.0,
+      sessionStart: Date.now(),
+      sessionLenghtInSeconds: 1,
       killerStats: {
         kills: 0,
         deaths: 0,

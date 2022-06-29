@@ -5,6 +5,8 @@ export interface PlayerCombatEffectiveness {
     name: String
     faction: Faction
     outfitTag?: String
+    sessionStart: number
+    sessionLenghtInSeconds: number
     combatEffectiveness: number
     killerStats: KillerStats
   }
