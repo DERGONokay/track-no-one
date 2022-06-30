@@ -15,3 +15,7 @@ export interface ReviveEvent {
 export interface HealEvent {
     playerId: String
 }
+
+export interface ShieldRepairEvent {
+    playerId: String
+}

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { AssistEvent, HealEvent, KillEvent, ReviveEvent } from './event.model';
+import { AssistEvent, HealEvent, KillEvent, ReviveEvent, ShieldRepairEvent } from './event.model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +11,7 @@ export class EventService {
   private assistSubject: Subject<AssistEvent> = new Subject<AssistEvent>()
   private reviveSubject: Subject<ReviveEvent> = new Subject<ReviveEvent>()
   private healSubject: Subject<HealEvent> = new Subject<HealEvent>()
+  private shieldRepairSubject: Subject<ShieldRepairEvent> = new Subject<ShieldRepairEvent>()
 
   constructor() { }
 
@@ -26,4 +27,6 @@ export class EventService {
   get healEvents() { return this.healSubject.asObservable() }
   set healEventData(event: HealEvent) { this.healSubject.next(event) } 
 
+  get shieldRepairEvents() { return this.shieldRepairSubject.asObservable() }
+  set shieldRepairData(event: ShieldRepairEvent) { this.shieldRepairSubject.next(event) } 
 }

@@ -41,7 +41,8 @@ export class TrackingService {
         CensusEvent.REVIVE, CensusEvent.SQUAD_REVIVE,
         CensusEvent.HIGH_THREAT_KILL_ASSIS, 
         CensusEvent.EXTREME_THREAT_KILL_ASSIST,
-        CensusEvent.HEAL, CensusEvent.SQUAD_HEAL, CensusEvent.HEAL_ASSIST
+        CensusEvent.HEAL, CensusEvent.SQUAD_HEAL, CensusEvent.HEAL_ASSIST,
+        CensusEvent.SHIELD_REPAIR, CensusEvent.SQUAD_SHIELD_REPAIR
       ]
     })
   }

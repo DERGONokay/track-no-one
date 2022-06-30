@@ -22,8 +22,20 @@ export class EventAdapterService {
       this.adaptReviveEvent(message.payload)
     } else if(this.isHealing(message)) {
       this.adaptHealingEvent(message.payload)
+    } else if(this.isShieldRepair(message)) {
+      this.adaptShieldRepair(message.payload)
     } else {
       console.log("Unknown event", message)
+    }
+  }
+
+  isShieldRepair(message: CensusMessage): Boolean {
+    return message.payload.event_name == CensusEvent.GAIN_EXPERIENCE
+        && this.shieldRepairIds.some(id => id == message.payload.experience_id)
+  }
+  adaptShieldRepair(payload: CensusPayload) {
+    this.eventService.shieldRepairData = {
+      playerId: payload.character_id
     }
   }
   
@@ -90,4 +102,5 @@ export class EventAdapterService {
   }
 
   private readonly healingIds = [GainExperienceId.HEAL, GainExperienceId.SQUAD_HEAL, GainExperienceId.HEAL_ASSIST]
+  private readonly shieldRepairIds = [GainExperienceId.SHIELD_REPAIR, GainExperienceId.SQUAD_SHIELD_REPAIR]
 }

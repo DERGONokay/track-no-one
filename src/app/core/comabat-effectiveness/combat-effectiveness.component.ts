@@ -12,6 +12,7 @@ import { KillsHandlerService } from './handler/kills-handler.service';
 import { AssistHandlerService } from './handler/assist-handler.service';
 import { ReviveHandlerService } from './handler/revive-handler.service';
 import { HealHandlerService } from './handler/heal-handler.service';
+import { ShieldRepairHandlerService } from './handler/shield-repair-handler.service';
 
 @Component({
   selector: 'app-combat-effectiveness',
@@ -36,14 +37,16 @@ export class CombatEffectivenessComponent implements OnInit, OnDestroy {
     private killsHandler: KillsHandlerService,
     private assistHandler: AssistHandlerService,
     private reviveHandler: ReviveHandlerService,
-    private healHandler: HealHandlerService
+    private healHandler: HealHandlerService,
+    private shieldRepairHandler: ShieldRepairHandlerService
   ) {
     this.trackingService.connect()
-    this.subscribeToPlayersCombatEffectiveness();
-    this.subscribeToAssists();
-    this.subscribeToKills();
-    this.subscribeToRevives();
-    this.subscribeToHeals();
+    this.subscribeToPlayersCombatEffectiveness()
+    this.subscribeToAssists()
+    this.subscribeToKills()
+    this.subscribeToRevives()
+    this.subscribeToHeals()
+    this.subscribeToShieldRepairs()
   }
 
   ngOnInit(): void { }
@@ -79,6 +82,12 @@ export class CombatEffectivenessComponent implements OnInit, OnDestroy {
   private subscribeToHeals() {
     this.eventService.healEvents.subscribe(
       event => { this.healHandler.handle(event) }
+    )
+  }
+
+  private subscribeToShieldRepairs() {
+    this.eventService.shieldRepairEvents.subscribe(
+      event => { this.shieldRepairHandler.handle(event) }
     )
   }
 
