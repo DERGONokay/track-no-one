@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CharacterRepresentation, OnlineStatus, OutfitRepresentation, OutfitService } from 'src/app/core/outfit/outfit.service';
+import { InfantryClass } from '../event/event.model';
 import { Faction, Outfit, Player } from '../player/player.model';
 
 @Injectable({
@@ -32,6 +33,7 @@ export class OutfitRepository {
     return {
       id: character.character_id,
       name: character.name.first,
+      currentClass: InfantryClass.UNKNOWN,
       faction: character.faction_id as Faction,
       outfit: {
         id: outfit.outfit_id,

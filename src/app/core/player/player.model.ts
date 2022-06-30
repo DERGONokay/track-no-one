@@ -1,14 +1,17 @@
+import { InfantryClass } from "../event/event.model"
+
 export interface Player {
-    id: String,
-    name: String,
-    faction: Faction,
+    id: String
+    name: String
+    faction: Faction
+    currentClass: InfantryClass
     outfit?: Outfit
 }
 
 export interface Outfit {
-  id: String,
-  name: String,
-  tag: String,
+  id: String
+  name: String
+  tag: String
   members?: Player[]
 }
 

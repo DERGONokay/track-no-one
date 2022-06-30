@@ -47,12 +47,12 @@ export class TrackingService {
     })
   }
 
-  stopTracking(player: Player) {
-    console.log("Stop tracking player ID = " + player.id)
+  stopTracking(playerId: String) {
+    console.log("Stop tracking player ID = " + playerId)
     this.subject.next({
       service: CensusService.EVENT, 
       action: CensusAction.UNSUBSCRIBE, 
-      characters: [player.id]
+      characters: [playerId]
     })
   }
 

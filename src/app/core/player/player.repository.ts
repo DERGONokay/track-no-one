@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { InfantryClass } from '../event/event.model';
 import { Faction, Outfit, Player } from './player.model';
 import { OutfitResponse, PlayerResponse, PlayerService } from './player.service';
 
@@ -53,6 +54,7 @@ export class PlayerRepository {
     return {
       id: character.character_id,
       name: character.name.first,
+      currentClass: character.profile.profile_type_description as InfantryClass,
       faction: character.faction_id as Faction,
       outfit: this.parseOutfit(character.outfit)
     }

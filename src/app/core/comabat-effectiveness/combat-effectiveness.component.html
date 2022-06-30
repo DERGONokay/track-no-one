@@ -34,8 +34,14 @@
                         <button mat-icon-button (click)="removePlayer(player)">
                             <mat-icon>highlight_off</mat-icon>
                         </button>
+                        <img class="class-logo" *ngIf="player.currentClass == 'Infiltrator'" src="../../../assets/ps2/infiltrator-logo.png">
+                        <img class="class-logo" *ngIf="player.currentClass == 'Light Assault'" src="../../../assets/ps2/la-logo.png">
+                        <img class="class-logo" *ngIf="player.currentClass == 'Combat Medic'" src="../../../assets/ps2/medic-logo.png">
+                        <img class="class-logo" *ngIf="player.currentClass == 'Engineer'" src="../../../assets/ps2/engi-logo.png">
+                        <img class="class-logo" *ngIf="player.currentClass == 'Heavy Assault'" src="../../../assets/ps2/heavy-logo.png">
+                        <img class="class-logo" *ngIf="player.currentClass == 'MAX'" src="../../../assets/ps2/max-logo.png">
                         <label>
-                            [{{player.outfitTag}}] {{player.name}}. Combat Effectiveness = {{ player.combatEffectiveness | number: '1.2-2' }}. {{ player.currentClass }}
+                            [{{player.outfitTag}}] {{player.name}}. Combat Effectiveness = {{ player.combatEffectiveness | number: '1.2-2' }}
                         </label>
                     </div>
                 </mat-list-option>

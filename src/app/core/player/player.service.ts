@@ -11,11 +11,11 @@ export class PlayerService {
   constructor(private http: HttpClient) { }
 
   findPlayerByName(playerName: String): Observable<PlayersResponse> {
-    return this.http.get<PlayersResponse>(`${environment.censusHost}/character/?name.first_lower=${playerName.toLowerCase()}&c:resolve=outfit`)
+    return this.http.get<PlayersResponse>(`${environment.censusHost}/character/?name.first_lower=${playerName.toLowerCase()}&c:resolve=outfit,profile`)
   }
 
   findPlayerById(playerId: String): Observable<PlayersResponse> {
-    return this.http.get<PlayersResponse>(`${environment.censusHost}/character/?character_id=${playerId}&c:resolve=outfit`)
+    return this.http.get<PlayersResponse>(`${environment.censusHost}/character/?character_id=${playerId}&c:resolve=outfit,profile`)
   }
 }
 
@@ -28,7 +28,9 @@ export interface PlayerResponse {
   character_id: String,
   name: PlayerResponseName,
   faction_id: String,
+  profile_id: String,
   outfit?: OutfitResponse
+  profile: ProfileResponse
 }
 
 export interface PlayerResponseName {
@@ -40,4 +42,8 @@ export interface OutfitResponse {
   outfit_id: String,
   name: String,
   alias: String
+}
+
+interface ProfileResponse {
+  profile_type_description: String
 }

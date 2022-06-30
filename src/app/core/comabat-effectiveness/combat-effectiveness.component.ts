@@ -140,7 +140,7 @@ export class CombatEffectivenessComponent implements OnInit, OnDestroy {
   }
 
   removePlayer(player: PlayerCombatEffectiveness) {
-    this.trackingService.stopTracking(player)
+    this.trackingService.stopTracking(player.id)
     this.trackedPlayers = this.trackedPlayers.filter(p => p.id != player.id)
     this.combatEffectivenessService.playersCombatEffectivesData = this.trackedPlayers
   }
@@ -179,6 +179,7 @@ export class CombatEffectivenessComponent implements OnInit, OnDestroy {
       name: player.name,
       faction: player.faction,
       outfitTag: player?.outfit?.tag,
+      currentClass: player.currentClass,
       combatEffectiveness: 0.0,
       sessionStart: Date.now(),
       sessionLenghtInSeconds: 1,
