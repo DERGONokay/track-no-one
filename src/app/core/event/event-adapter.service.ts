@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { InfantryClass } from './event.model';
 import { EventService } from './event.service';
 import { CensusEvent, CensusMessage, CensusPayload, GainExperienceId } from './tracking/tracking.model';
 
@@ -13,7 +14,6 @@ export class EventAdapterService {
 
   adapt(message: CensusMessage) {
     const eventName = message.payload.event_name
-
     if(this.isKill(eventName)) {
       this.adaptDeathEvent(message.payload)
     } else if(this.isAssist(message)) {
@@ -60,9 +60,41 @@ export class EventAdapterService {
    */
   private adaptDeathEvent(payload: CensusPayload) {
     this.eventService.killEventData = {
+      attackerClass: this.resolveClass(payload.attacker_loadout_id),
+      victimClass: this.resolveClass(payload.character_loadout_id),
       attackerId: payload.attacker_character_id,
       victimId: payload.character_id,
       wasHeadshot: payload.is_headshot == "0" ? false : true
+    }
+  }
+
+  private resolveClass(loadoutId: String): InfantryClass {
+    switch (loadoutId) {
+      case "1": return InfantryClass.INFILTRATOR;
+      case "8": return InfantryClass.INFILTRATOR;
+      case "15": return InfantryClass.INFILTRATOR;
+      case "28": return InfantryClass.INFILTRATOR;
+      case "3": return InfantryClass.LIGHT_ASSAULT;
+      case "10": return InfantryClass.LIGHT_ASSAULT;
+      case "17": return InfantryClass.LIGHT_ASSAULT;
+      case "29": return InfantryClass.LIGHT_ASSAULT;
+      case "4": return InfantryClass.MEDIC;
+      case "11": return InfantryClass.MEDIC;
+      case "18": return InfantryClass.MEDIC;
+      case "30": return InfantryClass.MEDIC;
+      case "5": return InfantryClass.ENGINEER;
+      case "12": return InfantryClass.ENGINEER;
+      case "19": return InfantryClass.ENGINEER;
+      case "31": return InfantryClass.ENGINEER;
+      case "6": return InfantryClass.HEAVY_ASSAULT;
+      case "13": return InfantryClass.HEAVY_ASSAULT;
+      case "20": return InfantryClass.HEAVY_ASSAULT;
+      case "32": return InfantryClass.HEAVY_ASSAULT;
+      case "7": return InfantryClass.MAX;
+      case "14": return InfantryClass.MAX;
+      case "21": return InfantryClass.MAX;
+      case "45": return InfantryClass.MAX;
+      default: return InfantryClass.UNKNOWN;
     }
   }
 

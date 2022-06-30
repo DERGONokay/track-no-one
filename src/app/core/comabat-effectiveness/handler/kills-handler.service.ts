@@ -27,17 +27,19 @@ export class KillsHandlerService {
 
     if (attacker) {
       const killedPlayer = await this.playerRepository.findById(event.victimId)
-
+      
       if(attacker.faction == killedPlayer.faction) {
-        console.log(attacker.name + " team killed " + killedPlayer.name)
+        console.log("Team Kill", attacker, victim)
         attacker.killerStats.teamKills += 1
       } else {
-        console.log(attacker.name + " killed " + killedPlayer.name)
+        console.log("Kill", attacker, victim)
         attacker.killerStats.kills += 1;
       }
+      attacker.currentClass = event.attackerClass
       this.updateCombatEffectiveness(attacker);
     } else if (victim) {
-      console.log(victim.name + " got killed")
+      console.log("DEATH", victim, attacker)
+      victim.currentClass = event.victimClass
       victim.killerStats.deaths += 1;
       this.updateCombatEffectiveness(victim)
     }

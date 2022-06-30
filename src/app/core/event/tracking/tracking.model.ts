@@ -8,6 +8,8 @@ export interface CensusMessage {
 export interface CensusPayload {
     attacker_character_id: String
     character_id: String
+    attacker_loadout_id: String
+    character_loadout_id: String
     event_name: String
     is_headshot: String
     experience_id: String

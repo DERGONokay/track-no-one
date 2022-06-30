@@ -1,9 +1,11 @@
+import { InfantryClass } from "../event/event.model"
 import { Faction } from "../player/player.model"
 
 export interface PlayerCombatEffectiveness {
     id: String
     name: String
     faction: Faction
+    currentClass?: InfantryClass
     outfitTag?: String
     sessionStart: number
     sessionLenghtInSeconds: number
