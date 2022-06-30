@@ -17,6 +17,8 @@ export enum CensusEvent {
     ALL = "All",
     DEATH = "Death",
     ASSIST = "GainExperience_experience_id_2",
+    REVIVE = "GainExperience_experience_id_7",
+    SQUAD_REVIVE = "GainExperience_experience_id_53",
     HIGH_THREAT_KILL_ASSIS = "GainExperience_experience_id_371",
     EXTREME_THREAT_KILL_ASSIST = "GainExperience_experience_id_372",
     GAIN_EXPERIENCE = "GainExperience"
@@ -24,6 +26,8 @@ export enum CensusEvent {
 
 export enum GainExperienceId {
     ASSIST = "2",
+    REVIVE = "7",
+    SQUAD_REVIVE = "53",
     HIGH_THREAT_KILL_ASSIS = "371",
     EXTREME_THREAT_KILL_ASSIST = "372"
 }

@@ -38,7 +38,9 @@ export class TrackingService {
       characters: [player.id],
       eventNames: [
         CensusEvent.DEATH, 
-        CensusEvent.ASSIST, 
+        CensusEvent.ASSIST,
+        CensusEvent.REVIVE,
+        CensusEvent.SQUAD_REVIVE,
         CensusEvent.HIGH_THREAT_KILL_ASSIS, 
         CensusEvent.EXTREME_THREAT_KILL_ASSIST
       ]

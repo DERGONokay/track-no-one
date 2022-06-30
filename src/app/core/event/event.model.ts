@@ -7,3 +7,7 @@ export interface KillEvent {
 export interface AssistEvent {
     playerId: String
 }
+
+export interface ReviveEvent {
+    playerId: String
+}

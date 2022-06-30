@@ -9,6 +9,7 @@ export interface PlayerCombatEffectiveness {
     sessionLenghtInSeconds: number
     combatEffectiveness: number
     killerStats: KillerStats
+    medicStats: MedicStats
   }
 
   export interface KillerStats {
@@ -16,4 +17,10 @@ export interface PlayerCombatEffectiveness {
     deaths: number
     assists: number
     teamKills: number
+  }
+
+  export interface MedicStats {
+    revives: number
+    heals: number
+    shielding: number
   }

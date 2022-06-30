@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { KillerStats, PlayerCombatEffectiveness } from './combat-effectiveness.model';
+import { KillerStats, MedicStats, PlayerCombatEffectiveness } from './combat-effectiveness.model';
 
 @Injectable({
   providedIn: 'root'
@@ -19,17 +19,20 @@ export class CombatEffectivenessService {
     this.playersCombatEffectivenessSubject.next(playersCombatEffectiveness)
   }
 
-  calculateCombatEffectiveness(killerStats: KillerStats): number {
-    const normalizedDeaths = this.normalizeDeaths(killerStats.deaths) //to avoid divide by 0
-    const kda = this.calculateKda(killerStats, normalizedDeaths)
-    return kda
+  calculateCombatEffectiveness(playerComef: PlayerCombatEffectiveness): number {
+    const killerStats = this.calculateKillerStats(playerComef.killerStats, playerComef.sessionLenghtInSeconds)
+    const medicStats = this.calculateMedicStats(playerComef)
+    return killerStats + medicStats
+  }
+  
+  private calculateKillerStats(killerStats: KillerStats, sessionLenghtInSeconds: number): number {
+    const kda = ((killerStats.kills + killerStats.assists - killerStats.teamKills) / Math.max(1, killerStats.deaths)) * 0.6
+    const kpm = (Math.max(1, killerStats.kills) / sessionLenghtInSeconds) * 60
+    return kda * kpm
   }
 
-  private calculateKda(killerStats: KillerStats, deaths: number) {
-    return ((killerStats.kills + killerStats.assists - killerStats.teamKills) / deaths) * 0.6;
+  private calculateMedicStats(playerComef: PlayerCombatEffectiveness) {
+    return playerComef.medicStats.revives * ((playerComef.medicStats.heals + playerComef.medicStats.shielding) * 0.1);
   }
 
-  private normalizeDeaths(deaths: number) {
-    return deaths == 0 ? 1 : deaths
-  }
 }

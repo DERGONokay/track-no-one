@@ -44,8 +44,8 @@ export class KillsHandlerService {
   }
   
   private updateCombatEffectiveness(attacker: PlayerCombatEffectiveness) {
-    attacker.combatEffectiveness = this.combatEffectivenessService.calculateCombatEffectiveness(attacker.killerStats);
     attacker.sessionLenghtInSeconds = this.calculateSessionLenght(attacker);
+    attacker.combatEffectiveness = this.combatEffectivenessService.calculateCombatEffectiveness(attacker);
     this.combatEffectivenessService.playersCombatEffectivesData = this.trackedPlayers;
   }
 

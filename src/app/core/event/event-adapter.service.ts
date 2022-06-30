@@ -18,6 +18,8 @@ export class EventAdapterService {
       this.adaptDeathEvent(message.payload)
     } else if(this.isAssist(message)) {
       this.adaptAssistEvent(message.payload)
+    } else if(this.isRevive(message)) {
+      this.adaptReviveEvent(message.payload)
     } else {
       console.log("Unknown event " + eventName)
     }
@@ -25,16 +27,6 @@ export class EventAdapterService {
 
   private isKill(eventName: String) {
     return eventName == CensusEvent.DEATH;
-  }
-
-  private isAssist(message: CensusMessage) {
-    return message.payload.event_name == CensusEvent.GAIN_EXPERIENCE && this.isAssistExperienceId(message)
-  }
-
-  private isAssistExperienceId(message: CensusMessage) {
-    return message.payload.experience_id == GainExperienceId.ASSIST 
-        || message.payload.experience_id == GainExperienceId.HIGH_THREAT_KILL_ASSIS 
-        || message.payload.experience_id == GainExperienceId.EXTREME_THREAT_KILL_ASSIST
   }
 
   /**
@@ -49,12 +41,37 @@ export class EventAdapterService {
     }
   }
 
+  private isAssist(message: CensusMessage) {
+    return message.payload.event_name == CensusEvent.GAIN_EXPERIENCE && this.isAssistExperienceId(message)
+  }
+  
+  private isAssistExperienceId(message: CensusMessage) {
+    return message.payload.experience_id == GainExperienceId.ASSIST 
+        || message.payload.experience_id == GainExperienceId.HIGH_THREAT_KILL_ASSIS 
+        || message.payload.experience_id == GainExperienceId.EXTREME_THREAT_KILL_ASSIST
+  }
+
   /**
    * Convers a GainExperience event into an AssistEvent
    * @param payload Census API event payload
    */
   private adaptAssistEvent(payload: CensusPayload) {
     this.eventService.assistEventData = {
+      playerId: payload.character_id
+    }
+  }
+
+  private isRevive(message: CensusMessage) {
+    return message.payload.event_name == CensusEvent.GAIN_EXPERIENCE && this.isReviveExperienceId(message)
+  }
+
+  private isReviveExperienceId(message: CensusMessage) {
+    return message.payload.experience_id == GainExperienceId.REVIVE 
+        || message.payload.experience_id == GainExperienceId.SQUAD_REVIVE 
+  }
+
+  private adaptReviveEvent(payload: CensusPayload) {
+    this.eventService.reviveEventsData = {
       playerId: payload.character_id
     }
   }

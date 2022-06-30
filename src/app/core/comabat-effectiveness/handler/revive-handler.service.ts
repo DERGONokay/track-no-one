@@ -1,27 +1,29 @@
 import { Injectable } from '@angular/core';
+import { ReviveEvent } from '../../event/event.model';
 import { CombatEffectivenessService } from '../combat-efectiveness.service';
 import { PlayerCombatEffectiveness } from '../combat-effectiveness.model';
-import { AssistEvent } from '../../event/event.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AssistHandlerService {
+export class ReviveHandlerService {
 
   private trackedPlayers: PlayerCombatEffectiveness[] = []
 
   constructor(private combatEffectivenessService: CombatEffectivenessService) {
     combatEffectivenessService.playersCombatEffectivenessObservable.subscribe(
-      playersComef => { this.trackedPlayers = playersComef }
+      playersComefs => {
+        this.trackedPlayers = playersComefs
+      }
     )
   }
 
-  async handle(event: AssistEvent) {
+  handle(event: ReviveEvent) {
     const player = this.trackedPlayers.find(d => d.id == event.playerId);
 
     if (player) {
-      console.log(player.name + " made an assist")
-      player.killerStats.assists += 1;
+      console.log(player.name + " revived a teammate")
+      player.medicStats.revives += 1;
       this.updateCombatEffectiveness(player)
     }
   }

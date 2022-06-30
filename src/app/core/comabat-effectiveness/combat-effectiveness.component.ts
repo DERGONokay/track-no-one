@@ -10,6 +10,7 @@ import { FormControl } from '@angular/forms';
 import { CombatEffectivenessService } from './combat-efectiveness.service';
 import { KillsHandlerService } from './handler/kills-handler.service';
 import { AssistHandlerService } from './handler/assist-handler.service';
+import { ReviveHandlerService } from './handler/revive-handler.service';
 
 @Component({
   selector: 'app-combat-effectiveness',
@@ -32,12 +33,14 @@ export class CombatEffectivenessComponent implements OnInit, OnDestroy {
     private eventService: EventService,
     private combatEffectivenessService: CombatEffectivenessService,
     private killsHandler: KillsHandlerService,
-    private assistHandler: AssistHandlerService
+    private assistHandler: AssistHandlerService,
+    private reviveHandler: ReviveHandlerService
   ) {
     this.trackingService.connect()
     this.subscribeToPlayersCombatEffectiveness();
     this.subscribeToAssists();
     this.subscribeToKills();
+    this.subscribeToRevives();
   }
 
   ngOnInit(): void { }
@@ -61,6 +64,13 @@ export class CombatEffectivenessComponent implements OnInit, OnDestroy {
   private subscribeToAssists() {
     this.eventService.assistEventObservable.subscribe(
       event => { this.assistHandler.handle(event) }
+    )
+  }
+
+  
+  private subscribeToRevives() {
+    this.eventService.reviveEvents.subscribe(
+      event => { this.reviveHandler.handle(event) }
     )
   }
 
@@ -160,6 +170,11 @@ export class CombatEffectivenessComponent implements OnInit, OnDestroy {
         deaths: 0,
         assists: 0,
         teamKills: 0
+      },
+      medicStats: {
+        revives: 0,
+        heals: 0,
+        shielding: 0
       }
     };
   }
