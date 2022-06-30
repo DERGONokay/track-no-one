@@ -11,6 +11,7 @@ export interface CensusPayload {
     event_name: String
     is_headshot: String
     experience_id: String
+    other_id: String
 }
 
 export enum CensusEvent {
@@ -19,6 +20,9 @@ export enum CensusEvent {
     ASSIST = "GainExperience_experience_id_2",
     REVIVE = "GainExperience_experience_id_7",
     SQUAD_REVIVE = "GainExperience_experience_id_53",
+    HEAL = "GainExperience_experience_id_4",
+    SQUAD_HEAL = "GainExperience_experience_id_51",
+    HEAL_ASSIST = "GainExperience_experience_id_34",
     HIGH_THREAT_KILL_ASSIS = "GainExperience_experience_id_371",
     EXTREME_THREAT_KILL_ASSIST = "GainExperience_experience_id_372",
     GAIN_EXPERIENCE = "GainExperience"
@@ -28,6 +32,9 @@ export enum GainExperienceId {
     ASSIST = "2",
     REVIVE = "7",
     SQUAD_REVIVE = "53",
+    HEAL = "4",
+    SQUAD_HEAL = "51",
+    HEAL_ASSIST = "34",
     HIGH_THREAT_KILL_ASSIS = "371",
     EXTREME_THREAT_KILL_ASSIST = "372"
 }

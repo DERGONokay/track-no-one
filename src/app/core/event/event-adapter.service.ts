@@ -20,8 +20,21 @@ export class EventAdapterService {
       this.adaptAssistEvent(message.payload)
     } else if(this.isRevive(message)) {
       this.adaptReviveEvent(message.payload)
+    } else if(this.isHealing(message)) {
+      this.adaptHealingEvent(message.payload)
     } else {
-      console.log("Unknown event " + eventName)
+      console.log("Unknown event", message)
+    }
+  }
+  
+  isHealing(message: CensusMessage): Boolean {
+    return message.payload.event_name == CensusEvent.GAIN_EXPERIENCE 
+        && this.healingIds.some(id => id == message.payload.experience_id)
+  }
+  
+  adaptHealingEvent(payload: CensusPayload) {
+    this.eventService.healEventData = {
+      playerId: payload.character_id
     }
   }
 
@@ -71,8 +84,10 @@ export class EventAdapterService {
   }
 
   private adaptReviveEvent(payload: CensusPayload) {
-    this.eventService.reviveEventsData = {
+    this.eventService.reviveEventData = {
       playerId: payload.character_id
     }
   }
+
+  private readonly healingIds = [GainExperienceId.HEAL, GainExperienceId.SQUAD_HEAL, GainExperienceId.HEAL_ASSIST]
 }

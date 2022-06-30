@@ -24,15 +24,17 @@ export class CombatEffectivenessService {
     const medicStats = this.calculateMedicStats(playerComef)
     return killerStats + medicStats
   }
-  
+
   private calculateKillerStats(killerStats: KillerStats, sessionLenghtInSeconds: number): number {
     const kda = ((killerStats.kills + killerStats.assists - killerStats.teamKills) / Math.max(1, killerStats.deaths)) * 0.6
     const kpm = (Math.max(1, killerStats.kills) / sessionLenghtInSeconds) * 60
     return kda * kpm
   }
 
-  private calculateMedicStats(playerComef: PlayerCombatEffectiveness) {
-    return playerComef.medicStats.revives * ((playerComef.medicStats.heals + playerComef.medicStats.shielding) * 0.1);
+  private calculateMedicStats(playerComef: PlayerCombatEffectiveness): number {
+    const revives = Math.max(1, playerComef.medicStats.revives)
+    const supporting =  Math.max(1, (playerComef.medicStats.heals + playerComef.medicStats.shielding))
+    return revives * (supporting * 0.1);
   }
 
 }

@@ -11,6 +11,7 @@ import { CombatEffectivenessService } from './combat-efectiveness.service';
 import { KillsHandlerService } from './handler/kills-handler.service';
 import { AssistHandlerService } from './handler/assist-handler.service';
 import { ReviveHandlerService } from './handler/revive-handler.service';
+import { HealHandlerService } from './handler/heal-handler.service';
 
 @Component({
   selector: 'app-combat-effectiveness',
@@ -34,13 +35,15 @@ export class CombatEffectivenessComponent implements OnInit, OnDestroy {
     private combatEffectivenessService: CombatEffectivenessService,
     private killsHandler: KillsHandlerService,
     private assistHandler: AssistHandlerService,
-    private reviveHandler: ReviveHandlerService
+    private reviveHandler: ReviveHandlerService,
+    private healHandler: HealHandlerService
   ) {
     this.trackingService.connect()
     this.subscribeToPlayersCombatEffectiveness();
     this.subscribeToAssists();
     this.subscribeToKills();
     this.subscribeToRevives();
+    this.subscribeToHeals();
   }
 
   ngOnInit(): void { }
@@ -56,21 +59,26 @@ export class CombatEffectivenessComponent implements OnInit, OnDestroy {
   }
   
   private subscribeToKills() {
-    this.eventService.killEventObservable.subscribe(
+    this.eventService.killEvents.subscribe(
       killEvent => { this.killsHandler.handle(killEvent) }
     )
   }
 
   private subscribeToAssists() {
-    this.eventService.assistEventObservable.subscribe(
+    this.eventService.assistEvents.subscribe(
       event => { this.assistHandler.handle(event) }
     )
   }
 
-  
   private subscribeToRevives() {
     this.eventService.reviveEvents.subscribe(
       event => { this.reviveHandler.handle(event) }
+    )
+  }
+
+  private subscribeToHeals() {
+    this.eventService.healEvents.subscribe(
+      event => { this.healHandler.handle(event) }
     )
   }
 
