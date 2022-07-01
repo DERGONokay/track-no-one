@@ -20,8 +20,6 @@ export interface CensusPayload {
 }
 
 export enum CensusEvent {
-    ALL = "all",
-    GAIN_EXPERIENCE = "GainExperience",
     DEATH = "Death",
     ASSIST = "GainExperience_experience_id_2",
     EXTREME_THREAT_KILL_ASSIST = "GainExperience_experience_id_372",
@@ -36,7 +34,15 @@ export enum CensusEvent {
     FACILITY_CAPTURE = "PlayerFacilityCapture",
     FACILITY_DEFENSE = "PlayerFacilityDefend",
     POINT_DEFENSE = "GainExperience_experience_id_556",
-    POINT_CAPTURE = "GainExperience_experience_id_557"
+    POINT_CAPTURE = "GainExperience_experience_id_557",
+    SUNDERER_SPAWN = "GainExperience_experience_id_233",
+    GALAXY_SPAWN = "GainExperience_experience_id_201",
+    VALKYRIE_SPAWN = "GainExperience_experience_id_355",
+    LODESTAR_SPAWN = "GainExperience_experience_id_1543",
+    SQUAD_SPAWN = "GainExperience_experience_id_56",
+    TRANSPORT_ASSIST = "GainExperience_experience_id_30",
+    BEACON_KILL = "GainExperience_experience_id_270",
+    ROUTER_KILL = "GainExperience_experience_id_1409"
 }
 
 export enum GainExperienceId {
@@ -51,7 +57,15 @@ export enum GainExperienceId {
     SHIELD_REPAIR = "438",
     SQUAD_SHIELD_REPAIR = "439",
     POINT_DEFENSE = "556",
-    POINT_CAPTURE = "557"
+    POINT_CAPTURE = "557",
+    SUNDERER_SPAWN = "233",
+    GALAXY_SPAWN = "201",
+    VALKYRIE_SPAWN = "355",
+    LODESTAR_SPAWN = "1543",
+    SQUAD_SPAWN = "56",
+    TRANSPORT_ASSIST = "30",
+    BEACON_KILL = "270",
+    ROUTER_KILL = "1409"
 }
 
 export enum MessageType {

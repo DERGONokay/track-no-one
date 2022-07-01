@@ -34,7 +34,8 @@ export class EventAdapterService {
 
   emmitPointCapture(payload: CensusPayload) {
     this.objectiveEventsService.pointCaptureData = {
-      playerId: payload.character_id
+      playerId: payload.character_id,
+      type: "pointCapture"
     }
   }
 
@@ -44,7 +45,8 @@ export class EventAdapterService {
 
   emmitPointDefense(payload: CensusPayload) {
     this.objectiveEventsService.pointDefenseData = {
-      playerId: payload.character_id
+      playerId: payload.character_id,
+      type: "pointDefense"
     }
   }
 
@@ -57,7 +59,8 @@ export class EventAdapterService {
       playerId: payload.character_id,
       facilityId: payload.facility_id,
       continentId: payload.world_id,
-      hexId: payload.zone_id
+      hexId: payload.zone_id,
+      type: "facilityDefense"
     }
   }
 
@@ -70,29 +73,30 @@ export class EventAdapterService {
       playerId: payload.character_id,
       facilityId: payload.facility_id,
       continentId: payload.world_id,
-      hexId: payload.zone_id
+      hexId: payload.zone_id,
+      type: "facilityCapture"
     }
   }
 
   isShieldRepair(message: CensusMessage): Boolean {
-    return message.payload.event_name == CensusEvent.GAIN_EXPERIENCE
-        && this.shieldRepairIds.some(id => id == message.payload.experience_id)
+    return this.shieldRepairIds.some(id => id == message.payload.experience_id)
   }
 
   emmitShieldRepair(payload: CensusPayload) {
     this.eventService.shieldRepairData = {
-      playerId: payload.character_id
+      playerId: payload.character_id,
+      type: "shieldRepair"
     }
   }
   
   isHealing(message: CensusMessage): Boolean {
-    return message.payload.event_name == CensusEvent.GAIN_EXPERIENCE 
-        && this.healingIds.some(id => id == message.payload.experience_id)
+    return this.healingIds.some(id => id == message.payload.experience_id)
   }
   
   emmitHeal(payload: CensusPayload) {
     this.eventService.healEventData = {
-      playerId: payload.character_id
+      playerId: payload.character_id,
+      type: "heal"
     }
   }
 
@@ -106,7 +110,8 @@ export class EventAdapterService {
       victimClass: this.resolveClass(payload.character_loadout_id),
       attackerId: payload.attacker_character_id,
       victimId: payload.character_id,
-      wasHeadshot: payload.is_headshot == "0" ? false : true
+      wasHeadshot: payload.is_headshot == "0" ? false : true,
+      type: "kill"
     }
   }
 
@@ -141,31 +146,24 @@ export class EventAdapterService {
   }
 
   private isAssist(message: CensusMessage) {
-    return message.payload.event_name == CensusEvent.GAIN_EXPERIENCE && this.isAssistExperienceId(message)
-  }
-  
-  private isAssistExperienceId(message: CensusMessage) {
     return this.assistIds.some(assistId => assistId == message.payload.experience_id)
   }
 
   private emmitAssit(payload: CensusPayload) {
     this.eventService.assistEventData = {
-      playerId: payload.character_id
+      playerId: payload.character_id,
+      type: "assist"
     }
   }
 
   private isRevive(message: CensusMessage) {
-    return message.payload.event_name == CensusEvent.GAIN_EXPERIENCE && this.isReviveExperienceId(message)
-  }
-
-  private isReviveExperienceId(message: CensusMessage) {
-    return message.payload.experience_id == GainExperienceId.REVIVE 
-        || message.payload.experience_id == GainExperienceId.SQUAD_REVIVE 
+    return message.payload.experience_id == GainExperienceId.REVIVE || message.payload.experience_id == GainExperienceId.SQUAD_REVIVE 
   }
 
   private emmitRevive(payload: CensusPayload) {
     this.eventService.reviveEventData = {
-      playerId: payload.character_id
+      playerId: payload.character_id,
+      type: "revive"
     }
   }
 
