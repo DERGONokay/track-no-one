@@ -3,7 +3,7 @@ import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { environment } from 'src/environments/environment';
 import { Player } from '../../player/player.model';
 import { EventAdapterService } from '../event-adapter.service';
-import { CensusAction, CensusEvent, CensusService, MessageType } from './tracking.model';
+import { CensusAction, CensusEvent as CensusEvents, CensusService, MessageType } from './tracking.model';
 
 @Injectable({
   providedIn: 'root'
@@ -36,9 +36,7 @@ export class TrackingService {
       service: CensusService.EVENT,
       action: CensusAction.SUBSCRIBE,
       characters: [player.id],
-      eventNames: [
-        CensusEvent
-      ]
+      eventNames: [CensusEvents]
     })
   }
 
