@@ -69,7 +69,7 @@ export class EventAdapterService {
   }
 
   private isSquadSpawn(message: CensusMessage): Boolean {
-    return this.squadSpawnIds.some(id => id == message.payload.character_id)
+    return this.squadSpawnIds.some(id => id == message.payload.experience_id)
   }
 
   private emmitSquadSpawn(payload: CensusPayload) {
@@ -225,6 +225,7 @@ export class EventAdapterService {
   private emmitRevive(payload: CensusPayload) {
     this.eventService.reviveEventData = {
       playerId: payload.character_id,
+      revivedPlayerId: payload.other_id,
       type: "revive"
     }
   }

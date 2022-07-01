@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HealEvent, ReviveEvent, ShieldRepairEvent } from '../../event/event.model';
+import { HealEvent, InfantryClass, ReviveEvent, ShieldRepairEvent } from '../../event/event.model';
 import { CombatEffectivenessService } from '../combat-efectiveness.service';
 import { PlayerCombatEffectiveness } from '../combat-effectiveness.model';
 
@@ -22,20 +22,38 @@ export class MedicHandler {
     const player = this.trackedPlayers.find(d => d.id == event.playerId);
 
     if (player) {
+      player.currentClass = InfantryClass.MEDIC;
+    
       switch (event.type) {
         case "heal":
+          console.log(`${player.name} healed a teammate`)
           player.medicStats.heals += 1;
           break;
         case "revive":
+          console.log(`${player.name} ressed a teammate`)
           player.medicStats.revives += 1;
           break;
         case "shieldRepair":
+          console.log(`${player.name} repaired a teammates shield`)
           player.medicStats.shielding += 1;
           break;
       }
       
-      this.updateSessionLenght(player)
-      this.updateCombatEffectiveness(player)
+      this.updateSessionLenght(player);
+      this.updateCombatEffectiveness(player);
+    }
+    
+    
+    if(event.type == "revive") {
+      const revivedPlayer = this.trackedPlayers.find(d => d.id == event.revivedPlayerId);
+
+      if(revivedPlayer) {
+        console.log(`${revivedPlayer.name} took a ress`)
+        revivedPlayer.killerStats.deaths -= 1;
+
+        this.updateSessionLenght(revivedPlayer);
+        this.updateCombatEffectiveness(revivedPlayer);
+      }
     }
   }
 

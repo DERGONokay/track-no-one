@@ -24,6 +24,7 @@ export interface AssistEvent {
 
 export interface ReviveEvent {
     playerId: String
+    revivedPlayerId: String
     type: "revive"
 }
 
