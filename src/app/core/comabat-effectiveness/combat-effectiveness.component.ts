@@ -6,7 +6,7 @@ import { PlayerRepository } from '../player/player.repository';
 import { OutfitRepository } from '../outfit/outfit.repository';
 import { Player } from '../player/player.model';
 import { PlayerCombatEffectiveness } from './combat-effectiveness.model';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { CombatEffectivenessService } from './combat-efectiveness.service';
 import { KillsHandler } from './handler/kills-handler.service';
 import { AssistHandler } from './handler/assist-handler.service';
@@ -25,8 +25,8 @@ export class CombatEffectivenessComponent {
 
   loadingData = false
 
-  playerName = new FormControl()
-  outfitTag = new FormControl()
+  playerName = new UntypedFormControl()
+  outfitTag = new UntypedFormControl()
 
   trackedPlayers: PlayerCombatEffectiveness[] = []
 
