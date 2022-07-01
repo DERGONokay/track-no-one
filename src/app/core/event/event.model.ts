@@ -4,6 +4,7 @@ export interface KillEvent {
     attackerId: String
     victimId: String
     wasHeadshot: Boolean
+    type: "kill"
 }
 
 export enum InfantryClass {
@@ -18,6 +19,7 @@ export enum InfantryClass {
 
 export interface AssistEvent {
     playerId: String
+    type: "assist"
 }
 
 export interface ReviveEvent {
