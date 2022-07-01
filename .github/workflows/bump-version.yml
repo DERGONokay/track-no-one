@@ -10,14 +10,15 @@ on:
 
 jobs:
   update-environments:
+    name: Update environments
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
       - name: Replace version in environments
         run: |
-          sed -i 's/userId: \d+[.]\d+[.]\d+/userId: ${{ inputs.version }}/' ./src/environments/environment.ts
-          sed -i 's/userId: \d+[.]\d+[.]\d+/userId: ${{ inputs.version }}/' ./src/environments/environment.prod.ts
+          sed -i 's/userId: "\d+[.]\d+[.]\d+"/userId: "${{ inputs.version }}"/' ./src/environments/environment.ts
+          sed -i 's/userId: "\d+[.]\d+[.]\d+"/userId: "${{ inputs.version }}"/' ./src/environments/environment.prod.ts
       - name: Commit changes
         uses: EndBug/add-and-commit@v9
         with:
