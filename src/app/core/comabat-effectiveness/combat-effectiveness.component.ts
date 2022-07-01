@@ -13,13 +13,15 @@ import { AssistHandlerService } from './handler/assist-handler.service';
 import { ReviveHandlerService } from './handler/revive-handler.service';
 import { HealHandlerService } from './handler/heal-handler.service';
 import { ShieldRepairHandlerService } from './handler/shield-repair-handler.service';
+import { ObjectiveEventsService } from '../event/objective-events.service';
+import { ObjectiveHandlerService } from './handler/objective-handler.service';
 
 @Component({
   selector: 'app-combat-effectiveness',
   templateUrl: './combat-effectiveness.component.html',
   styleUrls: ['./combat-effectiveness.component.css']
 })
-export class CombatEffectivenessComponent implements OnInit, OnDestroy {
+export class CombatEffectivenessComponent {
 
   loadingData = false
 
@@ -33,32 +35,31 @@ export class CombatEffectivenessComponent implements OnInit, OnDestroy {
     private playerRepository: PlayerRepository,
     private trackingService: TrackingService,
     private eventService: EventService,
+    private objectiveEvents: ObjectiveEventsService,
     private combatEffectivenessService: CombatEffectivenessService,
     private killsHandler: KillsHandlerService,
     private assistHandler: AssistHandlerService,
     private reviveHandler: ReviveHandlerService,
     private healHandler: HealHandlerService,
-    private shieldRepairHandler: ShieldRepairHandlerService
+    private shieldRepairHandler: ShieldRepairHandlerService,
+    private objectiveEventHandler: ObjectiveHandlerService
   ) {
     this.trackingService.connect()
     this.subscribeToPlayersCombatEffectiveness()
-    this.subscribeToAssists()
-    this.subscribeToKills()
-    this.subscribeToRevives()
-    this.subscribeToHeals()
-    this.subscribeToShieldRepairs()
-  }
-
-  ngOnInit(): void { }
-  
-  ngOnDestroy() {
-    this.trackingService.disconnect()
+    this.subscribeToKillerEvents();
+    this.subscribeToMedicEvents();
+    this.subscribeToObjectiveEvents()
   }
 
   private subscribeToPlayersCombatEffectiveness() {
     this.combatEffectivenessService.playersCombatEffectivenessObservable.subscribe(
       trackedPlayers => { this.trackedPlayers = trackedPlayers; }
     )
+  }
+
+  private subscribeToKillerEvents() {
+    this.subscribeToKills();
+    this.subscribeToAssists();
   }
   
   private subscribeToKills() {
@@ -71,6 +72,12 @@ export class CombatEffectivenessComponent implements OnInit, OnDestroy {
     this.eventService.assistEvents.subscribe(
       event => { this.assistHandler.handle(event) }
     )
+  }
+
+  private subscribeToMedicEvents() {
+    this.subscribeToRevives();
+    this.subscribeToHeals();
+    this.subscribeToShieldRepairs();
   }
 
   private subscribeToRevives() {
@@ -89,6 +96,37 @@ export class CombatEffectivenessComponent implements OnInit, OnDestroy {
     this.eventService.shieldRepairEvents.subscribe(
       event => { this.shieldRepairHandler.handle(event) }
     )
+  }
+
+  private subscribeToObjectiveEvents() {
+    this.subscribeToFacilityCaptures();
+    this.subscribeToFacilityDefenses();
+    this.subscribeToPointsCapture();
+    this.subscribeToPointsDefense();
+  }
+
+  private subscribeToPointsDefense() {
+    this.objectiveEvents.pointDefenseEvents.subscribe(
+      event => { this.objectiveEventHandler.handlePointDefense(event); }
+    );
+  }
+
+  private subscribeToPointsCapture() {
+    this.objectiveEvents.pointCaptureEvents.subscribe(
+      event => { this.objectiveEventHandler.handlePointCapture(event); }
+    );
+  }
+
+  private subscribeToFacilityDefenses() {
+    this.objectiveEvents.facilityDefenseEvents.subscribe(
+      event => { this.objectiveEventHandler.handleFacilityDefense(event); }
+    );
+  }
+
+  private subscribeToFacilityCaptures() {
+    this.objectiveEvents.facilityCaptureEvents.subscribe(
+      event => { this.objectiveEventHandler.handleFacilityCaptured(event); }
+    );
   }
 
   addPlayer() {
@@ -193,8 +231,14 @@ export class CombatEffectivenessComponent implements OnInit, OnDestroy {
         revives: 0,
         heals: 0,
         shielding: 0
+      },
+      objectiveStats: {
+        facilitiesCapture: 0,
+        facilitiesDefense: 0,
+        pointsCapture: 0,
+        pointsDefense: 0
       }
-    };
+    }
   }
 
 }

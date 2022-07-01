@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { InfantryClass } from './event.model';
 import { EventService } from './event.service';
+import { ObjectiveEventsService } from './objective-events.service';
 import { CensusEvent, CensusMessage, CensusPayload, GainExperienceId } from './tracking/tracking.model';
 
 @Injectable({
@@ -9,23 +10,67 @@ import { CensusEvent, CensusMessage, CensusPayload, GainExperienceId } from './t
 export class EventAdapterService {
 
   constructor(
-    private eventService: EventService
+    private eventService: EventService,
+    private objectiveEventsService: ObjectiveEventsService
   ) { }
 
   adapt(message: CensusMessage) {
     const eventName = message.payload.event_name
-    if(this.isKill(eventName)) {
-      this.adaptDeathEvent(message.payload)
-    } else if(this.isAssist(message)) {
-      this.adaptAssistEvent(message.payload)
-    } else if(this.isRevive(message)) {
-      this.adaptReviveEvent(message.payload)
-    } else if(this.isHealing(message)) {
-      this.adaptHealingEvent(message.payload)
-    } else if(this.isShieldRepair(message)) {
-      this.adaptShieldRepair(message.payload)
-    } else {
-      console.log("Unknown event", message)
+    if(this.isKill(eventName)) { this.emmitKill(message.payload) }
+    else if(this.isAssist(message)) { this.emmitAssit(message.payload) }
+    else if(this.isRevive(message)) { this.emmitRevive(message.payload) }
+    else if(this.isHealing(message)) { this.emmitHeal(message.payload) }
+    else if(this.isShieldRepair(message)) { this.emmitShieldRepair(message.payload) }
+    else if(this.isFacilityCapture(message)) { this.emmitFacilityCapture(message.payload) }
+    else if(this.isFacilityDefense(message)) { this.emmitFacilityDefense(message.payload) }
+    else if(this.isPointDefense(message)) { this.emmitPointDefense(message.payload) }
+    else if(this.isPointCapture(message)) { this.emmitPointCapture(message.payload) }
+    else { console.log("Unknown event", message) }
+  }
+
+  isPointCapture(message: CensusMessage) {
+    return message.payload.experience_id == GainExperienceId.POINT_CAPTURE
+  }
+
+  emmitPointCapture(payload: CensusPayload) {
+    this.objectiveEventsService.pointCaptureData = {
+      playerId: payload.character_id
+    }
+  }
+
+  isPointDefense(message: CensusMessage) {
+    return message.payload.experience_id == GainExperienceId.POINT_DEFENSE
+  }
+
+  emmitPointDefense(payload: CensusPayload) {
+    this.objectiveEventsService.pointDefenseData = {
+      playerId: payload.character_id
+    }
+  }
+
+  isFacilityDefense(message: CensusMessage) {
+    return message.payload.event_name == CensusEvent.FACILITY_DEFENSE
+  }
+
+  emmitFacilityDefense(payload: CensusPayload) {
+    this.objectiveEventsService.facilityDefenseData = {
+      playerId: payload.character_id,
+      facilityId: payload.facility_id,
+      continentId: payload.world_id,
+      hexId: payload.zone_id
+    }
+  }
+
+  isFacilityCapture(message: CensusMessage): Boolean {
+    return message.payload.event_name == CensusEvent.FACILITY_CAPTURE
+  }
+
+  emmitFacilityCapture(payload: CensusPayload) {
+    this.objectiveEventsService.facilityCaptureData = {
+      playerId: payload.character_id,
+      facilityId: payload.facility_id,
+      continentId: payload.world_id,
+      hexId: payload.zone_id
     }
   }
 
@@ -33,7 +78,8 @@ export class EventAdapterService {
     return message.payload.event_name == CensusEvent.GAIN_EXPERIENCE
         && this.shieldRepairIds.some(id => id == message.payload.experience_id)
   }
-  adaptShieldRepair(payload: CensusPayload) {
+
+  emmitShieldRepair(payload: CensusPayload) {
     this.eventService.shieldRepairData = {
       playerId: payload.character_id
     }
@@ -44,7 +90,7 @@ export class EventAdapterService {
         && this.healingIds.some(id => id == message.payload.experience_id)
   }
   
-  adaptHealingEvent(payload: CensusPayload) {
+  emmitHeal(payload: CensusPayload) {
     this.eventService.healEventData = {
       playerId: payload.character_id
     }
@@ -54,11 +100,7 @@ export class EventAdapterService {
     return eventName == CensusEvent.DEATH;
   }
 
-  /**
-   * Converts a Death event into a KillEvent
-   * @param payload Census API event payload
-   */
-  private adaptDeathEvent(payload: CensusPayload) {
+  private emmitKill(payload: CensusPayload) {
     this.eventService.killEventData = {
       attackerClass: this.resolveClass(payload.attacker_loadout_id),
       victimClass: this.resolveClass(payload.character_loadout_id),
@@ -103,16 +145,10 @@ export class EventAdapterService {
   }
   
   private isAssistExperienceId(message: CensusMessage) {
-    return message.payload.experience_id == GainExperienceId.ASSIST 
-        || message.payload.experience_id == GainExperienceId.HIGH_THREAT_KILL_ASSIS 
-        || message.payload.experience_id == GainExperienceId.EXTREME_THREAT_KILL_ASSIST
+    return this.assistIds.some(assistId => assistId == message.payload.experience_id)
   }
 
-  /**
-   * Convers a GainExperience event into an AssistEvent
-   * @param payload Census API event payload
-   */
-  private adaptAssistEvent(payload: CensusPayload) {
+  private emmitAssit(payload: CensusPayload) {
     this.eventService.assistEventData = {
       playerId: payload.character_id
     }
@@ -127,12 +163,13 @@ export class EventAdapterService {
         || message.payload.experience_id == GainExperienceId.SQUAD_REVIVE 
   }
 
-  private adaptReviveEvent(payload: CensusPayload) {
+  private emmitRevive(payload: CensusPayload) {
     this.eventService.reviveEventData = {
       playerId: payload.character_id
     }
   }
 
+  private readonly assistIds = [GainExperienceId.ASSIST, GainExperienceId.HIGH_THREAT_KILL_ASSIS, GainExperienceId.EXTREME_THREAT_KILL_ASSIST]
   private readonly healingIds = [GainExperienceId.HEAL, GainExperienceId.SQUAD_HEAL, GainExperienceId.HEAL_ASSIST]
   private readonly shieldRepairIds = [GainExperienceId.SHIELD_REPAIR, GainExperienceId.SQUAD_SHIELD_REPAIR]
 }

@@ -12,6 +12,7 @@ export interface PlayerCombatEffectiveness {
     combatEffectiveness: number
     killerStats: KillerStats
     medicStats: MedicStats
+    objectiveStats: ObjectiveStats
   }
 
   export interface KillerStats {
@@ -25,4 +26,11 @@ export interface PlayerCombatEffectiveness {
     revives: number
     heals: number
     shielding: number
+  }
+
+  export interface ObjectiveStats {
+    facilitiesCapture: number
+    facilitiesDefense: number
+    pointsCapture: number
+    pointsDefense: number
   }

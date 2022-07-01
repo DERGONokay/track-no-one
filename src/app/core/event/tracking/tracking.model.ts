@@ -14,6 +14,9 @@ export interface CensusPayload {
     is_headshot: String
     experience_id: String
     other_id: String
+    facility_id: String
+    world_id: String
+    zone_id: String
 }
 
 export enum CensusEvent {
@@ -29,7 +32,11 @@ export enum CensusEvent {
     SQUAD_HEAL = "GainExperience_experience_id_51",
     HEAL_ASSIST = "GainExperience_experience_id_34",
     SHIELD_REPAIR = "GainExperience_experience_id_438",
-    SQUAD_SHIELD_REPAIR = "GainExperience_experience_id_439"
+    SQUAD_SHIELD_REPAIR = "GainExperience_experience_id_439",
+    FACILITY_CAPTURE = "PlayerFacilityCapture",
+    FACILITY_DEFENSE = "PlayerFacilityDefend",
+    POINT_DEFENSE = "GainExperience_experience_id_556",
+    POINT_CAPTURE = "GainExperience_experience_id_557"
 }
 
 export enum GainExperienceId {
@@ -42,7 +49,9 @@ export enum GainExperienceId {
     SQUAD_HEAL = "51",
     HEAL_ASSIST = "34",
     SHIELD_REPAIR = "438",
-    SQUAD_SHIELD_REPAIR = "439"
+    SQUAD_SHIELD_REPAIR = "439",
+    POINT_DEFENSE = "556",
+    POINT_CAPTURE = "557"
 }
 
 export enum MessageType {

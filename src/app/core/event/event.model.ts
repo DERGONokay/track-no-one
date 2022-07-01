@@ -31,3 +31,25 @@ export interface HealEvent {
 export interface ShieldRepairEvent {
     playerId: String
 }
+
+export interface FacilityCaptureEvent {
+    playerId: String
+    facilityId: String
+    continentId: String
+    hexId: String
+}
+
+export interface FacilityDefenseEvent {
+    playerId: String
+    facilityId: String
+    continentId: String
+    hexId: String
+}
+
+export interface PointDefenseEvent {
+    playerId: String
+}
+
+export interface PointCaptureEvent {
+    playerId: String
+}
