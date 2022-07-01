@@ -22,14 +22,17 @@ export interface AssistEvent {
 
 export interface ReviveEvent {
     playerId: String
+    type: "revive"
 }
 
 export interface HealEvent {
     playerId: String
+    type: "heal"
 }
 
 export interface ShieldRepairEvent {
     playerId: String
+    type: "shieldRepair"
 }
 
 export interface FacilityCaptureEvent {
@@ -37,6 +40,7 @@ export interface FacilityCaptureEvent {
     facilityId: String
     continentId: String
     hexId: String
+    type: "facilityCapture"
 }
 
 export interface FacilityDefenseEvent {
@@ -44,12 +48,15 @@ export interface FacilityDefenseEvent {
     facilityId: String
     continentId: String
     hexId: String
+    type: "facilityDefense"
 }
 
 export interface PointDefenseEvent {
     playerId: String
+    type: "pointDefense"
 }
 
 export interface PointCaptureEvent {
     playerId: String
+    type: "pointCapture"
 }

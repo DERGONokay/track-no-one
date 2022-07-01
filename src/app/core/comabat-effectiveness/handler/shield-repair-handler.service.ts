@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { ShieldRepairEvent } from '../../event/event.model';
+import { HealEvent, ReviveEvent, ShieldRepairEvent } from '../../event/event.model';
 import { CombatEffectivenessService } from '../combat-efectiveness.service';
 import { PlayerCombatEffectiveness } from '../combat-effectiveness.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ShieldRepairHandlerService {
+export class MedicHandlerService {
 
   private trackedPlayers: PlayerCombatEffectiveness[] = []
 
@@ -18,23 +18,37 @@ export class ShieldRepairHandlerService {
     )
   }
 
-  handle(event: ShieldRepairEvent) {
+  handle(event: ReviveEvent | HealEvent | ShieldRepairEvent) {
     const player = this.trackedPlayers.find(d => d.id == event.playerId);
 
     if (player) {
-      console.log(player.name + " repaired a teammate personal shield")
-      player.medicStats.shielding += 1;
+      switch (event.type) {
+        case "heal":
+          player.medicStats.heals += 1;
+          break;
+        case "revive":
+          player.medicStats.revives += 1;
+          break;
+        case "shieldRepair":
+          player.medicStats.shielding += 1;
+          break;
+      }
+      
+      this.updateSessionLenght(player)
       this.updateCombatEffectiveness(player)
     }
   }
 
-  private updateCombatEffectiveness(player: PlayerCombatEffectiveness) {
-    player.sessionLenghtInSeconds = this.calculateSessionLenght(player)
-    player.combatEffectiveness = this.combatEffectivenessService.calculateCombatEffectiveness(player)
-    this.combatEffectivenessService.playersCombatEffectivesData = this.trackedPlayers
+  private updateSessionLenght(playerComef: PlayerCombatEffectiveness) {
+    playerComef.sessionLenghtInSeconds = this.calculateSessionLenght(playerComef)
   }
 
   private calculateSessionLenght(playerComef: PlayerCombatEffectiveness): number {
     return Math.floor((Date.now() - playerComef.sessionStart) / 1000);
+  }
+
+  private updateCombatEffectiveness(player: PlayerCombatEffectiveness) {
+    player.combatEffectiveness = this.combatEffectivenessService.calculateCombatEffectiveness(player)
+    this.combatEffectivenessService.playersCombatEffectivesData = this.trackedPlayers
   }
 }

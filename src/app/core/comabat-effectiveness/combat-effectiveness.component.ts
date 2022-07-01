@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit} from '@angular/core';
+import { Component } from '@angular/core';
 import Swal from 'sweetalert2';
 import { TrackingService } from '../event/tracking/tracking.service';
 import { EventService } from '../event/event.service';
@@ -10,9 +10,7 @@ import { FormControl } from '@angular/forms';
 import { CombatEffectivenessService } from './combat-efectiveness.service';
 import { KillsHandlerService } from './handler/kills-handler.service';
 import { AssistHandlerService } from './handler/assist-handler.service';
-import { ReviveHandlerService } from './handler/revive-handler.service';
-import { HealHandlerService } from './handler/heal-handler.service';
-import { ShieldRepairHandlerService } from './handler/shield-repair-handler.service';
+import { MedicHandlerService } from './handler/shield-repair-handler.service';
 import { ObjectiveEventsService } from '../event/objective-events.service';
 import { ObjectiveHandlerService } from './handler/objective-handler.service';
 
@@ -39,9 +37,7 @@ export class CombatEffectivenessComponent {
     private combatEffectivenessService: CombatEffectivenessService,
     private killsHandler: KillsHandlerService,
     private assistHandler: AssistHandlerService,
-    private reviveHandler: ReviveHandlerService,
-    private healHandler: HealHandlerService,
-    private shieldRepairHandler: ShieldRepairHandlerService,
+    private medicHandler: MedicHandlerService,
     private objectiveEventHandler: ObjectiveHandlerService
   ) {
     this.trackingService.connect()
@@ -82,19 +78,19 @@ export class CombatEffectivenessComponent {
 
   private subscribeToRevives() {
     this.eventService.reviveEvents.subscribe(
-      event => { this.reviveHandler.handle(event) }
+      event => { this.medicHandler.handle(event) }
     )
   }
 
   private subscribeToHeals() {
     this.eventService.healEvents.subscribe(
-      event => { this.healHandler.handle(event) }
+      event => { this.medicHandler.handle(event) }
     )
   }
 
   private subscribeToShieldRepairs() {
     this.eventService.shieldRepairEvents.subscribe(
-      event => { this.shieldRepairHandler.handle(event) }
+      event => { this.medicHandler.handle(event) }
     )
   }
 
@@ -107,25 +103,25 @@ export class CombatEffectivenessComponent {
 
   private subscribeToPointsDefense() {
     this.objectiveEvents.pointDefenseEvents.subscribe(
-      event => { this.objectiveEventHandler.handlePointDefense(event); }
+      event => { this.objectiveEventHandler.handle(event); }
     );
   }
 
   private subscribeToPointsCapture() {
     this.objectiveEvents.pointCaptureEvents.subscribe(
-      event => { this.objectiveEventHandler.handlePointCapture(event); }
+      event => { this.objectiveEventHandler.handle(event); }
     );
   }
 
   private subscribeToFacilityDefenses() {
     this.objectiveEvents.facilityDefenseEvents.subscribe(
-      event => { this.objectiveEventHandler.handleFacilityDefense(event); }
+      event => { this.objectiveEventHandler.handle(event); }
     );
   }
 
   private subscribeToFacilityCaptures() {
     this.objectiveEvents.facilityCaptureEvents.subscribe(
-      event => { this.objectiveEventHandler.handleFacilityCaptured(event); }
+      event => { this.objectiveEventHandler.handle(event); }
     );
   }
 

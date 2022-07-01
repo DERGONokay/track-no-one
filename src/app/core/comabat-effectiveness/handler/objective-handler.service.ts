@@ -18,52 +18,32 @@ export class ObjectiveHandlerService {
     )
   }
 
-  handleFacilityCaptured(event: FacilityCaptureEvent) {
+  handle(event: FacilityCaptureEvent | FacilityDefenseEvent | PointCaptureEvent | PointDefenseEvent) {
     const player = this.trackedPlayers.find(d => d.id == event.playerId);
-
-    if (player) {
-      console.log(player.name + " captured a facility")
-      player.objectiveStats.facilitiesCapture += 1;
-      this.updateSessionLenght(player)
-      this.updateCombatEffectiveness(player)
-    }
-  }
-
-  handleFacilityDefense(event: FacilityDefenseEvent) {
-    const player = this.trackedPlayers.find(d => d.id == event.playerId);
-
-    if (player) {
-      console.log(player.name + " defended a facility")
-      player.objectiveStats.facilitiesDefense += 1;
-      this.updateSessionLenght(player)
-      this.updateCombatEffectiveness(player)
-    }
-  }
-
-  handlePointCapture(event: PointCaptureEvent) {
-    const player = this.trackedPlayers.find(d => d.id == event.playerId);
-
-    if (player) {
-      console.log(player.name + " helped to capture point")
-      player.objectiveStats.pointsCapture += 1;
-      this.updateSessionLenght(player)
-      this.updateCombatEffectiveness(player)
-    }
-  }
-
-  handlePointDefense(event: PointDefenseEvent) {
-    const player = this.trackedPlayers.find(d => d.id == event.playerId);
-
-    if (player) {
-      console.log(player.name + " helped defending point")
-      player.objectiveStats.pointsDefense += 1;
-      this.updateSessionLenght(player)
-      this.updateCombatEffectiveness(player)
+    
+    if(player) {
+      switch (event.type) {
+        case "facilityCapture":
+          player.objectiveStats.facilitiesCapture += 1;
+          break;
+        case "facilityDefense":
+          player.objectiveStats.facilitiesDefense += 1;
+          break;
+        case "pointCapture":
+          player.objectiveStats.pointsCapture += 1;
+          break;
+        case "pointDefense":
+          player.objectiveStats.pointsDefense += 1;
+          break;
+      }
+      
+      this.updateSessionLenght(player);
+      this.updateCombatEffectiveness(player);
     }
   }
 
   private updateSessionLenght(playerComef: PlayerCombatEffectiveness) {
-    playerComef.sessionLenghtInSeconds = this.calculateSessionLenght(playerComef)
+    playerComef.sessionLenghtInSeconds = this.calculateSessionLenght(playerComef);
   }
 
   private calculateSessionLenght(playerComef: PlayerCombatEffectiveness): number {
@@ -71,7 +51,7 @@ export class ObjectiveHandlerService {
   }
 
   private updateCombatEffectiveness(player: PlayerCombatEffectiveness) {
-    player.combatEffectiveness = this.combatEffectivenessService.calculateCombatEffectiveness(player)
-    this.combatEffectivenessService.playersCombatEffectivesData = this.trackedPlayers
+    player.combatEffectiveness = this.combatEffectivenessService.calculateCombatEffectiveness(player);
+    this.combatEffectivenessService.playersCombatEffectivesData = this.trackedPlayers;
   }
 }
