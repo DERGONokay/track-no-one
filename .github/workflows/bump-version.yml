@@ -1,0 +1,25 @@
+name: Bump version
+
+on: 
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'New version'     
+        required: true
+        default: '1.0.0'
+
+jobs:
+  update-environments:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Replace version in environments
+        run: |
+          sed -i 's/userId: \d+[.]\d+[.]\d+/userId: ${{ inputs.version }}/' src/environment.ts
+          sed -i 's/userId: \d+[.]\d+[.]\d+/userId: ${{ inputs.version }}/' src/environment.prod.ts
+      - name: Commit changes
+        run: |
+          git add .
+          git commit -m "Bump version v${{ inputs.version }}"
+          git push
