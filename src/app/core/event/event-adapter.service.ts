@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { InfantryClass } from './event.model';
 import { EventService } from './event.service';
-import { ObjectiveEventsService } from './objective-events.service';
+import { LogisticsEvents as LogisticsEvents } from './logistics.events';
+import { ObjectiveEvents } from './objective-events.service';
 import { CensusEvent, CensusMessage, CensusPayload, GainExperienceId } from './tracking/tracking.model';
 
 @Injectable({
@@ -11,7 +12,8 @@ export class EventAdapterService {
 
   constructor(
     private eventService: EventService,
-    private objectiveEventsService: ObjectiveEventsService
+    private objectiveEventsService: ObjectiveEvents,
+    private logisticsEvents: LogisticsEvents
   ) { }
 
   adapt(message: CensusMessage) {
@@ -25,36 +27,96 @@ export class EventAdapterService {
     else if(this.isFacilityDefense(message)) { this.emmitFacilityDefense(message.payload) }
     else if(this.isPointDefense(message)) { this.emmitPointDefense(message.payload) }
     else if(this.isPointCapture(message)) { this.emmitPointCapture(message.payload) }
+    else if(this.isSpawn(message)) { this.emmitSpawn(message.payload) }
+    else if(this.isSquadSpawn(message)) { this.emmitSquadSpawn(message.payload) }
+    else if(this.isTransportAssist(message)) { this.emmitTransportAssist(message.payload) }
+    else if(this.isBeaconKill(message)) { this.emmitBeaconKill(message.payload) }
+    else if(this.isRouterKill(message)) { this.emmitRouterkill(message.payload) }
     else { console.log("Unknown event", message) }
   }
 
-  isPointCapture(message: CensusMessage) {
+  private isRouterKill(message: CensusMessage): Boolean {
+    return message.payload.experience_id == GainExperienceId.ROUTER_KILL
+  }
+
+  private emmitRouterkill(payload: CensusPayload) {
+    this.logisticsEvents.routerKillData = {
+      playerId: payload.character_id,
+      type: "routerKill"
+    }
+  }
+
+  private isBeaconKill(message: CensusMessage): Boolean {
+    return message.payload.experience_id == GainExperienceId.BEACON_KILL
+  }
+
+  private emmitBeaconKill(payload: CensusPayload) {
+    this.logisticsEvents.beaconKillData = {
+      playerId: payload.character_id,
+      type: "beaconKill"
+    }
+  }
+
+  private isTransportAssist(message: CensusMessage): Boolean {
+    return message.payload.experience_id == GainExperienceId.TRANSPORT_ASSIST
+  }
+
+  private emmitTransportAssist(payload: CensusPayload) {
+    this.logisticsEvents.transportAssistData = {
+      playerId: payload.character_id,
+      type: "transportAssist"
+    }
+  }
+
+  private isSquadSpawn(message: CensusMessage): Boolean {
+    return this.squadSpawnIds.some(id => id == message.payload.character_id)
+  }
+
+  private emmitSquadSpawn(payload: CensusPayload) {
+    this.logisticsEvents.squadSpawnData = {
+      playerId: payload.character_id,
+      type: "squadSpawn"
+    }
+  }
+
+  private isSpawn(message: CensusMessage) {
+    return this.spawnIds.some(id => id == message.payload.experience_id)
+  }
+
+  private emmitSpawn(payload: CensusPayload) {
+    this.logisticsEvents.spawnData = {
+      playerId: payload.character_id,
+      type: "spawn"
+    }
+  }
+
+  private isPointCapture(message: CensusMessage) {
     return message.payload.experience_id == GainExperienceId.POINT_CAPTURE
   }
 
-  emmitPointCapture(payload: CensusPayload) {
+  private emmitPointCapture(payload: CensusPayload) {
     this.objectiveEventsService.pointCaptureData = {
       playerId: payload.character_id,
       type: "pointCapture"
     }
   }
 
-  isPointDefense(message: CensusMessage) {
+  private isPointDefense(message: CensusMessage) {
     return message.payload.experience_id == GainExperienceId.POINT_DEFENSE
   }
 
-  emmitPointDefense(payload: CensusPayload) {
+  private emmitPointDefense(payload: CensusPayload) {
     this.objectiveEventsService.pointDefenseData = {
       playerId: payload.character_id,
       type: "pointDefense"
     }
   }
 
-  isFacilityDefense(message: CensusMessage) {
+  private isFacilityDefense(message: CensusMessage) {
     return message.payload.event_name == CensusEvent.FACILITY_DEFENSE
   }
 
-  emmitFacilityDefense(payload: CensusPayload) {
+  private emmitFacilityDefense(payload: CensusPayload) {
     this.objectiveEventsService.facilityDefenseData = {
       playerId: payload.character_id,
       facilityId: payload.facility_id,
@@ -64,11 +126,11 @@ export class EventAdapterService {
     }
   }
 
-  isFacilityCapture(message: CensusMessage): Boolean {
+  private isFacilityCapture(message: CensusMessage): Boolean {
     return message.payload.event_name == CensusEvent.FACILITY_CAPTURE
   }
 
-  emmitFacilityCapture(payload: CensusPayload) {
+  private emmitFacilityCapture(payload: CensusPayload) {
     this.objectiveEventsService.facilityCaptureData = {
       playerId: payload.character_id,
       facilityId: payload.facility_id,
@@ -78,22 +140,22 @@ export class EventAdapterService {
     }
   }
 
-  isShieldRepair(message: CensusMessage): Boolean {
+  private isShieldRepair(message: CensusMessage): Boolean {
     return this.shieldRepairIds.some(id => id == message.payload.experience_id)
   }
 
-  emmitShieldRepair(payload: CensusPayload) {
+  private emmitShieldRepair(payload: CensusPayload) {
     this.eventService.shieldRepairData = {
       playerId: payload.character_id,
       type: "shieldRepair"
     }
   }
   
-  isHealing(message: CensusMessage): Boolean {
+  private isHealing(message: CensusMessage): Boolean {
     return this.healingIds.some(id => id == message.payload.experience_id)
   }
   
-  emmitHeal(payload: CensusPayload) {
+  private emmitHeal(payload: CensusPayload) {
     this.eventService.healEventData = {
       playerId: payload.character_id,
       type: "heal"
@@ -170,4 +232,6 @@ export class EventAdapterService {
   private readonly assistIds = [GainExperienceId.ASSIST, GainExperienceId.HIGH_THREAT_KILL_ASSIS, GainExperienceId.EXTREME_THREAT_KILL_ASSIST]
   private readonly healingIds = [GainExperienceId.HEAL, GainExperienceId.SQUAD_HEAL, GainExperienceId.HEAL_ASSIST]
   private readonly shieldRepairIds = [GainExperienceId.SHIELD_REPAIR, GainExperienceId.SQUAD_SHIELD_REPAIR]
+  private readonly spawnIds = [GainExperienceId.SUNDERER_SPAWN, GainExperienceId.LODESTAR_SPAWN]
+  private readonly squadSpawnIds = [GainExperienceId.SQUAD_SPAWN, GainExperienceId.GALAXY_SPAWN, GainExperienceId.VALKYRIE_SPAWN]
 }

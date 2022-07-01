@@ -7,7 +7,7 @@ import { KillEvent } from '../../event/event.model';
 @Injectable({
   providedIn: 'root'
 })
-export class KillsHandlerService {
+export class KillsHandler {
 
   private trackedPlayers: PlayerCombatEffectiveness[] = []
 

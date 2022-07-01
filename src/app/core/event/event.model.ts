@@ -62,3 +62,28 @@ export interface PointCaptureEvent {
     playerId: String
     type: "pointCapture"
 }
+
+export interface SpawnEvent {
+    playerId: String
+    type: "spawn"
+}
+
+export interface SquadSpawnEvent {
+    playerId: String
+    type: "squadSpawn"
+}
+
+export interface TransportAssistEvent {
+    playerId: String
+    type: "transportAssist"
+}
+
+export interface BeaconKillEvent {
+    playerId: String
+    type: "beaconKill"
+}
+
+export interface RouterKillEvent {
+    playerId: String
+    type: "routerKill"
+}

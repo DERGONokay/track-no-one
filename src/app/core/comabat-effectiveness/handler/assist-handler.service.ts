@@ -6,7 +6,7 @@ import { AssistEvent } from '../../event/event.model';
 @Injectable({
   providedIn: 'root'
 })
-export class AssistHandlerService {
+export class AssistHandler {
 
   private trackedPlayers: PlayerCombatEffectiveness[] = []
 

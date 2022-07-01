@@ -36,7 +36,19 @@ export class TrackingService {
       service: CensusService.EVENT,
       action: CensusAction.SUBSCRIBE,
       characters: [player.id],
-      eventNames: [CensusEvents]
+      eventNames: [
+        CensusEvents.DEATH, CensusEvents.ASSIST,
+        CensusEvents.EXTREME_THREAT_KILL_ASSIST, CensusEvents.HIGH_THREAT_KILL_ASSIS,
+        CensusEvents.REVIVE, CensusEvents.SQUAD_REVIVE,
+        CensusEvents.HEAL, CensusEvents.SQUAD_HEAL, CensusEvents.HEAL_ASSIST,
+        CensusEvents.SHIELD_REPAIR, CensusEvents.SQUAD_SHIELD_REPAIR,
+        CensusEvents.FACILITY_CAPTURE, CensusEvents.FACILITY_DEFENSE,
+        CensusEvents.POINT_CAPTURE, CensusEvents.POINT_DEFENSE,
+        CensusEvents.SUNDERER_SPAWN, CensusEvents.LODESTAR_SPAWN,
+        CensusEvents.SQUAD_SPAWN, CensusEvents.VALKYRIE_SPAWN, CensusEvents.GALAXY_SPAWN,
+        CensusEvents.TRANSPORT_ASSIST,
+        CensusEvents.BEACON_KILL, CensusEvents.ROUTER_KILL
+      ]
     })
   }
 

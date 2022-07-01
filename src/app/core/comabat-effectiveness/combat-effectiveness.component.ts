@@ -8,11 +8,13 @@ import { Player } from '../player/player.model';
 import { PlayerCombatEffectiveness } from './combat-effectiveness.model';
 import { FormControl } from '@angular/forms';
 import { CombatEffectivenessService } from './combat-efectiveness.service';
-import { KillsHandlerService } from './handler/kills-handler.service';
-import { AssistHandlerService } from './handler/assist-handler.service';
-import { MedicHandlerService } from './handler/shield-repair-handler.service';
-import { ObjectiveEventsService } from '../event/objective-events.service';
-import { ObjectiveHandlerService } from './handler/objective-handler.service';
+import { KillsHandler } from './handler/kills-handler.service';
+import { AssistHandler } from './handler/assist-handler.service';
+import { MedicHandler } from './handler/medic-handler.service';
+import { ObjectiveEvents } from '../event/objective-events.service';
+import { ObjectivesHandler as ObjectivesHandler } from './handler/objectives-handler.service';
+import { LogisticsHandler } from './handler/logistics-handler.service';
+import { LogisticsEvents } from '../event/logistics.events';
 
 @Component({
   selector: 'app-combat-effectiveness',
@@ -33,18 +35,21 @@ export class CombatEffectivenessComponent {
     private playerRepository: PlayerRepository,
     private trackingService: TrackingService,
     private eventService: EventService,
-    private objectiveEvents: ObjectiveEventsService,
+    private objectiveEvents: ObjectiveEvents,
+    private logisticsEvents: LogisticsEvents,
     private combatEffectivenessService: CombatEffectivenessService,
-    private killsHandler: KillsHandlerService,
-    private assistHandler: AssistHandlerService,
-    private medicHandler: MedicHandlerService,
-    private objectiveEventHandler: ObjectiveHandlerService
+    private killsHandler: KillsHandler,
+    private assistHandler: AssistHandler,
+    private medicHandler: MedicHandler,
+    private objectivesHandler: ObjectivesHandler,
+    private logisticsHandler: LogisticsHandler
   ) {
-    this.trackingService.connect()
-    this.subscribeToPlayersCombatEffectiveness()
+    this.trackingService.connect();
+    this.subscribeToPlayersCombatEffectiveness();
     this.subscribeToKillerEvents();
     this.subscribeToMedicEvents();
-    this.subscribeToObjectiveEvents()
+    this.subscribeToObjectiveEvents();
+    this.subscribeToLogisticsEvents();
   }
 
   private subscribeToPlayersCombatEffectiveness() {
@@ -103,25 +108,63 @@ export class CombatEffectivenessComponent {
 
   private subscribeToPointsDefense() {
     this.objectiveEvents.pointDefenseEvents.subscribe(
-      event => { this.objectiveEventHandler.handle(event); }
+      event => { this.objectivesHandler.handle(event); }
     );
   }
 
   private subscribeToPointsCapture() {
     this.objectiveEvents.pointCaptureEvents.subscribe(
-      event => { this.objectiveEventHandler.handle(event); }
+      event => { this.objectivesHandler.handle(event); }
     );
   }
 
   private subscribeToFacilityDefenses() {
     this.objectiveEvents.facilityDefenseEvents.subscribe(
-      event => { this.objectiveEventHandler.handle(event); }
+      event => { this.objectivesHandler.handle(event); }
     );
   }
 
   private subscribeToFacilityCaptures() {
     this.objectiveEvents.facilityCaptureEvents.subscribe(
-      event => { this.objectiveEventHandler.handle(event); }
+      event => { this.objectivesHandler.handle(event); }
+    );
+  }
+
+  private subscribeToLogisticsEvents() {
+    this.subscribeToSpawns();
+    this.subscribeToSquadSpawns();
+    this.subscribeToTransportAssists();
+    this.subscribeToBeaconKills();
+    this.subscribeToRouterKills();
+  }
+
+  private subscribeToSquadSpawns() {
+    this.logisticsEvents.squadSpawnEvents.subscribe(
+      event => { this.logisticsHandler.handle(event); }
+    );
+  }
+
+  private subscribeToTransportAssists() {
+    this.logisticsEvents.transportAssistEvents.subscribe(
+      event => { this.logisticsHandler.handle(event); }
+    );
+  }
+
+  private subscribeToBeaconKills() {
+    this.logisticsEvents.beaconKillEvents.subscribe(
+      event => { this.logisticsHandler.handle(event); }
+    );
+  }
+
+  private subscribeToSpawns() {
+    this.logisticsEvents.spawnEvents.subscribe(
+      event => { this.logisticsHandler.handle(event); }
+    );
+  }
+
+  private subscribeToRouterKills() {
+    this.logisticsEvents.routerKillEvents.subscribe(
+      event => { this.logisticsHandler.handle(event); }
     );
   }
 
@@ -233,6 +276,13 @@ export class CombatEffectivenessComponent {
         facilitiesDefense: 0,
         pointsCapture: 0,
         pointsDefense: 0
+      },
+      logisticsStats: {
+        spawns: 0,
+        squadSpanws: 0,
+        transportAssits: 0,
+        beaconKills: 0,
+        routerKills: 0
       }
     }
   }

@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HealEvent, ReviveEvent, ShieldRepairEvent } from '../../event/event.model';
+import { FacilityCaptureEvent, FacilityDefenseEvent, PointCaptureEvent, PointDefenseEvent } from '../../event/event.model';
 import { CombatEffectivenessService } from '../combat-efectiveness.service';
 import { PlayerCombatEffectiveness } from '../combat-effectiveness.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MedicHandlerService {
+export class ObjectivesHandler {
 
   private trackedPlayers: PlayerCombatEffectiveness[] = []
 
@@ -18,29 +18,32 @@ export class MedicHandlerService {
     )
   }
 
-  handle(event: ReviveEvent | HealEvent | ShieldRepairEvent) {
+  handle(event: FacilityCaptureEvent | FacilityDefenseEvent | PointCaptureEvent | PointDefenseEvent) {
     const player = this.trackedPlayers.find(d => d.id == event.playerId);
-
-    if (player) {
+    
+    if(player) {
       switch (event.type) {
-        case "heal":
-          player.medicStats.heals += 1;
+        case "facilityCapture":
+          player.objectiveStats.facilitiesCapture += 1;
           break;
-        case "revive":
-          player.medicStats.revives += 1;
+        case "facilityDefense":
+          player.objectiveStats.facilitiesDefense += 1;
           break;
-        case "shieldRepair":
-          player.medicStats.shielding += 1;
+        case "pointCapture":
+          player.objectiveStats.pointsCapture += 1;
+          break;
+        case "pointDefense":
+          player.objectiveStats.pointsDefense += 1;
           break;
       }
       
-      this.updateSessionLenght(player)
-      this.updateCombatEffectiveness(player)
+      this.updateSessionLenght(player);
+      this.updateCombatEffectiveness(player);
     }
   }
 
   private updateSessionLenght(playerComef: PlayerCombatEffectiveness) {
-    playerComef.sessionLenghtInSeconds = this.calculateSessionLenght(playerComef)
+    playerComef.sessionLenghtInSeconds = this.calculateSessionLenght(playerComef);
   }
 
   private calculateSessionLenght(playerComef: PlayerCombatEffectiveness): number {
@@ -48,7 +51,7 @@ export class MedicHandlerService {
   }
 
   private updateCombatEffectiveness(player: PlayerCombatEffectiveness) {
-    player.combatEffectiveness = this.combatEffectivenessService.calculateCombatEffectiveness(player)
-    this.combatEffectivenessService.playersCombatEffectivesData = this.trackedPlayers
+    player.combatEffectiveness = this.combatEffectivenessService.calculateCombatEffectiveness(player);
+    this.combatEffectivenessService.playersCombatEffectivesData = this.trackedPlayers;
   }
 }

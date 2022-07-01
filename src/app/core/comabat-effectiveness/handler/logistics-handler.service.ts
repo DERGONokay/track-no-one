@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { FacilityCaptureEvent, FacilityDefenseEvent, PointCaptureEvent, PointDefenseEvent } from '../../event/event.model';
+import { BeaconKillEvent, RouterKillEvent, SpawnEvent, SquadSpawnEvent, TransportAssistEvent } from '../../event/event.model';
 import { CombatEffectivenessService } from '../combat-efectiveness.service';
 import { PlayerCombatEffectiveness } from '../combat-effectiveness.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ObjectiveHandlerService {
+export class LogisticsHandler {
 
   private trackedPlayers: PlayerCombatEffectiveness[] = []
 
@@ -18,22 +18,25 @@ export class ObjectiveHandlerService {
     )
   }
 
-  handle(event: FacilityCaptureEvent | FacilityDefenseEvent | PointCaptureEvent | PointDefenseEvent) {
+  handle(event: SpawnEvent | SquadSpawnEvent | TransportAssistEvent | BeaconKillEvent | RouterKillEvent) {
     const player = this.trackedPlayers.find(d => d.id == event.playerId);
     
     if(player) {
       switch (event.type) {
-        case "facilityCapture":
-          player.objectiveStats.facilitiesCapture += 1;
+        case "spawn":
+          player.logisticsStats.spawns += 1;
           break;
-        case "facilityDefense":
-          player.objectiveStats.facilitiesDefense += 1;
+        case "squadSpawn":
+          player.logisticsStats.squadSpanws += 1;
           break;
-        case "pointCapture":
-          player.objectiveStats.pointsCapture += 1;
+        case "transportAssist":
+          player.logisticsStats.transportAssits += 1;
           break;
-        case "pointDefense":
-          player.objectiveStats.pointsDefense += 1;
+        case "beaconKill":
+          player.logisticsStats.beaconKills += 1;
+          break;
+        case "routerKill":
+          player.logisticsStats.routerKills += 1;
           break;
       }
       

@@ -5,7 +5,7 @@ import { FacilityCaptureEvent, FacilityDefenseEvent, PointCaptureEvent, PointDef
 @Injectable({
   providedIn: 'root'
 })
-export class ObjectiveEventsService {
+export class ObjectiveEvents {
   
   constructor() { }
 

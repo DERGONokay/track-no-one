@@ -13,6 +13,7 @@ export interface PlayerCombatEffectiveness {
     killerStats: KillerStats
     medicStats: MedicStats
     objectiveStats: ObjectiveStats
+    logisticsStats: LogisticsStats
   }
 
   export interface KillerStats {
@@ -33,4 +34,12 @@ export interface PlayerCombatEffectiveness {
     facilitiesDefense: number
     pointsCapture: number
     pointsDefense: number
+  }
+
+  export interface LogisticsStats {
+    spawns: number
+    squadSpanws: number
+    transportAssits: number
+    beaconKills: number
+    routerKills: number
   }
