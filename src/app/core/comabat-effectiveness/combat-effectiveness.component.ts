@@ -185,6 +185,14 @@ export class CombatEffectivenessComponent {
     this.scoutEvents.scoutRadarSpotEvents.subscribe(
       event => { this.scoutHandler.handle(event)}
     )
+
+    this.scoutEvents.generatorOverloadEvents.subscribe(
+      event => { this.scoutHandler.handle(event) }
+    )
+
+    this.scoutEvents.generatorStabilizeEvents.subscribe(
+      event => { this.scoutHandler.handle(event) }
+    )
   }
 
   addPlayer() {

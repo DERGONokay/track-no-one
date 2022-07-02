@@ -24,15 +24,19 @@ export class ObjectivesHandler {
     if(player) {
       switch (event.type) {
         case "facilityCapture":
+          console.log(`${player.name} captured a facility`);
           player.objectiveStats.facilitiesCapture += 1;
           break;
         case "facilityDefense":
+          console.log(`${player.name} defended a facility`);
           player.objectiveStats.facilitiesDefense += 1;
           break;
         case "pointCapture":
+          console.log(`${player.name} capture a point`);
           player.objectiveStats.pointsCapture += 1;
           break;
         case "pointDefense":
+          console.log(`${player.name} defended a point`);
           player.objectiveStats.pointsDefense += 1;
           break;
       }

@@ -12,3 +12,13 @@ export interface ScoutRadarSpotEvent {
     playerId: String
     type: "radarSpot"
 }
+
+export interface GeneratorOverloadEvent {
+    playerId: String
+    type: "overload"
+}
+
+export interface GeneratorStabilizeEvent {
+    playerId: String
+    type: "stabilize"
+}

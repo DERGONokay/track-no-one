@@ -37,7 +37,31 @@ export class EventAdapterService {
     else if(this.isQSpot(message)) { this.emmitQSpot(message.payload) }
     else if(this.isMotionSpot(message)) { this.emmitMotionSpot(message.payload) }
     else if(this.isScoutRadarSpot(message)) { this.emmitScoutRadarSpot(message.payload) }
+    else if(this.isGeneratorOverload(message)) { this.emmitGeneratorOverload(message.payload) }
+    else if(this.isGeneratorStabilize(message)) { this.emmitGeneratorStabilize(message.payload) }
     else { console.log("Unknown event", message) }
+  }
+
+  private isGeneratorStabilize(message: CensusMessage): Boolean {
+    return message.payload.experience_id == GainExperienceId.GENERATOR_STABILIZED
+  }
+
+  private emmitGeneratorStabilize(payload: CensusPayload) {
+    this.scoutEvents.generatorStabilizeData = {
+      playerId: payload.character_id,
+      type: "stabilize"
+    }
+  }
+
+  private isGeneratorOverload(message: CensusMessage): Boolean {
+    return message.payload.experience_id == GainExperienceId.GENERATOR_OVERLOADED
+  }
+
+  private emmitGeneratorOverload(payload: CensusPayload) {
+    this.scoutEvents.generatorOverloadData = {
+      playerId: payload.character_id,
+      type: "overload"
+    }
   }
 
   private isScoutRadarSpot(message: CensusMessage): Boolean {
