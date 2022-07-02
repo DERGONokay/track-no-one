@@ -50,7 +50,7 @@ export interface ScoutStats {
   motionSpots: number
   radarSpots: number
   generatorOverloads: number
-  generatorStablilizations: number
+  generatorStabilizations: number
   terminalHacks: number
   turretHacks: number
   motionSpotterKills: number

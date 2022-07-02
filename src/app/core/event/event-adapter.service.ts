@@ -39,7 +39,19 @@ export class EventAdapterService {
     else if(this.isScoutRadarSpot(message)) { this.emmitScoutRadarSpot(message.payload) }
     else if(this.isGeneratorOverload(message)) { this.emmitGeneratorOverload(message.payload) }
     else if(this.isGeneratorStabilize(message)) { this.emmitGeneratorStabilize(message.payload) }
+    else if(this.isTerminalHack(message)) { this.emmitTerminalHack(message.payload) }
     else { console.log("Unknown event", message) }
+  }
+
+  private isTerminalHack(message: CensusMessage): Boolean {
+    return message.payload.experience_id == GainExperienceId.TERMINAL_HACK
+  }
+
+  private emmitTerminalHack(payload: CensusPayload) {
+    this.scoutEvents.generatorStabilizeData = {
+      playerId: payload.character_id,
+      type: "stabilize"
+    }
   }
 
   private isGeneratorStabilize(message: CensusMessage): Boolean {

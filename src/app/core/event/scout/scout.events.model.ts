@@ -22,3 +22,23 @@ export interface GeneratorStabilizeEvent {
     playerId: String
     type: "stabilize"
 }
+
+export interface TerminalHackEvent {
+    playerId: String
+    type: "terminalHack"
+}
+
+export interface TurretHackEvent {
+    playerId: String
+    type: "turretHack"
+}
+
+export interface MotionSensorKillEvent {
+    playerId: String
+    type: "motionSensorKill"
+}
+
+export interface SpitfireKillEvent {
+    playerId: String
+    type: "spitfireKill"
+}

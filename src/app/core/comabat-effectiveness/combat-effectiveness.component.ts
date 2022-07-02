@@ -174,25 +174,55 @@ export class CombatEffectivenessComponent {
   }
 
   private subscribeToScoutEvents() {
+    this.subscribeToQSpots();
+    this.subscribeToMotionSpots();
+    this.subscribeToScoutRadarSpots();
+    this.subscribeToGenerationOverloads();
+    this.subscribeToGeneratorStabilizations();
+    this.subscribeToTerminalHacks();
+    this.subscribeToTurretHacks();
+  }
+
+  private subscribeToQSpots() {
     this.scoutEvents.qSpotEvents.subscribe(
-      event => { this.scoutHandler.handle(event)}
-    )
+      event => { this.scoutHandler.handle(event); }
+    );
+  }
 
+  private subscribeToMotionSpots() {
     this.scoutEvents.motionSpotEvents.subscribe(
-      event => { this.scoutHandler.handle(event)}
-    )
-    
+      event => { this.scoutHandler.handle(event); }
+    );
+  }
+
+  private subscribeToScoutRadarSpots() {
     this.scoutEvents.scoutRadarSpotEvents.subscribe(
-      event => { this.scoutHandler.handle(event)}
-    )
+      event => { this.scoutHandler.handle(event); }
+    );
+  }
 
+  private subscribeToGenerationOverloads() {
     this.scoutEvents.generatorOverloadEvents.subscribe(
-      event => { this.scoutHandler.handle(event) }
-    )
+      event => { this.scoutHandler.handle(event); }
+    );
+  }
 
+  private subscribeToGeneratorStabilizations() {
     this.scoutEvents.generatorStabilizeEvents.subscribe(
-      event => { this.scoutHandler.handle(event) }
-    )
+      event => { this.scoutHandler.handle(event); }
+    );
+  }
+
+  private subscribeToTerminalHacks() {
+    this.scoutEvents.terminalHackEvents.subscribe(
+      event => { this.scoutHandler.handle(event); }
+    );
+  }
+
+  private subscribeToTurretHacks() {
+    this.scoutEvents.turretHackEvents.subscribe(
+      event => { this.scoutHandler.handle(event); }
+    );
   }
 
   addPlayer() {
@@ -316,7 +346,7 @@ export class CombatEffectivenessComponent {
         motionSpots: 0,
         radarSpots: 0,
         generatorOverloads: 0,
-        generatorStablilizations: 0,
+        generatorStabilizations: 0,
         terminalHacks: 0,
         turretHacks: 0,
         motionSpotterKills: 0,

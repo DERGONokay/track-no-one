@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { GeneratorOverloadEvent, GeneratorStabilizeEvent, MotionSpotEvent, QSpotEvent, ScoutRadarSpotEvent } from './scout.events.model';
+import { GeneratorOverloadEvent, GeneratorStabilizeEvent, MotionSpotEvent, QSpotEvent, ScoutRadarSpotEvent, TerminalHackEvent, TurretHackEvent } from './scout.events.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,9 @@ export class ScoutEvents {
   private motionSpotSubject: Subject<MotionSpotEvent> = new Subject<MotionSpotEvent>();
   private scoutRadarSpotSubject: Subject<ScoutRadarSpotEvent> = new Subject<ScoutRadarSpotEvent>();
   private generatorOverloadSubject: Subject<GeneratorOverloadEvent> = new Subject<GeneratorOverloadEvent>();
-  private generatorStabilizeSubject: Subject<GeneratorStabilizeEvent> = new Subject<GeneratorStabilizeEvent>();  
+  private generatorStabilizeSubject: Subject<GeneratorStabilizeEvent> = new Subject<GeneratorStabilizeEvent>();
+  private terminalHackSubject: Subject<TerminalHackEvent> = new Subject<TerminalHackEvent>();
+  private turretHackSubject: Subject<TurretHackEvent> = new Subject<TurretHackEvent>();
   
   get qSpotEvents() { return this.qSpotSubject.asObservable(); }
   set qSpotEventData(event: QSpotEvent) { this.qSpotSubject.next(event); }
@@ -29,4 +31,10 @@ export class ScoutEvents {
 
   get generatorStabilizeEvents() { return this.generatorStabilizeSubject.asObservable(); }
   set generatorStabilizeData(event: GeneratorStabilizeEvent) { this.generatorStabilizeSubject.next(event); }
+
+  get terminalHackEvents() { return this.terminalHackSubject.asObservable(); }
+  set terminalHackData(event: TerminalHackEvent) { this.terminalHackSubject.next(event); }
+  
+  get turretHackEvents() { return this.turretHackSubject.asObservable(); }
+  set turretHackData(event: TurretHackEvent) { this.turretHackSubject.next(event); }
 }

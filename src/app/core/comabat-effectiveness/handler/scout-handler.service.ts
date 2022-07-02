@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { GeneratorOverloadEvent, GeneratorStabilizeEvent, MotionSpotEvent, QSpotEvent, ScoutRadarSpotEvent } from '../../event/scout/scout.events.model';
+import { GeneratorOverloadEvent, GeneratorStabilizeEvent, MotionSensorKillEvent, MotionSpotEvent, QSpotEvent, ScoutRadarSpotEvent, SpitfireKillEvent, TerminalHackEvent, TurretHackEvent } from '../../event/scout/scout.events.model';
 import { CombatEffectivenessService } from '../combat-efectiveness.service';
 import { PlayerCombatEffectiveness } from '../combat-effectiveness.model';
 
@@ -18,7 +18,7 @@ export class ScoutHandlerService {
     )
   }
 
-  handle(event: QSpotEvent | MotionSpotEvent | ScoutRadarSpotEvent | GeneratorOverloadEvent | GeneratorStabilizeEvent) {
+  handle(event: QSpotEvent | MotionSpotEvent | ScoutRadarSpotEvent | GeneratorOverloadEvent | GeneratorStabilizeEvent | TerminalHackEvent | TurretHackEvent | MotionSensorKillEvent | SpitfireKillEvent) {
     const player = this.trackedPlayers.find(d => d.id == event.playerId);
     
     if(player) {
@@ -34,6 +34,22 @@ export class ScoutHandlerService {
         case "radarSpot":
           console.log(`${player.name} Radar Scout Spotted an enemy`)
           player.scoutStats.radarSpots += 1;
+          break;
+        case "overload":
+          console.log(`${player.name} overloaded a generator`)
+          player.scoutStats.generatorOverloads += 1;
+          break;
+        case "stabilize":
+          console.log(`${player.name} stabilized a generator`)
+          player.scoutStats.generatorStabilizations += 1;
+          break;
+        case "terminalHack":
+          console.log(`${player.name} hacked a terminal`)
+          player.scoutStats.terminalHacks += 1;
+          break;
+        case "turretHack":
+          console.log(`${player.name} hacked a phalanx turret`)
+          player.scoutStats.turretHacks += 1;
           break;
       }
       
