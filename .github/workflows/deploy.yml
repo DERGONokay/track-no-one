@@ -38,7 +38,7 @@ jobs:
           args: deploy --only hosting
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-  notify:
+  notify-discord:
     name: Notify Discord
     needs: deploy
     runs-on: ubuntu-latest
@@ -50,3 +50,15 @@ jobs:
         uses: Ilshidur/action-discord@master
         with:
           args: "${{ github.event.head_commit.message }}"
+  notify-guilded:
+    name: Notify KN1 Guilded
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send noti to KN1 Guilded
+        run: |
+          curl --request POST \
+               --header "Content-Type: application/json" \
+               --data "{'content': '${{ github.event.head_commit.message }}''}"
+               ${{ secrets.KN1_GUILDED_WEBHOOK }}
+
