@@ -35,7 +35,7 @@ export class CombatEffectivenessComponent {
   constructor(
     private outfitRepository: OutfitRepository,
     private playerRepository: PlayerRepository,
-    private trackingService: TrackingService,
+    public trackingService: TrackingService,
     private eventService: EventService,
     private objectiveEvents: ObjectiveEvents,
     private logisticsEvents: LogisticsEvents,
@@ -175,6 +175,10 @@ export class CombatEffectivenessComponent {
 
   private subscribeToScoutEvents() {
     this.scoutEvents.qSpotEvents.subscribe(
+      event => { this.scoutHandler.handle(event)}
+    )
+
+    this.scoutEvents.motionSpotEvents.subscribe(
       event => { this.scoutHandler.handle(event)}
     )
   }

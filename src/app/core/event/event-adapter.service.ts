@@ -35,7 +35,20 @@ export class EventAdapterService {
     else if(this.isBeaconKill(message)) { this.emmitBeaconKill(message.payload) }
     else if(this.isRouterKill(message)) { this.emmitRouterkill(message.payload) }
     else if(this.isQSpot(message)) { this.emmitQSpot(message.payload) }
+    else if(this.isMotionSpot(message)) { this.emmitMotionSpot(message.payload) }
     else { console.log("Unknown event", message) }
+  }
+
+  private isMotionSpot(message: CensusMessage): Boolean {
+    return message.payload.experience_id == GainExperienceId.MOTION_SPOTTER
+      || message.payload.experience_id == GainExperienceId.SQUAD_MOTION_SPOTTER
+  }
+
+  private emmitMotionSpot(payload: CensusPayload) {
+    this.scoutEvents.motionSpotData = {
+      playerId: payload.character_id,
+      type: "motionSpot"
+    }
   }
 
   private isQSpot(message: CensusMessage): Boolean {
