@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { KillerStats, MedicStats, PlayerCombatEffectiveness } from './combat-effectiveness.model';
+import { KillerStats, PlayerCombatEffectiveness } from './combat-effectiveness.model';
 
 @Injectable({
   providedIn: 'root'

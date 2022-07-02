@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 import { TrackingService } from '../event/tracking/tracking.service';
 import { EventService } from '../event/event.service';
@@ -15,15 +15,18 @@ import { ObjectivesHandler as ObjectivesHandler } from './handler/objectives-han
 import { LogisticsHandler } from './handler/logistics-handler.service';
 import { LogisticsEvents } from '../event/logistics.events';
 import { ObjectiveEvents } from '../event/objective.events';
-import { ScoutEvents } from '../event/scout/scout.events';
+import { ScoutEvents } from '../event/scout/scout.event';
 import { ScoutHandlerService } from './handler/scout-handler.service';
+import { EngiEvents } from '../event/engi/engi.event';
+import { EngiHandlerService } from './handler/engi-handler.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-combat-effectiveness',
   templateUrl: './combat-effectiveness.component.html',
   styleUrls: ['./combat-effectiveness.component.css']
 })
-export class CombatEffectivenessComponent {
+export class CombatEffectivenessComponent implements OnInit {
 
   loadingData = false
 
@@ -40,14 +43,18 @@ export class CombatEffectivenessComponent {
     private objectiveEvents: ObjectiveEvents,
     private logisticsEvents: LogisticsEvents,
     private scoutEvents: ScoutEvents,
+    private engiEvents: EngiEvents,
     private combatEffectivenessService: CombatEffectivenessService,
     private killsHandler: KillsHandler,
     private assistHandler: AssistHandler,
     private medicHandler: MedicHandler,
     private objectivesHandler: ObjectivesHandler,
     private logisticsHandler: LogisticsHandler,
-    private scoutHandler: ScoutHandlerService
-  ) {
+    private scoutHandler: ScoutHandlerService,
+    private engiHandler: EngiHandlerService
+  ) { }
+
+  ngOnInit(): void {
     this.trackingService.connect();
     this.subscribeToPlayersCombatEffectiveness();
     this.subscribeToKillerEvents();
@@ -55,12 +62,13 @@ export class CombatEffectivenessComponent {
     this.subscribeToObjectiveEvents();
     this.subscribeToLogisticsEvents();
     this.subscribeToScoutEvents();
+    this.subscribeToEngiEvents();
   }
 
   private subscribeToPlayersCombatEffectiveness() {
     this.combatEffectivenessService.playersCombatEffectivenessObservable.subscribe(
       trackedPlayers => { this.trackedPlayers = trackedPlayers; }
-    )
+    );
   }
 
   private subscribeToKillerEvents() {
@@ -71,13 +79,13 @@ export class CombatEffectivenessComponent {
   private subscribeToKills() {
     this.eventService.killEvents.subscribe(
       killEvent => { this.killsHandler.handle(killEvent) }
-    )
+    );
   }
 
   private subscribeToAssists() {
     this.eventService.assistEvents.subscribe(
       event => { this.assistHandler.handle(event) }
-    )
+    );
   }
 
   private subscribeToMedicEvents() {
@@ -89,19 +97,19 @@ export class CombatEffectivenessComponent {
   private subscribeToRevives() {
     this.eventService.reviveEvents.subscribe(
       event => { this.medicHandler.handle(event) }
-    )
+    );
   }
 
   private subscribeToHeals() {
     this.eventService.healEvents.subscribe(
       event => { this.medicHandler.handle(event) }
-    )
+    );
   }
 
   private subscribeToShieldRepairs() {
     this.eventService.shieldRepairEvents.subscribe(
       event => { this.medicHandler.handle(event) }
-    )
+    );
   }
 
   private subscribeToObjectiveEvents() {
@@ -239,6 +247,58 @@ export class CombatEffectivenessComponent {
     );
   }
 
+  private subscribeToEngiEvents() {
+    this.subscribeToTerminalRepairs();
+    this.subscribeToGeneratorRepairs();
+    this.subscribeToInfantryResuplies();
+    this.subscribeToVehicleResupplies();
+    this.subscribeToDeployableRepairs();
+    this.subscribeToVehicleRepairs();
+    this.subscribeToMaxRepairs();
+  }
+
+  private subscribeToTerminalRepairs() {
+    this.engiEvents.terminalRepairEvents.subscribe(
+      event => { this.engiHandler.handle(event); }
+    );
+  }
+
+  private subscribeToGeneratorRepairs() {
+    this.engiEvents.generatorRepairEvents.subscribe(
+      event => { this.engiHandler.handle(event); }
+    );
+  }
+
+  private subscribeToInfantryResuplies() {
+    this.engiEvents.infantryResupplyEvents.subscribe(
+      event => { this.engiHandler.handle(event); }
+    );
+  }
+
+  private subscribeToVehicleResupplies() {
+    this.engiEvents.vehicleResupplyEvents.subscribe(
+      event => { this.engiHandler.handle(event); }
+    );
+  }
+
+  private subscribeToDeployableRepairs() {
+    this.engiEvents.deployableRepairEvents.subscribe(
+      event => { this.engiHandler.handle(event); }
+    );
+  }
+
+  private subscribeToVehicleRepairs() {
+    this.engiEvents.vehicleRepairEvents.subscribe(
+      event => { this.engiHandler.handle(event); }
+    );
+  }
+
+  private subscribeToMaxRepairs() {
+    this.engiEvents.maxRepairEvents.subscribe(
+      event => { this.engiHandler.handle(event); }
+    );
+  }
+
   addPlayer() {
     if(this.loadingData) { return }
 
@@ -365,6 +425,15 @@ export class CombatEffectivenessComponent {
         turretHacks: 0,
         motionSensorsDestroyed: 0,
         spitfiresDestroyed: 0
+      },
+      engiStats: {
+        terminalRepairs: 0,
+        generatorReparirs: 0,
+        infantryResupply: 0,
+        vehicleResupply: 0,
+        deployableRepairs: 0,
+        vehicleRepairs: 0,
+        maxRepairs: 0
       }
     }
   }

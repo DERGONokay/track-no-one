@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { GeneratorOverloadEvent, GeneratorStabilizeEvent, MotionSensorDestroyEvent, MotionSpotEvent, QSpotEvent, ScoutRadarSpotEvent, SpitfireDestroyEvent, TerminalHackEvent, TurretHackEvent } from '../../event/scout/scout.events.model';
+import { GeneratorOverloadEvent, GeneratorStabilizeEvent, MotionSensorDestroyEvent, MotionSpotEvent, QSpotEvent, ScoutRadarSpotEvent, SpitfireDestroyEvent, TerminalHackEvent, TurretHackEvent } from '../../event/scout/scout.event.model';
 import { CombatEffectivenessService } from '../combat-efectiveness.service';
 import { PlayerCombatEffectiveness } from '../combat-effectiveness.model';
 

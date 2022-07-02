@@ -15,6 +15,7 @@ export interface PlayerCombatEffectiveness {
   objectiveStats: ObjectiveStats
   logisticsStats: LogisticsStats
   scoutStats: ScoutStats
+  engiStats: EngiStats
 }
 
 export interface KillerStats {
@@ -55,4 +56,14 @@ export interface ScoutStats {
   turretHacks: number
   motionSensorsDestroyed: number
   spitfiresDestroyed: number
+}
+
+export interface EngiStats {
+  terminalRepairs: number
+  generatorReparirs: number
+  infantryResupply: number
+  vehicleResupply: number
+  deployableRepairs: number
+  vehicleRepairs: number
+  maxRepairs: number
 }

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
+import { EngiEvents } from './engi/engi.event';
 import { InfantryClass } from './event.model';
 import { EventService } from './event.service';
 import { LogisticsEvents as LogisticsEvents } from './logistics.events';
 import { ObjectiveEvents } from './objective.events';
-import { ScoutEvents } from './scout/scout.events';
+import { ScoutEvents } from './scout/scout.event';
 import { CensusEvent, CensusMessage, CensusPayload, GainExperienceId } from './tracking/tracking.model';
 
 @Injectable({
@@ -15,7 +16,8 @@ export class EventAdapterService {
     private eventService: EventService,
     private objectiveEventsService: ObjectiveEvents,
     private logisticsEvents: LogisticsEvents,
-    private scoutEvents: ScoutEvents
+    private scoutEvents: ScoutEvents,
+    private engiEvents: EngiEvents
   ) { }
 
   adapt(message: CensusMessage) {
@@ -43,7 +45,98 @@ export class EventAdapterService {
     else if(this.isTurrethack(message)) { this.emmitTurretHack(message.payload) }
     else if(this.isMotionSensorDestroy(message)) { this.emmitMotionSensorDestroy(message.payload) }
     else if(this.isSpitfireDestroy(message)) { this.emmitSpitfireDestroy(message.payload) }
+    else if(this.isTerminalRepair(message)) { this.emmitTerminalRepair(message.payload) }
+    else if(this.isGeneratorRepair(message)) { this.emmitGeneratorRepair(message.payload) }
+    else if(this.isInfantryResupply(message)) { this.emmitInfantryResupply(message.payload) }
+    else if(this.isVehicleResupply(message)) { this.emmitVehicleResupply(message.payload) }
+    else if(this.isDeployableRepair(message)) { this.emmitDeployableRepair(message.payload) }
+    else if(this.isVehicleRepair(message)) { this.emmitVehicleRepair(message.payload) }
+    else if(this.isMaxRepair(message)) { this.emmitMaxRepair(message.payload) }
     else { console.log("Unknown event", message) }
+  }
+
+  private isMaxRepair(message: CensusMessage): Boolean {
+      return message.payload.experience_id == GainExperienceId.MAX_REPAIR
+          || message.payload.experience_id == GainExperienceId.SQUAD_MAX_REPAIR
+  }
+  
+  private emmitMaxRepair(payload: CensusPayload) {
+      this.engiEvents.maxRepairData = {
+          playerId: payload.character_id,
+          type: "maxRepair"
+      }
+  }
+  
+  private isVehicleRepair(message: CensusMessage): Boolean {
+      return this.vehicleRepairIds.some(id => id == message.payload.experience_id);
+  }
+  
+  private emmitVehicleRepair(payload: CensusPayload) {
+      this.engiEvents.vehicleRepairData = {
+          playerId: payload.character_id,
+          type: "vehicleRepair"
+      }
+  }
+
+  private isDeployableRepair(message: CensusMessage): Boolean {
+      return message.payload.experience_id == GainExperienceId.MANA_TURRET_REPAIR
+          || message.payload.experience_id == GainExperienceId.SQUAD_MANA_TURRET_REPAIR
+          || message.payload.experience_id == GainExperienceId.HARDLIGHT_BARRIER_REPAIR
+          || message.payload.experience_id == GainExperienceId.SQUAD_HARDLIGHT_BARRIER_REPAIR
+          || message.payload.experience_id == GainExperienceId.SPITFIRE_REPAIR
+          || message.payload.experience_id == GainExperienceId.SQUAD_SPITFIRE_REPAIR
+  }
+  
+  private emmitDeployableRepair(payload: CensusPayload) {
+      this.engiEvents.deployableRepairData = {
+          playerId: payload.character_id,
+          type: "deployableRepair"
+      }
+  }
+
+  private isVehicleResupply(message: CensusMessage): Boolean {
+      return message.payload.experience_id == GainExperienceId.VEHICLE_RESUPPLY
+  }
+  
+  private emmitVehicleResupply(payload: CensusPayload) {
+      this.engiEvents.vehicleResupplyData = {
+          playerId: payload.character_id,
+          type: "vehicleResupply"
+      }
+  }
+
+  private isInfantryResupply(message: CensusMessage): Boolean {
+      return message.payload.experience_id == GainExperienceId.INFANTRY_RESUPPLY
+          || message.payload.experience_id == GainExperienceId.SQUAD_INFANTRY_RESUPPLY
+  }
+  
+  private emmitInfantryResupply(payload: CensusPayload) {
+      this.engiEvents.infantryResupplyData = {
+          playerId: payload.character_id,
+          type: "infantryResupply"
+      }
+  }
+  
+  private isGeneratorRepair(message: CensusMessage): Boolean {
+      return message.payload.experience_id == GainExperienceId.GENERATOR_REPAIR
+  }
+  
+  private emmitGeneratorRepair(payload: CensusPayload) {
+      this.engiEvents.generatorRepairData = {
+          playerId: payload.character_id,
+          type: "generatorRepair"
+      }
+  }
+  
+  private isTerminalRepair(message: CensusMessage): Boolean {
+      return message.payload.experience_id == GainExperienceId.TERMINAL_REPAIR
+  }
+  
+  private emmitTerminalRepair(payload: CensusPayload) {
+      this.engiEvents.terminalRepairData = {
+          playerId: payload.character_id,
+          type: "terminalRepair"
+      }
   }
 
   private isSpitfireDestroy(message: CensusMessage): Boolean {
@@ -348,4 +441,15 @@ export class EventAdapterService {
   private readonly shieldRepairIds = [GainExperienceId.SHIELD_REPAIR, GainExperienceId.SQUAD_SHIELD_REPAIR]
   private readonly spawnIds = [GainExperienceId.SUNDERER_SPAWN, GainExperienceId.LODESTAR_SPAWN]
   private readonly squadSpawnIds = [GainExperienceId.SQUAD_SPAWN, GainExperienceId.GALAXY_SPAWN, GainExperienceId.VALKYRIE_SPAWN]
+  private readonly vehicleRepairIds = [
+    GainExperienceId.SUNDERER_REPAIR, GainExperienceId.SQUAD_SUNDERER_REPAIR, GainExperienceId.ANT_REPAIR, GainExperienceId.SQUAD_ANT_REPAIR,
+    GainExperienceId.LIGHTING_REPAIR, GainExperienceId.SQUAD_LIGHTING_REPAIR, GainExperienceId.VANGUARD_REPAIR, GainExperienceId.SQUAD_VANGUARD_REPAIR,
+    GainExperienceId.PROWLER_REPAIR, GainExperienceId.SQUAD_PROWLER_REPAIR, GainExperienceId.MAGRIDER_REPAIR, GainExperienceId.SQUAD_MAGRIDER_REPAIR,
+    GainExperienceId.FLASH_REPAIR, GainExperienceId.SQUAD_FLASH_REPAIR, GainExperienceId.JAVELIN_REPAIR, GainExperienceId.SQUAD_JAVELIN_REPAIR,
+    GainExperienceId.HARRASER_REPAIR, GainExperienceId.SQUAD_HARRASER_REPAIR, GainExperienceId.REAVER_REPAIR, GainExperienceId.SQUAD_REAVER_REPAIR,
+    GainExperienceId.MOSQUITO_REPAIR, GainExperienceId.SQUAD_MOSQUITO_REPAIR, GainExperienceId.SCYTHE_REPAIR, GainExperienceId.SQUAD_SCYTHE_REPAIR,
+    GainExperienceId.DERVISH_REPAIR, GainExperienceId.SQUAD_DERVISH_REPAIR, GainExperienceId.VALKYRIE_REPAIR, GainExperienceId.SQUAD_VALKYRIE_REPAIR,
+    GainExperienceId.GALAXY_REPAIR, GainExperienceId.SQUAD_GALAXY_REPAIR, GainExperienceId.LIBERATOR_REPAIR, GainExperienceId.SQUAD_LIBERATOR_REPAIR,
+    GainExperienceId.COLOSUS_REPAIR, GainExperienceId.SQUAD_COLOSUS_REPAIR
+  ]
 }
