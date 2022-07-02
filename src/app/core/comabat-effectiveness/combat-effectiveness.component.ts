@@ -181,6 +181,10 @@ export class CombatEffectivenessComponent {
     this.scoutEvents.motionSpotEvents.subscribe(
       event => { this.scoutHandler.handle(event)}
     )
+    
+    this.scoutEvents.scoutRadarSpotEvents.subscribe(
+      event => { this.scoutHandler.handle(event)}
+    )
   }
 
   addPlayer() {

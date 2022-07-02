@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MotionSpotEvent, QSpotEvent } from '../../event/scout/scout.events.model';
+import { MotionSpotEvent, QSpotEvent, ScoutRadarSpotEvent } from '../../event/scout/scout.events.model';
 import { CombatEffectivenessService } from '../combat-efectiveness.service';
 import { PlayerCombatEffectiveness } from '../combat-effectiveness.model';
 
@@ -18,7 +18,7 @@ export class ScoutHandlerService {
     )
   }
 
-  handle(event: QSpotEvent | MotionSpotEvent) {
+  handle(event: QSpotEvent | MotionSpotEvent | ScoutRadarSpotEvent) {
     const player = this.trackedPlayers.find(d => d.id == event.playerId);
     
     if(player) {
@@ -30,6 +30,10 @@ export class ScoutHandlerService {
         case "motionSpot":
           console.log(`${player.name} Motion Spotted an enemy`)
           player.scoutStats.motionSpots += 1;
+          break;
+        case "radarSpot":
+          console.log(`${player.name} Radar Scout Spotted an enemy`)
+          player.scoutStats.radarSpots += 1;
           break;
       }
       
