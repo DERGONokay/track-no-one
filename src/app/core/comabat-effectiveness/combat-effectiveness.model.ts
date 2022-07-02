@@ -54,5 +54,5 @@ export interface ScoutStats {
   terminalHacks: number
   turretHacks: number
   motionSensorsDestroyed: number
-  spitfireKills: number
+  spitfiresDestroyed: number
 }

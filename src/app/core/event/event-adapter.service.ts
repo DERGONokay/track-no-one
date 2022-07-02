@@ -42,7 +42,19 @@ export class EventAdapterService {
     else if(this.isTerminalHack(message)) { this.emmitTerminalHack(message.payload) }
     else if(this.isTurrethack(message)) { this.emmitTurretHack(message.payload) }
     else if(this.isMotionSensorDestroy(message)) { this.emmitMotionSensorDestroy(message.payload) }
+    else if(this.isSpitfireDestroy(message)) { this.emmitSpitfireDestroy(message.payload) }
     else { console.log("Unknown event", message) }
+  }
+
+  private isSpitfireDestroy(message: CensusMessage): Boolean {
+    return message.payload.experience_id == GainExperienceId.SPITFIRE_DESTROY
+  }
+
+  private emmitSpitfireDestroy(payload: CensusPayload) {
+    this.scoutEvents.spitfireDestroyData = {
+      playerId: payload.character_id,
+      type: "spitfireDestroy"
+    }
   }
 
   private isMotionSensorDestroy(message: CensusMessage): Boolean {

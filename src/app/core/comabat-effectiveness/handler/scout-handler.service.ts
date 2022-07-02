@@ -55,6 +55,10 @@ export class ScoutHandlerService {
           console.log(`${player.name} destroyed a motion sensor`)
           player.scoutStats.motionSensorsDestroyed += 1;
           break;
+        case "spitfireDestroy":
+          console.log(`${player.name} destroyed a spitfire`)
+          player.scoutStats.spitfiresDestroyed += 1;
+          break;
       }
       
       this.updateSessionLenght(player);

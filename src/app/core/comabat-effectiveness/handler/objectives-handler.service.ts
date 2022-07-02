@@ -32,11 +32,11 @@ export class ObjectivesHandler {
           player.objectiveStats.facilitiesDefense += 1;
           break;
         case "pointCapture":
-          console.log(`${player.name} capture a point`);
+          console.log(`${player.name} is capturing a point`);
           player.objectiveStats.pointsCapture += 1;
           break;
         case "pointDefense":
-          console.log(`${player.name} defended a point`);
+          console.log(`${player.name} is defending the point`);
           player.objectiveStats.pointsDefense += 1;
           break;
       }

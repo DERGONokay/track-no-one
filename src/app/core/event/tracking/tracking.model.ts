@@ -89,7 +89,7 @@ export enum GainExperienceId {
     TERMINAL_HACK = "236",
     TURRET_HACK = "237",
     MOTION_SENSOR_DESTROY = "370",
-    SPITFIRE_KILL = "579"
+    SPITFIRE_DESTROY = "579"
 }
 
 export enum MessageType {

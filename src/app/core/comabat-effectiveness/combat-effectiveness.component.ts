@@ -181,7 +181,8 @@ export class CombatEffectivenessComponent {
     this.subscribeToGeneratorStabilizations();
     this.subscribeToTerminalHacks();
     this.subscribeToTurretHacks();
-    this.subscribeToMotionSensorKills();
+    this.subscribeToMotionSensorDestruciton();
+    this.subscribeToSpitfireDestruction();
   }
 
   private subscribeToQSpots() {
@@ -226,8 +227,14 @@ export class CombatEffectivenessComponent {
     );
   }
 
-  private subscribeToMotionSensorKills() {
+  private subscribeToMotionSensorDestruciton() {
     this.scoutEvents.motionSensorKillEvents.subscribe(
+      event => { this.scoutHandler.handle(event); }
+    );
+  }
+
+  private subscribeToSpitfireDestruction() {
+    this.scoutEvents.spitfireDestroyEvents.subscribe(
       event => { this.scoutHandler.handle(event); }
     );
   }
@@ -357,7 +364,7 @@ export class CombatEffectivenessComponent {
         terminalHacks: 0,
         turretHacks: 0,
         motionSensorsDestroyed: 0,
-        spitfireKills: 0
+        spitfiresDestroyed: 0
       }
     }
   }
