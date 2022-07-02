@@ -57,8 +57,7 @@ jobs:
     steps:
       - name: Send noti to KN1 Guilded
         run: |
-          curl --request POST \
+          curl --request POST ${{ secrets.KN1_GUILDED_WEBHOOK }} \
                --header "Content-Type: application/json" \
                --data "{'content': '${{ github.event.head_commit.message }}''}"
-               ${{ secrets.KN1_GUILDED_WEBHOOK }}
 
