@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { GeneratorOverloadEvent, GeneratorStabilizeEvent, MotionSensorKillEvent, MotionSpotEvent, QSpotEvent, ScoutRadarSpotEvent, SpitfireKillEvent, TerminalHackEvent, TurretHackEvent } from '../../event/scout/scout.events.model';
+import { GeneratorOverloadEvent, GeneratorStabilizeEvent, MotionSensorDestroyEvent, MotionSpotEvent, QSpotEvent, ScoutRadarSpotEvent, SpitfireDestroyEvent, TerminalHackEvent, TurretHackEvent } from '../../event/scout/scout.events.model';
 import { CombatEffectivenessService } from '../combat-efectiveness.service';
 import { PlayerCombatEffectiveness } from '../combat-effectiveness.model';
 
@@ -18,7 +18,7 @@ export class ScoutHandlerService {
     )
   }
 
-  handle(event: QSpotEvent | MotionSpotEvent | ScoutRadarSpotEvent | GeneratorOverloadEvent | GeneratorStabilizeEvent | TerminalHackEvent | TurretHackEvent | MotionSensorKillEvent | SpitfireKillEvent) {
+  handle(event: QSpotEvent | MotionSpotEvent | ScoutRadarSpotEvent | GeneratorOverloadEvent | GeneratorStabilizeEvent | TerminalHackEvent | TurretHackEvent | MotionSensorDestroyEvent | SpitfireDestroyEvent) {
     const player = this.trackedPlayers.find(d => d.id == event.playerId);
     
     if(player) {
@@ -50,6 +50,10 @@ export class ScoutHandlerService {
         case "turretHack":
           console.log(`${player.name} hacked a phalanx turret`)
           player.scoutStats.turretHacks += 1;
+          break;
+        case "motionSensorDestroy":
+          console.log(`${player.name} destroyed a motion sensor`)
+          player.scoutStats.motionSensorsDestroyed += 1;
           break;
       }
       

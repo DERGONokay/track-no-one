@@ -53,6 +53,6 @@ export interface ScoutStats {
   generatorStabilizations: number
   terminalHacks: number
   turretHacks: number
-  motionSpotterKills: number
+  motionSensorsDestroyed: number
   spitfireKills: number
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { GeneratorOverloadEvent, GeneratorStabilizeEvent, MotionSpotEvent, QSpotEvent, ScoutRadarSpotEvent, TerminalHackEvent, TurretHackEvent } from './scout.events.model';
+import { GeneratorOverloadEvent, GeneratorStabilizeEvent, MotionSensorDestroyEvent, MotionSpotEvent, QSpotEvent, ScoutRadarSpotEvent, TerminalHackEvent, TurretHackEvent } from './scout.events.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +16,7 @@ export class ScoutEvents {
   private generatorStabilizeSubject: Subject<GeneratorStabilizeEvent> = new Subject<GeneratorStabilizeEvent>();
   private terminalHackSubject: Subject<TerminalHackEvent> = new Subject<TerminalHackEvent>();
   private turretHackSubject: Subject<TurretHackEvent> = new Subject<TurretHackEvent>();
+  private motionSensorKillSubject: Subject<MotionSensorDestroyEvent> = new Subject<MotionSensorDestroyEvent>();
   
   get qSpotEvents() { return this.qSpotSubject.asObservable(); }
   set qSpotEventData(event: QSpotEvent) { this.qSpotSubject.next(event); }
@@ -37,4 +38,7 @@ export class ScoutEvents {
   
   get turretHackEvents() { return this.turretHackSubject.asObservable(); }
   set turretHackData(event: TurretHackEvent) { this.turretHackSubject.next(event); }
+  
+  get motionSensorKillEvents() { return this.motionSensorKillSubject.asObservable(); }
+  set motionSensorKillData(event: MotionSensorDestroyEvent) { this.motionSensorKillSubject.next(event); }
 }

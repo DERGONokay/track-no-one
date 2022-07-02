@@ -33,12 +33,12 @@ export interface TurretHackEvent {
     type: "turretHack"
 }
 
-export interface MotionSensorKillEvent {
+export interface MotionSensorDestroyEvent {
     playerId: String
-    type: "motionSensorKill"
+    type: "motionSensorDestroy"
 }
 
-export interface SpitfireKillEvent {
+export interface SpitfireDestroyEvent {
     playerId: String
-    type: "spitfireKill"
+    type: "spitfireDestroy"
 }

@@ -40,7 +40,31 @@ export class EventAdapterService {
     else if(this.isGeneratorOverload(message)) { this.emmitGeneratorOverload(message.payload) }
     else if(this.isGeneratorStabilize(message)) { this.emmitGeneratorStabilize(message.payload) }
     else if(this.isTerminalHack(message)) { this.emmitTerminalHack(message.payload) }
+    else if(this.isTurrethack(message)) { this.emmitTurretHack(message.payload) }
+    else if(this.isMotionSensorDestroy(message)) { this.emmitMotionSensorDestroy(message.payload) }
     else { console.log("Unknown event", message) }
+  }
+
+  private isMotionSensorDestroy(message: CensusMessage): Boolean {
+    return message.payload.experience_id == GainExperienceId.MOTION_SENSOR_DESTROY
+  }
+
+  private emmitMotionSensorDestroy(payload: CensusPayload) {
+    this.scoutEvents.motionSensorKillData = {
+      playerId: payload.character_id,
+      type: "motionSensorDestroy"
+    }
+  }
+
+  private isTurrethack(message: CensusMessage): Boolean {
+    return message.payload.experience_id == GainExperienceId.TURRET_HACK
+  }
+
+  private emmitTurretHack(payload: CensusPayload) {
+    this.scoutEvents.turretHackData = {
+      playerId: payload.character_id,
+      type: "turretHack"
+    }
   }
 
   private isTerminalHack(message: CensusMessage): Boolean {
@@ -48,9 +72,9 @@ export class EventAdapterService {
   }
 
   private emmitTerminalHack(payload: CensusPayload) {
-    this.scoutEvents.generatorStabilizeData = {
+    this.scoutEvents.terminalHackData = {
       playerId: payload.character_id,
-      type: "stabilize"
+      type: "terminalHack"
     }
   }
 

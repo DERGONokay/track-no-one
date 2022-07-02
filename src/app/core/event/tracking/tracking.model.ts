@@ -88,7 +88,7 @@ export enum GainExperienceId {
     GENERATOR_STABILIZED = "235",
     TERMINAL_HACK = "236",
     TURRET_HACK = "237",
-    MOTION_SPOTTER_KILL = "370",
+    MOTION_SENSOR_DESTROY = "370",
     SPITFIRE_KILL = "579"
 }
 
