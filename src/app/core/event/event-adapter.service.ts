@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { InfantryClass } from './event.model';
 import { EventService } from './event.service';
 import { LogisticsEvents as LogisticsEvents } from './logistics.events';
-import { ObjectiveEvents } from './objective-events.service';
+import { ObjectiveEvents } from './objective.events';
+import { ScoutEvents } from './scout/scout.events';
 import { CensusEvent, CensusMessage, CensusPayload, GainExperienceId } from './tracking/tracking.model';
 
 @Injectable({
@@ -13,7 +14,8 @@ export class EventAdapterService {
   constructor(
     private eventService: EventService,
     private objectiveEventsService: ObjectiveEvents,
-    private logisticsEvents: LogisticsEvents
+    private logisticsEvents: LogisticsEvents,
+    private scoutEvents: ScoutEvents
   ) { }
 
   adapt(message: CensusMessage) {
@@ -32,7 +34,20 @@ export class EventAdapterService {
     else if(this.isTransportAssist(message)) { this.emmitTransportAssist(message.payload) }
     else if(this.isBeaconKill(message)) { this.emmitBeaconKill(message.payload) }
     else if(this.isRouterKill(message)) { this.emmitRouterkill(message.payload) }
+    else if(this.isQSpot(message)) { this.emmitQSpot(message.payload) }
     else { console.log("Unknown event", message) }
+  }
+
+  private isQSpot(message: CensusMessage): Boolean {
+    return message.payload.experience_id == GainExperienceId.Q_SPOT
+      || message.payload.experience_id == GainExperienceId.SQUAD_Q_SPOT
+  }
+
+  private emmitQSpot(payload: CensusPayload) {
+    this.scoutEvents.qSpotEventData = {
+      playerId: payload.character_id,
+      type: "qspot"
+    }
   }
 
   private isRouterKill(message: CensusMessage): Boolean {

@@ -47,7 +47,13 @@ export class TrackingService {
         CensusEvents.SUNDERER_SPAWN, CensusEvents.LODESTAR_SPAWN,
         CensusEvents.SQUAD_SPAWN, CensusEvents.VALKYRIE_SPAWN, CensusEvents.GALAXY_SPAWN,
         CensusEvents.TRANSPORT_ASSIST,
-        CensusEvents.BEACON_KILL, CensusEvents.ROUTER_KILL
+        CensusEvents.BEACON_KILL, CensusEvents.ROUTER_KILL,
+        CensusEvents.Q_SPOT, CensusEvents.SQUAD_Q_SPOT,
+        CensusEvents.MOTION_SPOTTER, CensusEvents.SQUAD_MOTION_SPOTTER,
+        CensusEvents.SCOUT_RADAR, CensusEvents.SQUAD_SCOUT_RADAR,
+        CensusEvents.GENERATOR_OVERLOADED, CensusEvents.GENERATOR_SABILIZED,
+        CensusEvents.TERMINAL_HACK, CensusEvents.TURRET_HACK, 
+        CensusEvents.MOTION_SPOTTER_KILL, CensusEvents.SPITFIRE_KILL
       ]
     })
   }

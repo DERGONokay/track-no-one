@@ -11,10 +11,12 @@ import { CombatEffectivenessService } from './combat-efectiveness.service';
 import { KillsHandler } from './handler/kills-handler.service';
 import { AssistHandler } from './handler/assist-handler.service';
 import { MedicHandler } from './handler/medic-handler.service';
-import { ObjectiveEvents } from '../event/objective-events.service';
 import { ObjectivesHandler as ObjectivesHandler } from './handler/objectives-handler.service';
 import { LogisticsHandler } from './handler/logistics-handler.service';
 import { LogisticsEvents } from '../event/logistics.events';
+import { ObjectiveEvents } from '../event/objective.events';
+import { ScoutEvents } from '../event/scout/scout.events';
+import { ScoutHandlerService } from './handler/scout-handler.service';
 
 @Component({
   selector: 'app-combat-effectiveness',
@@ -37,12 +39,14 @@ export class CombatEffectivenessComponent {
     private eventService: EventService,
     private objectiveEvents: ObjectiveEvents,
     private logisticsEvents: LogisticsEvents,
+    private scoutEvents: ScoutEvents,
     private combatEffectivenessService: CombatEffectivenessService,
     private killsHandler: KillsHandler,
     private assistHandler: AssistHandler,
     private medicHandler: MedicHandler,
     private objectivesHandler: ObjectivesHandler,
-    private logisticsHandler: LogisticsHandler
+    private logisticsHandler: LogisticsHandler,
+    private scoutHandler: ScoutHandlerService
   ) {
     this.trackingService.connect();
     this.subscribeToPlayersCombatEffectiveness();
@@ -50,6 +54,7 @@ export class CombatEffectivenessComponent {
     this.subscribeToMedicEvents();
     this.subscribeToObjectiveEvents();
     this.subscribeToLogisticsEvents();
+    this.subscribeToScoutEvents();
   }
 
   private subscribeToPlayersCombatEffectiveness() {
@@ -168,6 +173,12 @@ export class CombatEffectivenessComponent {
     );
   }
 
+  private subscribeToScoutEvents() {
+    this.scoutEvents.qSpotEvents.subscribe(
+      event => { this.scoutHandler.handle(event)}
+    )
+  }
+
   addPlayer() {
     if(this.loadingData) { return }
 
@@ -283,6 +294,17 @@ export class CombatEffectivenessComponent {
         transportAssits: 0,
         beaconKills: 0,
         routerKills: 0
+      },
+      scoutStats: {
+        qspots: 0,
+        motionSpots: 0,
+        radarSpots: 0,
+        generatorOverloads: 0,
+        generatorStablilizations: 0,
+        terminalHacks: 0,
+        turretHacks: 0,
+        motionSpotterKills: 0,
+        spitfireKills: 0
       }
     }
   }

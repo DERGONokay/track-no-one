@@ -28,7 +28,7 @@ export enum CensusEvent {
     SQUAD_REVIVE = "GainExperience_experience_id_53",
     HEAL = "GainExperience_experience_id_4",
     SQUAD_HEAL = "GainExperience_experience_id_51",
-    HEAL_ASSIST = "GainExperience_experience_id_34",
+    HEAL_ASSIST = "GainExperience_experience_id_5",
     SHIELD_REPAIR = "GainExperience_experience_id_438",
     SQUAD_SHIELD_REPAIR = "GainExperience_experience_id_439",
     FACILITY_CAPTURE = "PlayerFacilityCapture",
@@ -42,7 +42,19 @@ export enum CensusEvent {
     GALAXY_SPAWN = "GainExperience_experience_id_201",
     TRANSPORT_ASSIST = "GainExperience_experience_id_30",
     BEACON_KILL = "GainExperience_experience_id_270",
-    ROUTER_KILL = "GainExperience_experience_id_1409"
+    ROUTER_KILL = "GainExperience_experience_id_1409",
+    Q_SPOT = "GainExperience_experience_id_36",
+    SQUAD_Q_SPOT = "GainExperience_experience_id_54",
+    MOTION_SPOTTER = "GainExperience_experience_id_293",
+    SQUAD_MOTION_SPOTTER = "GainExperience_experience_id_294",
+    SCOUT_RADAR = "GainExperience_experience_id_353",
+    SQUAD_SCOUT_RADAR = "GainExperience_experience_id_354",
+    GENERATOR_OVERLOADED = "GainExperience_experience_id_234",
+    GENERATOR_SABILIZED = "GainExperience_experience_id_235",
+    TERMINAL_HACK = "GainExperience_experience_id_236",
+    TURRET_HACK = "GainExperience_experience_id_237",
+    MOTION_SPOTTER_KILL = "GainExperience_experience_id_370",
+    SPITFIRE_KILL = "GainExperience_experience_id_579"
 }
 
 export enum GainExperienceId {
@@ -53,7 +65,7 @@ export enum GainExperienceId {
     SQUAD_REVIVE = "53",
     HEAL = "4",
     SQUAD_HEAL = "51",
-    HEAL_ASSIST = "34",
+    HEAL_ASSIST = "5",
     SHIELD_REPAIR = "438",
     SQUAD_SHIELD_REPAIR = "439",
     POINT_DEFENSE = "556",
@@ -65,7 +77,19 @@ export enum GainExperienceId {
     SQUAD_SPAWN = "56",
     TRANSPORT_ASSIST = "30",
     BEACON_KILL = "270",
-    ROUTER_KILL = "1409"
+    ROUTER_KILL = "1409",
+    Q_SPOT = "36",
+    SQUAD_Q_SPOT = "54",
+    MOTION_SPOTTER = "293",
+    SQUAD_MOTION_SPOTTER = "294",
+    SCOUT_RADAR = "353",
+    SQUAD_SCOUT_RADAR = "354",
+    GENERATOR_OVERLOADED = "234",
+    GENERATOR_SABILIZED = "235",
+    TERMINAL_HACK = "236",
+    TURRET_HACK = "237",
+    MOTION_SPOTTER_KILL = "370",
+    SPITFIRE_KILL = "579"
 }
 
 export enum MessageType {
