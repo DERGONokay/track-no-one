@@ -22,6 +22,7 @@ import { UnderConstructionComponent } from './under-construction/under-construct
 import { CombatEffectivenessComponent } from './core/comabat-effectiveness/combat-effectiveness.component';
 import { ExperienceComponent } from './core/experience/experience.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 @NgModule({
@@ -48,7 +49,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatProgressSpinnerModule,
     ReactiveFormsModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatTooltipModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -19,6 +19,7 @@
 <mat-form-field class="inputs">
     <mat-label>Outfit tag</mat-label>
     <input matInput type="text" [formControl]="outfitTag">
+    <mat-icon matSuffix matTooltip="Only online members will be tracked">info</mat-icon>
 </mat-form-field>
 <button mat-icon-button (click)="addOutfit()">
     <mat-icon>add</mat-icon>
