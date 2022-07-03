@@ -328,16 +328,25 @@ export class CombatEffectivenessComponent implements OnInit {
 
     this.outfitRepository.findByTag(this.outfitTag.value)
       .then(outfit => {
-        console.log("Outfit found", outfit)
-        outfit.members?.forEach(player =>{
-          this.startTracking(player);
-        })
+        console.log("Outfit found", outfit);
+
+        if(!outfit.members || outfit.members.length == 0) {
+          Swal.fire({
+            icon: "info",
+            title: "No online members found in " + outfit.name,
+            text: "Only online members are tracked"
+          });
+        } else {
+          outfit.members.forEach(player =>{
+            this.startTracking(player);
+          });
+        }
       })
-      .catch(error => {
+      .catch(() => {
         Swal.fire({
-          icon: error,
+          icon: "error",
           title: "Couldn't find outfit with tag " + this.outfitTag.value
-        })
+        });
       })
       .finally(() => {
         this.loadingData = false
