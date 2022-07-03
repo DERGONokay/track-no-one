@@ -1,24 +1,13 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 import { TrackingService } from '../event/tracking/tracking.service';
-import { EventService } from '../event/event.service';
 import { PlayerRepository } from '../player/player.repository';
 import { OutfitRepository } from '../outfit/outfit.repository';
 import { Player } from '../player/player.model';
 import { PlayerCombatEffectiveness } from './combat-effectiveness.model';
 import { UntypedFormControl } from '@angular/forms';
 import { CombatEffectivenessService } from './combat-efectiveness.service';
-import { KillsHandler } from './handler/kills-handler.service';
-import { AssistHandler } from './handler/assist-handler.service';
-import { MedicHandler } from './handler/medic-handler.service';
-import { ObjectivesHandler as ObjectivesHandler } from './handler/objectives-handler.service';
-import { LogisticsHandler } from './handler/logistics-handler.service';
-import { LogisticsEvents } from '../event/logistics.events';
-import { ObjectiveEvents } from '../event/objective.events';
-import { ScoutEvents } from '../event/scout/scout.event';
-import { ScoutHandlerService } from './handler/scout-handler.service';
-import { EngiEvents } from '../event/engi/engi.event';
-import { EngiHandlerService } from './handler/engi-handler.service';
+import { PlayerEventsListenerService } from '../event/listener/player-events-listener.service';
 
 @Component({
   selector: 'app-combat-effectiveness',
@@ -38,264 +27,16 @@ export class CombatEffectivenessComponent implements OnInit {
     private outfitRepository: OutfitRepository,
     private playerRepository: PlayerRepository,
     public trackingService: TrackingService,
-    private eventService: EventService,
-    private objectiveEvents: ObjectiveEvents,
-    private logisticsEvents: LogisticsEvents,
-    private scoutEvents: ScoutEvents,
-    private engiEvents: EngiEvents,
     private combatEffectivenessService: CombatEffectivenessService,
-    private killsHandler: KillsHandler,
-    private assistHandler: AssistHandler,
-    private medicHandler: MedicHandler,
-    private objectivesHandler: ObjectivesHandler,
-    private logisticsHandler: LogisticsHandler,
-    private scoutHandler: ScoutHandlerService,
-    private engiHandler: EngiHandlerService
+    private playerEventsListener: PlayerEventsListenerService
   ) { }
 
   ngOnInit(): void {
     this.trackingService.connect();
-    this.subscribeToPlayersCombatEffectiveness();
-    this.subscribeToKillerEvents();
-    this.subscribeToMedicEvents();
-    this.subscribeToObjectiveEvents();
-    this.subscribeToLogisticsEvents();
-    this.subscribeToScoutEvents();
-    this.subscribeToEngiEvents();
-  }
-
-  private subscribeToPlayersCombatEffectiveness() {
+    this.playerEventsListener.stratListening()
     this.combatEffectivenessService.playersCombatEffectivenessObservable.subscribe(
-      trackedPlayers => { this.trackedPlayers = trackedPlayers; }
-    );
-  }
-
-  private subscribeToKillerEvents() {
-    this.subscribeToKills();
-    this.subscribeToAssists();
-  }
-  
-  private subscribeToKills() {
-    this.eventService.killEvents.subscribe(
-      killEvent => { this.killsHandler.handle(killEvent) }
-    );
-  }
-
-  private subscribeToAssists() {
-    this.eventService.assistEvents.subscribe(
-      event => { this.assistHandler.handle(event) }
-    );
-  }
-
-  private subscribeToMedicEvents() {
-    this.subscribeToRevives();
-    this.subscribeToHeals();
-    this.subscribeToShieldRepairs();
-  }
-
-  private subscribeToRevives() {
-    this.eventService.reviveEvents.subscribe(
-      event => { this.medicHandler.handle(event) }
-    );
-  }
-
-  private subscribeToHeals() {
-    this.eventService.healEvents.subscribe(
-      event => { this.medicHandler.handle(event) }
-    );
-  }
-
-  private subscribeToShieldRepairs() {
-    this.eventService.shieldRepairEvents.subscribe(
-      event => { this.medicHandler.handle(event) }
-    );
-  }
-
-  private subscribeToObjectiveEvents() {
-    this.subscribeToFacilityCaptures();
-    this.subscribeToFacilityDefenses();
-    this.subscribeToPointsCapture();
-    this.subscribeToPointsDefense();
-  }
-
-  private subscribeToPointsDefense() {
-    this.objectiveEvents.pointDefenseEvents.subscribe(
-      event => { this.objectivesHandler.handle(event); }
-    );
-  }
-
-  private subscribeToPointsCapture() {
-    this.objectiveEvents.pointCaptureEvents.subscribe(
-      event => { this.objectivesHandler.handle(event); }
-    );
-  }
-
-  private subscribeToFacilityDefenses() {
-    this.objectiveEvents.facilityDefenseEvents.subscribe(
-      event => { this.objectivesHandler.handle(event); }
-    );
-  }
-
-  private subscribeToFacilityCaptures() {
-    this.objectiveEvents.facilityCaptureEvents.subscribe(
-      event => { this.objectivesHandler.handle(event); }
-    );
-  }
-
-  private subscribeToLogisticsEvents() {
-    this.subscribeToSpawns();
-    this.subscribeToSquadSpawns();
-    this.subscribeToTransportAssists();
-    this.subscribeToBeaconKills();
-    this.subscribeToRouterKills();
-  }
-
-  private subscribeToSquadSpawns() {
-    this.logisticsEvents.squadSpawnEvents.subscribe(
-      event => { this.logisticsHandler.handle(event); }
-    );
-  }
-
-  private subscribeToTransportAssists() {
-    this.logisticsEvents.transportAssistEvents.subscribe(
-      event => { this.logisticsHandler.handle(event); }
-    );
-  }
-
-  private subscribeToBeaconKills() {
-    this.logisticsEvents.beaconKillEvents.subscribe(
-      event => { this.logisticsHandler.handle(event); }
-    );
-  }
-
-  private subscribeToSpawns() {
-    this.logisticsEvents.spawnEvents.subscribe(
-      event => { this.logisticsHandler.handle(event); }
-    );
-  }
-
-  private subscribeToRouterKills() {
-    this.logisticsEvents.routerKillEvents.subscribe(
-      event => { this.logisticsHandler.handle(event); }
-    );
-  }
-
-  private subscribeToScoutEvents() {
-    this.subscribeToQSpots();
-    this.subscribeToMotionSpots();
-    this.subscribeToScoutRadarSpots();
-    this.subscribeToGenerationOverloads();
-    this.subscribeToGeneratorStabilizations();
-    this.subscribeToTerminalHacks();
-    this.subscribeToTurretHacks();
-    this.subscribeToMotionSensorDestruciton();
-    this.subscribeToSpitfireDestruction();
-  }
-
-  private subscribeToQSpots() {
-    this.scoutEvents.qSpotEvents.subscribe(
-      event => { this.scoutHandler.handle(event); }
-    );
-  }
-
-  private subscribeToMotionSpots() {
-    this.scoutEvents.motionSpotEvents.subscribe(
-      event => { this.scoutHandler.handle(event); }
-    );
-  }
-
-  private subscribeToScoutRadarSpots() {
-    this.scoutEvents.scoutRadarSpotEvents.subscribe(
-      event => { this.scoutHandler.handle(event); }
-    );
-  }
-
-  private subscribeToGenerationOverloads() {
-    this.scoutEvents.generatorOverloadEvents.subscribe(
-      event => { this.scoutHandler.handle(event); }
-    );
-  }
-
-  private subscribeToGeneratorStabilizations() {
-    this.scoutEvents.generatorStabilizeEvents.subscribe(
-      event => { this.scoutHandler.handle(event); }
-    );
-  }
-
-  private subscribeToTerminalHacks() {
-    this.scoutEvents.terminalHackEvents.subscribe(
-      event => { this.scoutHandler.handle(event); }
-    );
-  }
-
-  private subscribeToTurretHacks() {
-    this.scoutEvents.turretHackEvents.subscribe(
-      event => { this.scoutHandler.handle(event); }
-    );
-  }
-
-  private subscribeToMotionSensorDestruciton() {
-    this.scoutEvents.motionSensorKillEvents.subscribe(
-      event => { this.scoutHandler.handle(event); }
-    );
-  }
-
-  private subscribeToSpitfireDestruction() {
-    this.scoutEvents.spitfireDestroyEvents.subscribe(
-      event => { this.scoutHandler.handle(event); }
-    );
-  }
-
-  private subscribeToEngiEvents() {
-    this.subscribeToTerminalRepairs();
-    this.subscribeToGeneratorRepairs();
-    this.subscribeToInfantryResuplies();
-    this.subscribeToVehicleResupplies();
-    this.subscribeToDeployableRepairs();
-    this.subscribeToVehicleRepairs();
-    this.subscribeToMaxRepairs();
-  }
-
-  private subscribeToTerminalRepairs() {
-    this.engiEvents.terminalRepairEvents.subscribe(
-      event => { this.engiHandler.handle(event); }
-    );
-  }
-
-  private subscribeToGeneratorRepairs() {
-    this.engiEvents.generatorRepairEvents.subscribe(
-      event => { this.engiHandler.handle(event); }
-    );
-  }
-
-  private subscribeToInfantryResuplies() {
-    this.engiEvents.infantryResupplyEvents.subscribe(
-      event => { this.engiHandler.handle(event); }
-    );
-  }
-
-  private subscribeToVehicleResupplies() {
-    this.engiEvents.vehicleResupplyEvents.subscribe(
-      event => { this.engiHandler.handle(event); }
-    );
-  }
-
-  private subscribeToDeployableRepairs() {
-    this.engiEvents.deployableRepairEvents.subscribe(
-      event => { this.engiHandler.handle(event); }
-    );
-  }
-
-  private subscribeToVehicleRepairs() {
-    this.engiEvents.vehicleRepairEvents.subscribe(
-      event => { this.engiHandler.handle(event); }
-    );
-  }
-
-  private subscribeToMaxRepairs() {
-    this.engiEvents.maxRepairEvents.subscribe(
-      event => { this.engiHandler.handle(event); }
-    );
+      playersComef => { this.trackedPlayers = playersComef }
+    )
   }
 
   addPlayer() {
