@@ -19,7 +19,6 @@ import { ScoutEvents } from '../event/scout/scout.event';
 import { ScoutHandlerService } from './handler/scout-handler.service';
 import { EngiEvents } from '../event/engi/engi.event';
 import { EngiHandlerService } from './handler/engi-handler.service';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-combat-effectiveness',
