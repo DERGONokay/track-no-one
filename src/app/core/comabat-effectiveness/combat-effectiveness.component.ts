@@ -78,8 +78,12 @@ export class CombatEffectivenessComponent implements OnInit {
             text: "Only online members are tracked"
           });
         } else {
-          outfit.members.forEach(player =>{
-            this.startTracking(player);
+          outfit.members.forEach(member =>{
+            this.playerRepository
+              .findById(member.id)
+              .then(player => {
+                this.startTracking(player);
+              })
           });
         }
       })
