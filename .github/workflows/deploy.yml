@@ -55,9 +55,11 @@ jobs:
     needs: deploy
     runs-on: ubuntu-latest
     steps:
-      - name: Send noti to KN1 Guilded
-        run: |
-          curl --request POST ${{ secrets.KN1_GUILDED_WEBHOOK }} \
-               --header "Content-Type: application/json" \
-               --data '{"content": "${{ github.event.head_commit.message }}"}'
+      - name: Notify KN1 Guilded
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.KN1_GUILDED_WEBHOOK }}
+          DISCORD_USERNAME: Track No One
+        uses: Ilshidur/action-discord@master
+        with:
+          args: "${{ github.event.head_commit.message }}"
 
