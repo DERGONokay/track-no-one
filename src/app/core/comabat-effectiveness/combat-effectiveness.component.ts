@@ -8,6 +8,7 @@ import { PlayerCombatEffectiveness } from './combat-effectiveness.model';
 import { UntypedFormControl } from '@angular/forms';
 import { CombatEffectivenessService } from './combat-efectiveness.service';
 import { PlayerEventsListenerService } from '../event/listener/player-events-listener.service';
+import { Gtag } from 'angular-gtag';
 
 @Component({
   selector: 'app-combat-effectiveness',
@@ -24,6 +25,7 @@ export class CombatEffectivenessComponent implements OnInit {
   trackedPlayers: PlayerCombatEffectiveness[] = []
 
   constructor(
+    private gtag: Gtag,
     private outfitRepository: OutfitRepository,
     private playerRepository: PlayerRepository,
     public trackingService: TrackingService,
@@ -41,6 +43,12 @@ export class CombatEffectivenessComponent implements OnInit {
 
   addPlayer() {
     if(this.loadingData) { return }
+
+    this.gtag.event("start_tracking_player_click", {
+      event_category: "engagement",
+      event_label: "Add a single player to the tracking list",
+      value: this.playerName.value.toLowerCase()
+    })
 
     this.loadingData = true
     this.playerName.disable()
@@ -63,6 +71,12 @@ export class CombatEffectivenessComponent implements OnInit {
 
   addOutfit() {
     if(this.loadingData) { return }
+
+    this.gtag.event("start_tracking_outfit_click", {
+      event_category: "engagement",
+      event_label: "Add entire outfit to tracking list",
+      value: this.outfitTag.value.toLowerCase()
+    })
 
     this.loadingData = true
     this.outfitTag.disable()
@@ -124,6 +138,15 @@ export class CombatEffectivenessComponent implements OnInit {
 
   private startTracking(player: Player) {
     if(!this.isBeingTracked(player)) {
+
+      this.gtag.event("start_tracking_player", {
+        event_category: "comef_tracking",
+        event_label: "Started to track a player",
+        value: player.name,
+        outfit: player.outfit?.name,
+        faction: player.faction
+      })
+
       this.trackingService.startTracking(player)
       this.trackedPlayers.push(this.parseToPlayerCombatEffectiveness(player))
       this.combatEffectivenessService.playersCombatEffectivesData = this.trackedPlayers
