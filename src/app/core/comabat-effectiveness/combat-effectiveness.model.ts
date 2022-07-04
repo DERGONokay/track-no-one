@@ -19,6 +19,7 @@ export interface PlayerCombatEffectiveness {
 }
 
 export interface KillerStats {
+  score: number
   kills: number
   deaths: number
   assists: number
@@ -26,12 +27,14 @@ export interface KillerStats {
 }
 
 export interface MedicStats {
+  score: number
   revives: number
   heals: number
   shielding: number
 }
 
 export interface ObjectiveStats {
+  score: number
   facilitiesCapture: number
   facilitiesDefense: number
   pointsCapture: number
@@ -39,6 +42,7 @@ export interface ObjectiveStats {
 }
 
 export interface LogisticsStats {
+  score: number
   spawns: number
   squadSpanws: number
   transportAssits: number
@@ -47,6 +51,7 @@ export interface LogisticsStats {
 }
 
 export interface ScoutStats {
+  score: number
   qspots: number
   motionSpots: number
   radarSpots: number
@@ -59,6 +64,7 @@ export interface ScoutStats {
 }
 
 export interface EngiStats {
+  score: number
   terminalRepairs: number
   generatorReparirs: number
   infantryResupply: number

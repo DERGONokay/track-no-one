@@ -114,9 +114,28 @@ export class CombatEffectivenessComponent implements OnInit {
       })
   }
 
-  removePlayer(player: PlayerCombatEffectiveness) {
-    this.trackingService.stopTracking(player.id)
-    this.trackedPlayers = this.trackedPlayers.filter(p => p.id != player.id)
+  removePlayer(playerComef: PlayerCombatEffectiveness) {
+
+    this.playerRepository.findById(playerComef.id).then(p => {
+      this.gtag.event("stop_tracking_player", {
+        event_category: "comef_tracking",
+        event_label: "Stop tracking a player",
+        value: p.name,
+        outfit: p.outfit?.name,
+        faction: p.faction,
+        combat_effectiveness: playerComef.combatEffectiveness,
+        seesion_lenght: playerComef.sessionLenghtInSeconds,
+        killer_score: playerComef.killerStats.score,
+        medic_score: playerComef.medicStats.score,
+        scout_score: playerComef.scoutStats.score,
+        engi_score: playerComef.engiStats.score,
+        logistics_score: playerComef.logisticsStats.score,
+        objective_score: playerComef.medicStats.score,
+      })
+    })
+
+    this.trackingService.stopTracking(playerComef.id)
+    this.trackedPlayers = this.trackedPlayers.filter(p => p.id != playerComef.id)
     this.combatEffectivenessService.playersCombatEffectivesData = this.trackedPlayers
   }
 
@@ -174,23 +193,27 @@ export class CombatEffectivenessComponent implements OnInit {
       sessionStart: Date.now(),
       sessionLenghtInSeconds: 1,
       killerStats: {
+        score: 0,
         kills: 0,
         deaths: 0,
         assists: 0,
         teamKills: 0
       },
       medicStats: {
+        score: 0,
         revives: 0,
         heals: 0,
         shielding: 0
       },
       objectiveStats: {
+        score: 0,
         facilitiesCapture: 0,
         facilitiesDefense: 0,
         pointsCapture: 0,
         pointsDefense: 0
       },
       logisticsStats: {
+        score: 0,
         spawns: 0,
         squadSpanws: 0,
         transportAssits: 0,
@@ -198,6 +221,7 @@ export class CombatEffectivenessComponent implements OnInit {
         routerKills: 0
       },
       scoutStats: {
+        score: 0,
         qspots: 0,
         motionSpots: 0,
         radarSpots: 0,
@@ -209,6 +233,7 @@ export class CombatEffectivenessComponent implements OnInit {
         spitfiresDestroyed: 0
       },
       engiStats: {
+        score: 0,
         terminalRepairs: 0,
         generatorReparirs: 0,
         infantryResupply: 0,
