@@ -21,18 +21,9 @@ export class AssistHandler {
 
     if (player) {
       console.log(player.name + " made an assist")
-      player.killerStats.assists += 1;
-      this.updateCombatEffectiveness(player)
+      player.killerStats.assists += 1
+      this.combatEffectivenessService.updateCombatEffectiveness(player)
     }
   }
 
-  private updateCombatEffectiveness(player: PlayerCombatEffectiveness) {
-    player.sessionLenghtInSeconds = this.calculateSessionLenght(player)
-    player.combatEffectiveness = this.combatEffectivenessService.calculateCombatEffectiveness(player)
-    this.combatEffectivenessService.playersCombatEffectivesData = this.trackedPlayers
-  }
-
-  private calculateSessionLenght(playerComef: PlayerCombatEffectiveness): number {
-    return Math.floor((Date.now() - playerComef.sessionStart) / 1000);
-  }
 }

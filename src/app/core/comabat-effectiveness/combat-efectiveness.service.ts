@@ -20,15 +20,24 @@ export class CombatEffectivenessService {
     this.playersCombatEffectivenessSubject.next(playersCombatEffectiveness)
   }
 
-  calculateCombatEffectiveness(playerComef: PlayerCombatEffectiveness): number {
+  updateCombatEffectiveness(playerComef: PlayerCombatEffectiveness): void {
+    this.refreshSessionLenght(playerComef);
     const killerScore = this.calculateKillerScore(playerComef)
     const medicScore = this.calculateMedicScore(playerComef)
     const engiScore = this.calculateEngiScore(playerComef)
     const scoutScore = this.calculateScoutScore(playerComef)
     const objectiveScore = this.calculateObjectiveScore(playerComef)
     const logisticsScore = this.calculateLogisticsScore(playerComef)
+    playerComef.combatEffectiveness = killerScore + medicScore + engiScore + scoutScore + objectiveScore + logisticsScore
     this.analytics.trackPlayerComef(playerComef)
-    return killerScore + medicScore + engiScore + scoutScore + objectiveScore + logisticsScore
+  }
+
+  private refreshSessionLenght(playerComef: PlayerCombatEffectiveness) {
+    playerComef.sessionLenghtInSeconds = this.calculateSessionLenght(playerComef);
+  }
+
+  private calculateSessionLenght(playerComef: PlayerCombatEffectiveness): number {
+    return Math.floor((Date.now() - playerComef.sessionStart) / 1000);
   }
 
   private calculateKillerScore(playerComef: PlayerCombatEffectiveness): number {

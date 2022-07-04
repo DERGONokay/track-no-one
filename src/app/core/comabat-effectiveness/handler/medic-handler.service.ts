@@ -38,9 +38,7 @@ export class MedicHandler {
           player.medicStats.shielding += 1;
           break;
       }
-      
-      this.updateSessionLenght(player);
-      this.updateCombatEffectiveness(player);
+      this.combatEffectivenessService.updateCombatEffectiveness(player)
     }
     
     
@@ -50,23 +48,9 @@ export class MedicHandler {
       if(revivedPlayer) {
         console.log(`${revivedPlayer.name} took a ress`)
         revivedPlayer.killerStats.deaths -= 1;
-
-        this.updateSessionLenght(revivedPlayer);
-        this.updateCombatEffectiveness(revivedPlayer);
+        this.combatEffectivenessService.updateCombatEffectiveness(revivedPlayer)
       }
     }
   }
 
-  private updateSessionLenght(playerComef: PlayerCombatEffectiveness) {
-    playerComef.sessionLenghtInSeconds = this.calculateSessionLenght(playerComef)
-  }
-
-  private calculateSessionLenght(playerComef: PlayerCombatEffectiveness): number {
-    return Math.floor((Date.now() - playerComef.sessionStart) / 1000);
-  }
-
-  private updateCombatEffectiveness(player: PlayerCombatEffectiveness) {
-    player.combatEffectiveness = this.combatEffectivenessService.calculateCombatEffectiveness(player)
-    this.combatEffectivenessService.playersCombatEffectivesData = this.trackedPlayers
-  }
 }

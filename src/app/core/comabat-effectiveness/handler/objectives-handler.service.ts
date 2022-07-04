@@ -40,22 +40,9 @@ export class ObjectivesHandler {
           player.objectiveStats.pointsDefense += 1;
           break;
       }
-      
-      this.updateSessionLenght(player);
-      this.updateCombatEffectiveness(player);
+
+      this.combatEffectivenessService.updateCombatEffectiveness(player)
     }
   }
 
-  private updateSessionLenght(playerComef: PlayerCombatEffectiveness) {
-    playerComef.sessionLenghtInSeconds = this.calculateSessionLenght(playerComef);
-  }
-
-  private calculateSessionLenght(playerComef: PlayerCombatEffectiveness): number {
-    return Math.floor((Date.now() - playerComef.sessionStart) / 1000);
-  }
-
-  private updateCombatEffectiveness(player: PlayerCombatEffectiveness) {
-    player.combatEffectiveness = this.combatEffectivenessService.calculateCombatEffectiveness(player);
-    this.combatEffectivenessService.playersCombatEffectivesData = this.trackedPlayers;
-  }
 }

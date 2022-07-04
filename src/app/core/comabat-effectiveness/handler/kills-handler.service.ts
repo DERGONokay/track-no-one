@@ -36,22 +36,12 @@ export class KillsHandler {
         attacker.killerStats.kills += 1;
       }
       attacker.currentClass = event.attackerClass
-      this.updateCombatEffectiveness(attacker);
+      this.combatEffectivenessService.updateCombatEffectiveness(attacker);
     } else if (victim) {
       console.log("DEATH", victim, attacker)
       victim.currentClass = event.victimClass
       victim.killerStats.deaths += 1;
-      this.updateCombatEffectiveness(victim)
+      this.combatEffectivenessService.updateCombatEffectiveness(victim)
     }
-  }
-  
-  private updateCombatEffectiveness(attacker: PlayerCombatEffectiveness) {
-    attacker.sessionLenghtInSeconds = this.calculateSessionLenght(attacker);
-    attacker.combatEffectiveness = this.combatEffectivenessService.calculateCombatEffectiveness(attacker);
-    this.combatEffectivenessService.playersCombatEffectivesData = this.trackedPlayers;
-  }
-
-  private calculateSessionLenght(playerComef: PlayerCombatEffectiveness): number {
-    return Math.floor((Date.now() - playerComef.sessionStart) / 1000);
   }
 }
