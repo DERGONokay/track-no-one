@@ -121,6 +121,12 @@ export class CombatEffectivenessComponent implements OnInit {
   }
 
   showCombatEffectivenessDialog() {
+
+    this.gtag.event("comef_help_show", {
+      event_category: "comef_tracking",
+      event_label: "Show Combat Effectiveness calculation dialog",
+    })
+
     Swal.fire({
       icon: "info",
       title: "How is combat effectiveness calculated?",
