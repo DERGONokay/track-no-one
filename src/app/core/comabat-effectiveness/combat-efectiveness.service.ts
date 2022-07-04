@@ -77,7 +77,7 @@ export class CombatEffectivenessService {
     const beaconKills = playerComef.logisticsStats.beaconKills
     const routerKills = playerComef.logisticsStats.routerKills
     const score = (spawns + squadSpawns * 2) + transportAssits + (beaconKills + routerKills *4) * 20
-    playerComef.logisticsStats.score = score
+    playerComef.engiStats.score = score
     return score
   }
 
