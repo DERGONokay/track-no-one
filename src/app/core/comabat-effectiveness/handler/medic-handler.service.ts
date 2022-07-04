@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DescriptionService } from '../../event/description.service';
 import { HealEvent, InfantryClass, ReviveEvent, ShieldRepairEvent } from '../../event/event.model';
 import { CombatEffectivenessService } from '../combat-efectiveness.service';
 import { PlayerCombatEffectiveness } from '../combat-effectiveness.model';
@@ -10,7 +11,10 @@ export class MedicHandler {
 
   private trackedPlayers: PlayerCombatEffectiveness[] = []
 
-  constructor(private combatEffectivenessService: CombatEffectivenessService) {
+  constructor(
+    private combatEffectivenessService: CombatEffectivenessService,
+    private description: DescriptionService
+  ) {
     combatEffectivenessService.playersCombatEffectivenessObservable.subscribe(
       playersComefs => {
         this.trackedPlayers = playersComefs
@@ -26,15 +30,15 @@ export class MedicHandler {
     
       switch (event.type) {
         case "heal":
-          console.log(`${player.name} healed a teammate`)
+          this.description.eventDescriptionData = `${player.name} healed a teammate`
           player.medicStats.heals += 1;
           break;
         case "revive":
-          console.log(`${player.name} ressed a teammate`)
+          this.description.eventDescriptionData = `${player.name} ressed a teammate`
           player.medicStats.revives += 1;
           break;
         case "shieldRepair":
-          console.log(`${player.name} repaired a teammates shield`)
+          this.description.eventDescriptionData = `${player.name} repaired a teammate shield`
           player.medicStats.shielding += 1;
           break;
       }

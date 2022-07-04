@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DescriptionService } from '../../event/description.service';
 import { FacilityCaptureEvent, FacilityDefenseEvent, PointCaptureEvent, PointDefenseEvent } from '../../event/event.model';
 import { CombatEffectivenessService } from '../combat-efectiveness.service';
 import { PlayerCombatEffectiveness } from '../combat-effectiveness.model';
@@ -10,7 +11,10 @@ export class ObjectivesHandler {
 
   private trackedPlayers: PlayerCombatEffectiveness[] = []
 
-  constructor(private combatEffectivenessService: CombatEffectivenessService) {
+  constructor(
+    private combatEffectivenessService: CombatEffectivenessService,
+    private descriptions: DescriptionService
+  ) {
     combatEffectivenessService.playersCombatEffectivenessObservable.subscribe(
       playersComefs => {
         this.trackedPlayers = playersComefs
@@ -24,19 +28,19 @@ export class ObjectivesHandler {
     if(player) {
       switch (event.type) {
         case "facilityCapture":
-          console.log(`${player.name} captured a facility`);
+          this.descriptions.eventDescriptionData = `${player.name} captured a facility`
           player.objectiveStats.facilitiesCapture += 1;
           break;
         case "facilityDefense":
-          console.log(`${player.name} defended a facility`);
+          this.descriptions.eventDescriptionData = `${player.name} defended a facility`
           player.objectiveStats.facilitiesDefense += 1;
           break;
         case "pointCapture":
-          console.log(`${player.name} is capturing a point`);
+          this.descriptions.eventDescriptionData = `${player.name} is capturing a point`
           player.objectiveStats.pointsCapture += 1;
           break;
         case "pointDefense":
-          console.log(`${player.name} is defending the point`);
+          this.descriptions.eventDescriptionData = `${player.name} is defending the point`
           player.objectiveStats.pointsDefense += 1;
           break;
       }

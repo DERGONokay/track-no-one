@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DescriptionService } from '../../event/description.service';
 import { GeneratorOverloadEvent, GeneratorStabilizeEvent, MotionSensorDestroyEvent, MotionSpotEvent, QSpotEvent, ScoutRadarSpotEvent, SpitfireDestroyEvent, TerminalHackEvent, TurretHackEvent } from '../../event/scout/scout.event.model';
 import { CombatEffectivenessService } from '../combat-efectiveness.service';
 import { PlayerCombatEffectiveness } from '../combat-effectiveness.model';
@@ -10,7 +11,10 @@ export class ScoutHandlerService {
 
   private trackedPlayers: PlayerCombatEffectiveness[] = []
 
-  constructor(private combatEffectivenessService: CombatEffectivenessService) {
+  constructor(
+    private combatEffectivenessService: CombatEffectivenessService,
+    private descriptions: DescriptionService
+  ) {
     combatEffectivenessService.playersCombatEffectivenessObservable.subscribe(
       playersComefs => {
         this.trackedPlayers = playersComefs
@@ -24,39 +28,39 @@ export class ScoutHandlerService {
     if(player) {
       switch (event.type) {
         case "qspot":
-          console.log(`${player.name} Q Spotted an enemy`)
+          this.descriptions.eventDescriptionData = `${player.name} Q Spotted an enemy`
           player.scoutStats.qspots += 1;
           break;
         case "motionSpot":
-          console.log(`${player.name} Motion Spotted an enemy`)
+          this.descriptions.eventDescriptionData = `${player.name} Motion Spotted an enemy`
           player.scoutStats.motionSpots += 1;
           break;
         case "radarSpot":
-          console.log(`${player.name} Radar Scout Spotted an enemy`)
+          this.descriptions.eventDescriptionData = `${player.name} Radar Scout Spotted an enemy`
           player.scoutStats.radarSpots += 1;
           break;
         case "overload":
-          console.log(`${player.name} overloaded a generator`)
+          this.descriptions.eventDescriptionData = `${player.name} overloaded a generator`
           player.scoutStats.generatorOverloads += 1;
           break;
         case "stabilize":
-          console.log(`${player.name} stabilized a generator`)
+          this.descriptions.eventDescriptionData = `${player.name} stabilized a generator`
           player.scoutStats.generatorStabilizations += 1;
           break;
         case "terminalHack":
-          console.log(`${player.name} hacked a terminal`)
+          this.descriptions.eventDescriptionData = `${player.name} hacked a terminal`
           player.scoutStats.terminalHacks += 1;
           break;
         case "turretHack":
-          console.log(`${player.name} hacked a phalanx turret`)
+          this.descriptions.eventDescriptionData = `${player.name} hacked a phalanx turret`
           player.scoutStats.turretHacks += 1;
           break;
         case "motionSensorDestroy":
-          console.log(`${player.name} destroyed a motion sensor`)
+          this.descriptions.eventDescriptionData = `${player.name} destroyed a motion sensor`
           player.scoutStats.motionSensorsDestroyed += 1;
           break;
         case "spitfireDestroy":
-          console.log(`${player.name} destroyed a spitfire`)
+          this.descriptions.eventDescriptionData = `${player.name} destroyed a spitfire`
           player.scoutStats.spitfiresDestroyed += 1;
           break;
       }

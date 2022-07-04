@@ -9,6 +9,7 @@ import { UntypedFormControl } from '@angular/forms';
 import { CombatEffectivenessService } from './combat-efectiveness.service';
 import { PlayerEventsListenerService } from '../event/listener/player-events-listener.service';
 import { AnalyticsService } from '../analytics/analytics.service';
+import { DescriptionService } from '../event/description.service';
 
 @Component({
   selector: 'app-combat-effectiveness',
@@ -23,6 +24,7 @@ export class CombatEffectivenessComponent implements OnInit {
   outfitTag = new UntypedFormControl()
 
   trackedPlayers: PlayerCombatEffectiveness[] = []
+  lastEvents: String[] = []
 
   constructor(
     private outfitRepository: OutfitRepository,
@@ -30,7 +32,8 @@ export class CombatEffectivenessComponent implements OnInit {
     public trackingService: TrackingService,
     private combatEffectivenessService: CombatEffectivenessService,
     private playerEventsListener: PlayerEventsListenerService,
-    private analytics: AnalyticsService
+    private descriptions: DescriptionService,
+    private analytics: AnalyticsService,
   ) { }
 
   ngOnInit(): void {
@@ -38,6 +41,9 @@ export class CombatEffectivenessComponent implements OnInit {
     this.playerEventsListener.stratListening()
     this.combatEffectivenessService.playersCombatEffectivenessObservable.subscribe(
       playersComef => { this.trackedPlayers = playersComef }
+    )
+    this.descriptions.eventDescription.subscribe(
+      description => { this.lastEvents.unshift(description) }
     )
   }
 

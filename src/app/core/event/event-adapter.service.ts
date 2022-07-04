@@ -439,7 +439,7 @@ export class EventAdapterService {
   private readonly assistIds = [GainExperienceId.ASSIST, GainExperienceId.HIGH_THREAT_KILL_ASSIS, GainExperienceId.EXTREME_THREAT_KILL_ASSIST]
   private readonly healingIds = [GainExperienceId.HEAL, GainExperienceId.SQUAD_HEAL, GainExperienceId.HEAL_ASSIST]
   private readonly shieldRepairIds = [GainExperienceId.SHIELD_REPAIR, GainExperienceId.SQUAD_SHIELD_REPAIR]
-  private readonly spawnIds = [GainExperienceId.SUNDERER_SPAWN, GainExperienceId.LODESTAR_SPAWN]
+  private readonly spawnIds = [GainExperienceId.SUNDERER_SPAWN]
   private readonly squadSpawnIds = [GainExperienceId.SQUAD_SPAWN, GainExperienceId.GALAXY_SPAWN, GainExperienceId.VALKYRIE_SPAWN]
   private readonly vehicleRepairIds = [
     GainExperienceId.SUNDERER_REPAIR, GainExperienceId.SQUAD_SUNDERER_REPAIR, GainExperienceId.ANT_REPAIR, GainExperienceId.SQUAD_ANT_REPAIR,

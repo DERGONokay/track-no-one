@@ -25,30 +25,47 @@
     <mat-icon>add</mat-icon>
 </button>
 
-<div class="tracking-list">
-    <mat-card>
-        <mat-card-title>Tracking</mat-card-title>
-        <mat-card-content>
-            <mat-selection-list #comefs [multiple]="false">
-                <mat-list-option *ngFor="let player of trackedPlayers" [value]="player">
-                    <div style="display: inline-block;">
-                        <button mat-icon-button (click)="removePlayer(player)">
-                            <mat-icon>highlight_off</mat-icon>
-                        </button>
-                        <img class="class-logo" *ngIf="player.currentClass == 'Infiltrator'" src="../../../assets/ps2/infiltrator-logo.png">
-                        <img class="class-logo" *ngIf="player.currentClass == 'Light Assault'" src="../../../assets/ps2/la-logo.png">
-                        <img class="class-logo" *ngIf="player.currentClass == 'Combat Medic'" src="../../../assets/ps2/medic-logo.png">
-                        <img class="class-logo" *ngIf="player.currentClass == 'Engineer'" src="../../../assets/ps2/engi-logo.png">
-                        <img class="class-logo" *ngIf="player.currentClass == 'Heavy Assault'" src="../../../assets/ps2/heavy-logo.png">
-                        <img class="class-logo" *ngIf="player.currentClass == 'MAX'" src="../../../assets/ps2/max-logo.png">
-                        <label>
-                            [{{player.outfitTag}}] {{player.name}}. Combat Effectiveness = {{ player.combatEffectiveness | number: '1.2-2' }}
-                        </label>
-                    </div>
-                </mat-list-option>
-            </mat-selection-list>
-        </mat-card-content>
-    </mat-card>
+<div>
+    <div class="tracking-list">
+        <mat-card>
+            <mat-card-title>Tracking</mat-card-title>
+            <mat-card-content>
+                <mat-selection-list #comefs [multiple]="false">
+                    <mat-list-option *ngFor="let player of trackedPlayers" [value]="player">
+                        <div style="display: inline-block;">
+                            <button mat-icon-button (click)="removePlayer(player)">
+                                    <mat-icon>highlight_off</mat-icon>
+                                </button>
+                            <img class="class-logo" *ngIf="player.currentClass == 'Infiltrator'" src="../../../assets/ps2/infiltrator-logo.png">
+                            <img class="class-logo" *ngIf="player.currentClass == 'Light Assault'" src="../../../assets/ps2/la-logo.png">
+                            <img class="class-logo" *ngIf="player.currentClass == 'Combat Medic'" src="../../../assets/ps2/medic-logo.png">
+                            <img class="class-logo" *ngIf="player.currentClass == 'Engineer'" src="../../../assets/ps2/engi-logo.png">
+                            <img class="class-logo" *ngIf="player.currentClass == 'Heavy Assault'" src="../../../assets/ps2/heavy-logo.png">
+                            <img class="class-logo" *ngIf="player.currentClass == 'MAX'" src="../../../assets/ps2/max-logo.png">
+                            <label>
+                                    [{{player.outfitTag}}] {{player.name}}. Combat Effectiveness = {{ player.combatEffectiveness | number: '1.2-2' }}
+                                </label>
+                        </div>
+                    </mat-list-option>
+                </mat-selection-list>
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+    <div class="tracking-list">
+        <mat-card>
+            <mat-card-title>Last Events</mat-card-title>
+            <mat-card-content>
+                <mat-list>
+                    <mat-list-item *ngFor="let event of lastEvents">
+                        <div style="display: inline-block;">
+                            {{ event }}
+                        </div>
+                    </mat-list-item>
+                </mat-list>
+            </mat-card-content>
+        </mat-card>
+    </div>
 </div>
 
 <mat-spinner *ngIf="loadingData" class="spinner"></mat-spinner>

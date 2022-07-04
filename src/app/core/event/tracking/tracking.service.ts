@@ -46,7 +46,7 @@ export class TrackingService {
         CensusEvents.SHIELD_REPAIR, CensusEvents.SQUAD_SHIELD_REPAIR,
         CensusEvents.FACILITY_CAPTURE, CensusEvents.FACILITY_DEFENSE,
         CensusEvents.POINT_CAPTURE, CensusEvents.POINT_DEFENSE,
-        CensusEvents.SUNDERER_SPAWN, CensusEvents.LODESTAR_SPAWN,
+        CensusEvents.SUNDERER_SPAWN,
         CensusEvents.SQUAD_SPAWN, CensusEvents.VALKYRIE_SPAWN, CensusEvents.GALAXY_SPAWN,
         CensusEvents.TRANSPORT_ASSIST,
         CensusEvents.BEACON_KILL, CensusEvents.ROUTER_KILL,

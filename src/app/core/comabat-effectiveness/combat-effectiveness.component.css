@@ -2,8 +2,19 @@
     padding: 2rem;
 }
 
+.mat-card-title {
+    position: sticky;
+    top: 0;
+}
+
 .tracking-list {
     margin: 1rem;
+    display: inline-block;
+    width: 45%;
+    min-height: 500px;
+    max-height: 600px;
+    overflow: scroll;
+    vertical-align: top;
 }
 
 .comef-stat {
