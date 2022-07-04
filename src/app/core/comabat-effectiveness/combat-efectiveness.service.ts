@@ -22,22 +22,28 @@ export class CombatEffectivenessService {
   }
 
   calculateCombatEffectiveness(playerComef: PlayerCombatEffectiveness): number {
-    const killerStats = this.calculateKillerStats(playerComef.killerStats, playerComef.sessionLenghtInSeconds)
+    const killerStats = this.calculateKillerStats(playerComef)
     const medicStats = this.calculateMedicStats(playerComef)
     this.trackPlayerComef(playerComef);
     return killerStats + medicStats
   }
 
-  private calculateKillerStats(killerStats: KillerStats, sessionLenghtInSeconds: number): number {
-    const kda = ((killerStats.kills + killerStats.assists - killerStats.teamKills) / Math.max(1, killerStats.deaths)) * 0.6
-    const kpm = (Math.max(1, killerStats.kills) / sessionLenghtInSeconds) * 60
-    return kda * kpm
+  private calculateKillerStats(playerComef: PlayerCombatEffectiveness): number {
+    const kda = ((playerComef.killerStats.kills + playerComef.killerStats.assists - playerComef.killerStats.teamKills) / Math.max(1, playerComef.killerStats.deaths)) * 0.6
+    const kpm = (Math.max(1, playerComef.killerStats.kills) / playerComef.sessionLenghtInSeconds) * 60
+    const score = kda * kpm
+    playerComef.killerStats.score = score
+
+    return score
   }
 
   private calculateMedicStats(playerComef: PlayerCombatEffectiveness): number {
     const revives = Math.max(1, playerComef.medicStats.revives)
     const supporting =  Math.max(1, (playerComef.medicStats.heals + playerComef.medicStats.shielding))
-    return revives * (supporting * 0.1);
+    const score = revives * (supporting * 0.1);
+    playerComef.medicStats.score = score
+    
+    return score
   }
   
   private trackPlayerComef(playerComef: PlayerCombatEffectiveness) {
