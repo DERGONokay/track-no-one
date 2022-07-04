@@ -8,7 +8,7 @@ import { PlayerCombatEffectiveness } from './combat-effectiveness.model';
 import { UntypedFormControl } from '@angular/forms';
 import { CombatEffectivenessService } from './combat-efectiveness.service';
 import { PlayerEventsListenerService } from '../event/listener/player-events-listener.service';
-import { Gtag } from 'angular-gtag';
+import { AnalyticsService } from '../analytics/analytics.service';
 
 @Component({
   selector: 'app-combat-effectiveness',
@@ -25,12 +25,12 @@ export class CombatEffectivenessComponent implements OnInit {
   trackedPlayers: PlayerCombatEffectiveness[] = []
 
   constructor(
-    private gtag: Gtag,
     private outfitRepository: OutfitRepository,
     private playerRepository: PlayerRepository,
     public trackingService: TrackingService,
     private combatEffectivenessService: CombatEffectivenessService,
-    private playerEventsListener: PlayerEventsListenerService
+    private playerEventsListener: PlayerEventsListenerService,
+    private analytics: AnalyticsService
   ) { }
 
   ngOnInit(): void {
@@ -44,11 +44,7 @@ export class CombatEffectivenessComponent implements OnInit {
   addPlayer() {
     if(this.loadingData) { return }
 
-    this.gtag.event("start_tracking_player_click", {
-      event_category: "engagement",
-      event_label: "Add a single player to the tracking list",
-      value: this.playerName.value.toLowerCase()
-    })
+    this.analytics.addPlayerClick(this.playerName.value)
 
     this.loadingData = true
     this.playerName.disable()
@@ -71,16 +67,9 @@ export class CombatEffectivenessComponent implements OnInit {
 
   addOutfit() {
     if(this.loadingData) { return }
-
-    this.gtag.event("start_tracking_outfit_click", {
-      event_category: "engagement",
-      event_label: "Add entire outfit to tracking list",
-      value: this.outfitTag.value.toLowerCase()
-    })
-
+    this.analytics.addOutfitClick(this.outfitTag.value)
     this.loadingData = true
     this.outfitTag.disable()
-
     this.outfitRepository.findByTag(this.outfitTag.value)
       .then(outfit => {
         console.log("Outfit found", outfit);
@@ -115,37 +104,14 @@ export class CombatEffectivenessComponent implements OnInit {
   }
 
   removePlayer(playerComef: PlayerCombatEffectiveness) {
-
-    this.playerRepository.findById(playerComef.id).then(p => {
-      this.gtag.event("stop_tracking_player", {
-        event_category: "comef_tracking",
-        event_label: "Stop tracking a player",
-        value: p.name,
-        outfit: p.outfit?.name,
-        faction: p.faction,
-        combat_effectiveness: playerComef.combatEffectiveness,
-        seesion_lenght: playerComef.sessionLenghtInSeconds,
-        killer_score: playerComef.killerStats.score,
-        medic_score: playerComef.medicStats.score,
-        scout_score: playerComef.scoutStats.score,
-        engi_score: playerComef.engiStats.score,
-        logistics_score: playerComef.logisticsStats.score,
-        objective_score: playerComef.medicStats.score,
-      })
-    })
-
+    this.analytics.stopTrackingPlayer(playerComef)
     this.trackingService.stopTracking(playerComef.id)
     this.trackedPlayers = this.trackedPlayers.filter(p => p.id != playerComef.id)
     this.combatEffectivenessService.playersCombatEffectivesData = this.trackedPlayers
   }
 
   showCombatEffectivenessDialog() {
-
-    this.gtag.event("comef_help_show", {
-      event_category: "comef_tracking",
-      event_label: "Show Combat Effectiveness calculation dialog",
-    })
-
+    this.analytics.comefHelpShow()
     Swal.fire({
       icon: "info",
       title: "How is combat effectiveness calculated?",
@@ -163,15 +129,7 @@ export class CombatEffectivenessComponent implements OnInit {
 
   private startTracking(player: Player) {
     if(!this.isBeingTracked(player)) {
-
-      this.gtag.event("start_tracking_player", {
-        event_category: "comef_tracking",
-        event_label: "Started to track a player",
-        value: player.name,
-        outfit: player.outfit?.name,
-        faction: player.faction
-      })
-
+      this.analytics.startTrackingPlayer(player)
       this.trackingService.startTracking(player)
       this.trackedPlayers.push(this.parseToPlayerCombatEffectiveness(player))
       this.combatEffectivenessService.playersCombatEffectivesData = this.trackedPlayers

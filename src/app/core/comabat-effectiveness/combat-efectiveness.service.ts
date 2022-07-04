@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Gtag } from 'angular-gtag';
 import { BehaviorSubject } from 'rxjs';
-import { Player } from '../player/player.model';
-import { PlayerRepository } from '../player/player.repository';
-import { KillerStats, PlayerCombatEffectiveness } from './combat-effectiveness.model';
+import { AnalyticsService } from '../analytics/analytics.service';
+import { PlayerCombatEffectiveness } from './combat-effectiveness.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +10,7 @@ export class CombatEffectivenessService {
 
   private playersCombatEffectivenessSubject: BehaviorSubject<PlayerCombatEffectiveness[]> = new BehaviorSubject<PlayerCombatEffectiveness[]>([])
 
-  constructor(private playerRepository: PlayerRepository, private gtag: Gtag) { }
+  constructor(private analytics: AnalyticsService) { }
 
   get playersCombatEffectivenessObservable() {
     return this.playersCombatEffectivenessSubject.asObservable()
@@ -29,7 +27,7 @@ export class CombatEffectivenessService {
     const scoutScore = this.calculateScoutScore(playerComef)
     const objectiveScore = this.calculateObjectiveScore(playerComef)
     const logisticsScore = this.calculateLogisticsScore(playerComef)
-    this.trackPlayerComef(playerComef);
+    this.analytics.trackPlayerComef(playerComef)
     return killerScore + medicScore + engiScore + scoutScore + objectiveScore + logisticsScore
   }
 
@@ -96,24 +94,4 @@ export class CombatEffectivenessService {
     return score
   }
   
-  private trackPlayerComef(playerComef: PlayerCombatEffectiveness) {
-    this.playerRepository.findById(playerComef.id).then(p => {
-      this.gtag.event("update_player_combat_effectiveness", {
-        event_category: "comef_tracking",
-        event_label: "Player combat effectiveness updated",
-        value: p.name,
-        outfit: p.outfit?.name,
-        faction: p.faction,
-        combat_effectiveness: playerComef.combatEffectiveness,
-        seesion_lenght: playerComef.sessionLenghtInSeconds,
-        killer_score: playerComef.killerStats.score,
-        medic_score: playerComef.medicStats.score,
-        scout_score: playerComef.scoutStats.score,
-        engi_score: playerComef.engiStats.score,
-        logistics_score: playerComef.logisticsStats.score,
-        objective_score: playerComef.medicStats.score,
-      });
-    });
-  }
-
 }
