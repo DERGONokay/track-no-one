@@ -23,6 +23,8 @@ import { CombatEffectivenessComponent } from './core/comabat-effectiveness/comba
 import { ExperienceComponent } from './core/experience/experience.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { GtagModule } from 'angular-gtag';
+import { environment } from 'src/environments/environment';
 
 
 @NgModule({
@@ -33,6 +35,11 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     ExperienceComponent
   ],
   imports: [
+    GtagModule.forRoot({ 
+      trackingId: environment.googleAnalyticsId, 
+      trackPageviews: environment.trackPageviews,
+      debug: environment.debugGoogleAnalytics
+    }),
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,

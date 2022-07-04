@@ -21,6 +21,7 @@
     "@angular/platform-browser-dynamic": "^14.0.4",
     "@angular/router": "^14.0.4",
     "@sweetalert2/theme-dark": "^5.0.5",
+    "angular-gtag": "^1.0.4",
     "rxjs": "^6.6.7",
     "sweetalert2": "^11.1.7",
     "tslib": "^2.3.1",

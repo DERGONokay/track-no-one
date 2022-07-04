@@ -22,7 +22,6 @@ export class ExperienceComponent implements AfterViewInit {
       .then(experience => {
         this.resultsLength = experience.length
         this.events.data = experience
-        console.log(this.events.data)
       })
   }
 
