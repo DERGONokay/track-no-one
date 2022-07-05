@@ -39,3 +39,8 @@
 .class-logo {
     height: 20px;
 }
+
+.connection-ready-icon {
+    float: right;
+    padding-right: 1rem;
+}

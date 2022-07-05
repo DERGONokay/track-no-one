@@ -19,6 +19,7 @@ import { DescriptionService } from '../event/description.service';
 export class CombatEffectivenessComponent implements OnInit {
 
   loadingData = false
+  connectionReady: Boolean = false
 
   playerName = new UntypedFormControl()
   outfitTag = new UntypedFormControl()
@@ -44,6 +45,9 @@ export class CombatEffectivenessComponent implements OnInit {
     )
     this.descriptions.eventDescription.subscribe(
       description => { this.lastEvents.unshift(description) }
+    )
+    this.trackingService.connectionStatus.subscribe(
+      status => { this.connectionReady = status }
     )
   }
 
