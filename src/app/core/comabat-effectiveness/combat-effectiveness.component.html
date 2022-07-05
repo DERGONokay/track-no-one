@@ -17,7 +17,7 @@
     <mat-label>Player name</mat-label>
     <input matInput type="text" [formControl]="playerName">
 </mat-form-field>
-<button mat-icon-button (click)="addPlayer()">
+<button *ngIf="connectionReady" mat-icon-button (click)="addPlayer()">
     <mat-icon>add</mat-icon>
 </button>
 
@@ -26,7 +26,7 @@
     <input matInput type="text" [formControl]="outfitTag">
     <mat-icon matSuffix matTooltip="Only online members will be tracked">info</mat-icon>
 </mat-form-field>
-<button mat-icon-button (click)="addOutfit()">
+<button *ngIf="connectionReady" mat-icon-button (click)="addOutfit()">
     <mat-icon>add</mat-icon>
 </button>
 
