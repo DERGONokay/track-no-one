@@ -52,7 +52,7 @@ export class AnalyticsService {
     })
   }
 
-  stopTrackingPlayer(playerComef: PlayerCombatEffectiveness) {
+  playerSessionEnded(playerComef: PlayerCombatEffectiveness) {
     this.playerRepository.findById(playerComef.id).then(player => {
       this.gtag.event("stop_tracking_player", {
         event_category: EventCategory.COMEF_TRACKING,

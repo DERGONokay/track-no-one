@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
 import { AssistHandler } from '../../comabat-effectiveness/handler/assist-handler.service';
 import { EngiHandlerService as EngiHandler } from '../../comabat-effectiveness/handler/engi-handler.service';
 import { KillsHandler } from '../../comabat-effectiveness/handler/kills-handler.service';
 import { LogisticsHandler } from '../../comabat-effectiveness/handler/logistics-handler.service';
 import { MedicHandler } from '../../comabat-effectiveness/handler/medic-handler.service';
 import { ObjectivesHandler } from '../../comabat-effectiveness/handler/objectives-handler.service';
+import { PlayerHandlerService } from '../../comabat-effectiveness/handler/player-handler.service';
 import { ScoutHandlerService as ScoutHandler } from '../../comabat-effectiveness/handler/scout-handler.service';
 import { EngiEvents } from '../engi/engi.event';
 import { EventService } from '../event.service';
 import { LogisticsEvents } from '../logistics.events';
 import { ObjectiveEvents } from '../objective.events';
+import { PlayerEvents } from '../player/player.event';
 import { ScoutEvents } from '../scout/scout.event';
 
 @Injectable({
@@ -26,13 +27,15 @@ export class PlayerEventsListenerService {
     private logisticsEvents: LogisticsEvents,
     private scoutEvents: ScoutEvents,
     private engiEvents: EngiEvents,
+    private playerEvents: PlayerEvents,
     private killsHandler: KillsHandler,
     private assistHandler: AssistHandler,
     private medicHandler: MedicHandler,
     private objectivesHandler: ObjectivesHandler,
     private logisticsHandler: LogisticsHandler,
     private scoutHandler: ScoutHandler,
-    private engiHandler: EngiHandler
+    private engiHandler: EngiHandler,
+    private playerHandler: PlayerHandlerService
   ) { }
 
   stratListening(): void {
@@ -44,6 +47,9 @@ export class PlayerEventsListenerService {
       this.subscribeToLogisticsEvents();
       this.subscribeToScoutEvents();
       this.subscribeToEngiEvents();
+      this.playerEvents.playerLogoutEvents.subscribe(
+        event => { this.playerHandler.handle(event) }
+      )
       console.log("Started listening player events")
     }
   }

@@ -80,6 +80,7 @@ export class TrackingService {
         CensusEvents.GALAXY_REPAIR, CensusEvents.SQUAD_GALAXY_REPAIR,
         CensusEvents.LIBERATOR_REPAIR, CensusEvents.SQUAD_LIBERATOR_REPAIR,
         CensusEvents.COLOSUS_REPAIR, CensusEvents.SQUAD_COLOSUS_REPAIR,
+        CensusEvents.PLAYER_LOGOUT
       ]
     })
   }

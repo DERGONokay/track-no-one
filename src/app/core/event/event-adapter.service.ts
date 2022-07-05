@@ -4,6 +4,7 @@ import { InfantryClass } from './event.model';
 import { EventService } from './event.service';
 import { LogisticsEvents as LogisticsEvents } from './logistics.events';
 import { ObjectiveEvents } from './objective.events';
+import { PlayerEvents } from './player/player.event';
 import { ScoutEvents } from './scout/scout.event';
 import { CensusEvent, CensusMessage, CensusPayload, GainExperienceId } from './tracking/tracking.model';
 
@@ -17,7 +18,8 @@ export class EventAdapterService {
     private objectiveEventsService: ObjectiveEvents,
     private logisticsEvents: LogisticsEvents,
     private scoutEvents: ScoutEvents,
-    private engiEvents: EngiEvents
+    private engiEvents: EngiEvents,
+    private playerEvents: PlayerEvents
   ) { }
 
   adapt(message: CensusMessage) {
@@ -52,7 +54,19 @@ export class EventAdapterService {
     else if(this.isDeployableRepair(message)) { this.emmitDeployableRepair(message.payload) }
     else if(this.isVehicleRepair(message)) { this.emmitVehicleRepair(message.payload) }
     else if(this.isMaxRepair(message)) { this.emmitMaxRepair(message.payload) }
+    else if(this.isPlayerLogout(message)) { this.emmitPlayerLogout(message.payload) }
     else { console.log("Unknown event", message) }
+  }
+
+  private isPlayerLogout(message: CensusMessage): Boolean {
+      return message.payload.event_name == CensusEvent.PLAYER_LOGOUT
+  }
+  
+  private emmitPlayerLogout(payload: CensusPayload) {
+      this.playerEvents.playerLogoutData = {
+          playerId: payload.character_id,
+          type: "logout"
+      }
   }
 
   private isMaxRepair(message: CensusMessage): Boolean {

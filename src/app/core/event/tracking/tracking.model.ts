@@ -118,6 +118,7 @@ export enum CensusEvent {
     SQUAD_LIBERATOR_REPAIR = "GainExperience_experience_id_133",
     COLOSUS_REPAIR = "GainExperience_experience_id_1451",
     SQUAD_COLOSUS_REPAIR = "GainExperience_experience_id_1452",
+    PLAYER_LOGOUT = "PlayerLogout"
 }
 
 export enum GainExperienceId {

@@ -110,7 +110,7 @@ export class CombatEffectivenessComponent implements OnInit {
   }
 
   removePlayer(playerComef: PlayerCombatEffectiveness) {
-    this.analytics.stopTrackingPlayer(playerComef)
+    this.analytics.playerSessionEnded(playerComef)
     this.trackingService.stopTracking(playerComef.id)
     this.trackedPlayers = this.trackedPlayers.filter(p => p.id != playerComef.id)
     this.combatEffectivenessService.playersCombatEffectivesData = this.trackedPlayers
