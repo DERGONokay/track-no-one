@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { environment } from 'src/environments/environment';
 import { Player } from '../../player/player.model';
@@ -11,6 +12,10 @@ import { CensusAction, CensusEvent as CensusEvents, CensusService, MessageType }
 export class TrackingService {
 
   private subject: WebSocketSubject<any>
+  private connectionStatusSubject: BehaviorSubject<Boolean> = new BehaviorSubject<Boolean>(false)
+
+  get connectionStatus() { return this.connectionStatusSubject.asObservable(); }
+  set connectionData(event: Boolean) { this.connectionStatusSubject.next(event); }
 
   constructor(private eventAdapter: EventAdapterService) {
     this.subject = webSocket(environment.wssHost)
@@ -22,9 +27,19 @@ export class TrackingService {
       msg => {
         if(this.isPlayerEvent(msg)) {
           this.eventAdapter.adapt(msg)
+        } else if(this.connectionStatusChanged(msg)) {
+          this.connectionData = msg.connected as Boolean
         }
       }
     )
+  }
+
+  private isPlayerEvent(msg: any) {
+    return msg.service == CensusService.EVENT && msg.type == MessageType.SERVICE_MESSAGE
+  }
+
+  private connectionStatusChanged(msg: any) {
+    return msg.service == CensusService.PUSH && msg.type == MessageType.CONNECTION_STATE_CHANGED
   }
 
   disconnect() {
@@ -92,10 +107,6 @@ export class TrackingService {
       action: CensusAction.UNSUBSCRIBE, 
       characters: [playerId]
     })
-  }
-
-  private isPlayerEvent(msg: any) {
-    return msg.service == CensusService.EVENT && msg.type == MessageType.SERVICE_MESSAGE;
   }
 
 }

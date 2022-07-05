@@ -6,7 +6,8 @@ export interface CensusMessage {
 }
 
 export enum CensusService {
-    EVENT = "event"
+    EVENT = "event",
+    PUSH = "push"
 }
 
 export interface CensusPayload {
