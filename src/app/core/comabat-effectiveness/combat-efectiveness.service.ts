@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { AnalyticsService } from '../analytics/analytics.service';
+import { Player } from '../player/player.model';
 import { PlayerCombatEffectiveness } from './combat-effectiveness.model';
 
 @Injectable({
@@ -101,6 +102,69 @@ export class CombatEffectivenessService {
     const score = (qspots + motionSpots + radarSpots) * 0.1 + generatorOverloads * 5 + generatorStabilizations * 5 + terminalHacks + turretHacks + motionSensorsDestroyed + spitfiresDestroyed
     playerComef.scoutStats.score = score
     return score
+  }
+
+  parseToCombatEffectiveness(player: Player): PlayerCombatEffectiveness {
+    return {
+      id: player.id,
+      name: player.name,
+      faction: player.faction,
+      outfitTag: player?.outfit?.tag,
+      currentClass: player.currentClass,
+      combatEffectiveness: 0.0,
+      sessionStart: Date.now(),
+      sessionLenghtInSeconds: 1,
+      killerStats: {
+        score: 0,
+        kills: 0,
+        deaths: 0,
+        assists: 0,
+        teamKills: 0
+      },
+      medicStats: {
+        score: 0,
+        revives: 0,
+        heals: 0,
+        shielding: 0
+      },
+      objectiveStats: {
+        score: 0,
+        facilitiesCapture: 0,
+        facilitiesDefense: 0,
+        pointsCapture: 0,
+        pointsDefense: 0
+      },
+      logisticsStats: {
+        score: 0,
+        spawns: 0,
+        squadSpanws: 0,
+        transportAssits: 0,
+        beaconKills: 0,
+        routerKills: 0
+      },
+      scoutStats: {
+        score: 0,
+        qspots: 0,
+        motionSpots: 0,
+        radarSpots: 0,
+        generatorOverloads: 0,
+        generatorStabilizations: 0,
+        terminalHacks: 0,
+        turretHacks: 0,
+        motionSensorsDestroyed: 0,
+        spitfiresDestroyed: 0
+      },
+      engiStats: {
+        score: 0,
+        terminalRepairs: 0,
+        generatorReparirs: 0,
+        infantryResupply: 0,
+        vehicleResupply: 0,
+        deployableRepairs: 0,
+        vehicleRepairs: 0,
+        maxRepairs: 0
+      }
+    }
   }
   
 }

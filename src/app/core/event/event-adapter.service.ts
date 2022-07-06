@@ -55,7 +55,19 @@ export class EventAdapterService {
     else if(this.isVehicleRepair(message)) { this.emmitVehicleRepair(message.payload) }
     else if(this.isMaxRepair(message)) { this.emmitMaxRepair(message.payload) }
     else if(this.isPlayerLogout(message)) { this.emmitPlayerLogout(message.payload) }
+    else if(this.isPlayerLogin(message)) { this.emmitPlayerLogin(message.payload) }
     else { console.log("Unknown event", message) }
+  }
+
+  private isPlayerLogin(message: CensusMessage): Boolean {
+      return message.payload.event_name == CensusEvent.PLAYER_LOGIN
+  }
+  
+  private emmitPlayerLogin(payload: CensusPayload) {
+      this.playerEvents.playerLoginData = {
+          playerId: payload.character_id,
+          type: "login"
+      }
   }
 
   private isPlayerLogout(message: CensusMessage): Boolean {

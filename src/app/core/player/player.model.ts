@@ -12,7 +12,8 @@ export interface Outfit {
   id: String
   name: String
   tag: String
-  members?: Player[]
+  onlinePlayers?: Player[]
+  offlinePlayers?: Player[]
 }
 
 export enum Faction {

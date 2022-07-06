@@ -40,23 +40,38 @@ export class PlayerEventsListenerService {
 
   stratListening(): void {
     if(!this.listening) {
-      this.listening = true;
-      this.subscribeToKillerEvents();
-      this.subscribeToMedicEvents();
-      this.subscribeToObjectiveEvents();
-      this.subscribeToLogisticsEvents();
-      this.subscribeToScoutEvents();
-      this.subscribeToEngiEvents();
-      this.playerEvents.playerLogoutEvents.subscribe(
-        event => { this.playerHandler.handle(event) }
-      )
+      this.listening = true
+      this.subscribeToKillerEvents()
+      this.subscribeToMedicEvents()
+      this.subscribeToObjectiveEvents()
+      this.subscribeToLogisticsEvents()
+      this.subscribeToScoutEvents()
+      this.subscribeToEngiEvents()
+      this.subscribeToPlayerEvents()
       console.log("Started listening player events")
     }
   }
 
+  private subscribeToPlayerEvents() {
+    this.subscribeToLogouts()
+    this.subscribeToLogins()
+  }
+
+  private subscribeToLogouts() {
+    this.playerEvents.playerLogoutEvents.subscribe(
+      event => { this.playerHandler.handle(event) }
+    );
+  }
+  
+  private subscribeToLogins() {
+    this.playerEvents.playerLoginEvents.subscribe(
+      event => { this.playerHandler.handle(event) }
+    );
+  }
+
   private subscribeToKillerEvents() {
-    this.subscribeToKills();
-    this.subscribeToAssists();
+    this.subscribeToKills()
+    this.subscribeToAssists()
   }
   
   private subscribeToKills() {

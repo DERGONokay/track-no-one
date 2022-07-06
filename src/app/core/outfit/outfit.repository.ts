@@ -19,13 +19,16 @@ export class OutfitRepository {
 
     const outfitRepresentation = response.outfit_list[0]
     const onlineMembers = outfitRepresentation.members.filter(m => m.online_status == OnlineStatus.ONLINE )
-    const parsedMembers = onlineMembers.map(m => this.parseToPlayer(m, outfitRepresentation))
+    const offlineMembers = outfitRepresentation.members.filter(m => m.online_status == OnlineStatus.OFFLINE )
+    const onlinePlayers = onlineMembers.map(m => this.parseToPlayer(m, outfitRepresentation))
+    const offlinePlayers = offlineMembers.map(m => this.parseToPlayer(m, outfitRepresentation))
 
     return {
       id: outfitRepresentation.outfit_id,
       name: outfitRepresentation.name,
       tag: outfitRepresentation.alias,
-      members: parsedMembers
+      onlinePlayers: onlinePlayers,
+      offlinePlayers: offlinePlayers
     }
   }
 
