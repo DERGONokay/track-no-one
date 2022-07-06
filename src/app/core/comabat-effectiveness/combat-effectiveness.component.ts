@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import Swal from 'sweetalert2';
 import { TrackingService } from '../event/tracking/tracking.service';
 import { PlayerRepository } from '../player/player.repository';
@@ -60,6 +60,7 @@ export class CombatEffectivenessComponent implements OnInit {
         if(this.lastEvents.length > 50) {
           this.lastEvents.pop()
         }
+        this.refreshSort();
       }
     )
 
@@ -70,6 +71,11 @@ export class CombatEffectivenessComponent implements OnInit {
     this.outfitEvents.outfitsTracked.subscribe(
       outfits => { this.trackedOutfits = outfits }
     )
+  }
+
+  private refreshSort() {
+    this.trackedPlayers.sort = null;
+    this.trackedPlayers.sort = this.sort!!;
   }
 
   ngAfterViewInit() {
