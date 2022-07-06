@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import Swal from 'sweetalert2';
 import { TrackingService } from '../event/tracking/tracking.service';
 import { PlayerRepository } from '../player/player.repository';
@@ -11,6 +11,9 @@ import { PlayerEventsListenerService } from '../event/listener/player-events-lis
 import { AnalyticsService } from '../analytics/analytics.service';
 import { DescriptionService as LastEventsDescriptionService } from '../event/description.service';
 import { OutfitEvents } from '../event/outfit/player.event';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-combat-effectiveness',
@@ -25,7 +28,11 @@ export class CombatEffectivenessComponent implements OnInit {
   playerName = new UntypedFormControl()
   outfitTag = new UntypedFormControl()
 
-  trackedPlayers: PlayerCombatEffectiveness[] = []
+  displayedColumns = ["class", "name", "comef", "actions"]
+  trackedPlayers = new MatTableDataSource<PlayerCombatEffectiveness>()
+  @ViewChild(MatPaginator) paginator: MatPaginator | undefined
+  @ViewChild(MatSort) sort: MatSort | undefined
+
   trackedOutfits: Outfit[] = []
   lastEvents: String[] = []
 
@@ -44,7 +51,7 @@ export class CombatEffectivenessComponent implements OnInit {
     this.trackingService.connect()
     this.playerEventsListener.stratListening()
     this.combatEffectivenessService.playersCombatEffectivenessObservable.subscribe(
-      playersComef => { this.trackedPlayers = playersComef }
+      playersComef => { this.trackedPlayers.data = playersComef }
     )
 
     this.lastEventsService.eventDescription.subscribe(
@@ -63,6 +70,11 @@ export class CombatEffectivenessComponent implements OnInit {
     this.outfitEvents.outfitsTracked.subscribe(
       outfits => { this.trackedOutfits = outfits }
     )
+  }
+
+  ngAfterViewInit() {
+    this.trackedPlayers.paginator = this.paginator!!
+    this.trackedPlayers.sort = this.sort!!
   }
 
   addPlayer() {
@@ -140,8 +152,8 @@ export class CombatEffectivenessComponent implements OnInit {
 
   removePlayer(playerComef: PlayerCombatEffectiveness) {
     this.analytics.playerSessionEnded(playerComef)
-    this.trackedPlayers = this.trackedPlayers.filter(p => p.id != playerComef.id)
-    this.combatEffectivenessService.playersCombatEffectivesData = this.trackedPlayers
+    this.trackedPlayers.data = this.trackedPlayers.data.filter(p => p.id != playerComef.id)
+    this.combatEffectivenessService.playersCombatEffectivesData = this.trackedPlayers.data
   }
 
   showCombatEffectivenessDialog() {
@@ -164,13 +176,13 @@ export class CombatEffectivenessComponent implements OnInit {
   private startTracking(player: Player) {
     if(!this.isBeingTracked(player)) {
       this.trackingService.startTracking(player)
-      this.trackedPlayers.push(this.combatEffectivenessService.parseToCombatEffectiveness(player))
-      this.combatEffectivenessService.playersCombatEffectivesData = this.trackedPlayers
+      this.trackedPlayers.data.push(this.combatEffectivenessService.parseToCombatEffectiveness(player))
+      this.combatEffectivenessService.playersCombatEffectivesData = this.trackedPlayers.data
     }
   }
 
   private isBeingTracked(player: Player) {
-    return this.trackedPlayers.some(p => p.id == player.id);
+    return this.trackedPlayers.data.some(p => p.id == player.id);
   }
 
 }

@@ -33,26 +33,46 @@
 <div>
     <div class="tracking-list">
         <mat-card>
-            <mat-card-title>Tracking</mat-card-title>
+            <mat-card-title>Players</mat-card-title>
             <mat-card-content>
-                <mat-selection-list #comefs [multiple]="false">
-                    <mat-list-option *ngFor="let player of trackedPlayers" [value]="player">
-                        <div style="display: inline-block;">
-                            <button mat-icon-button (click)="removePlayer(player)">
-                                    <mat-icon>highlight_off</mat-icon>
-                                </button>
-                            <img class="class-logo" *ngIf="player.currentClass == 'Infiltrator'" src="../../../assets/ps2/infiltrator-logo.png">
-                            <img class="class-logo" *ngIf="player.currentClass == 'Light Assault'" src="../../../assets/ps2/la-logo.png">
-                            <img class="class-logo" *ngIf="player.currentClass == 'Combat Medic'" src="../../../assets/ps2/medic-logo.png">
-                            <img class="class-logo" *ngIf="player.currentClass == 'Engineer'" src="../../../assets/ps2/engi-logo.png">
-                            <img class="class-logo" *ngIf="player.currentClass == 'Heavy Assault'" src="../../../assets/ps2/heavy-logo.png">
-                            <img class="class-logo" *ngIf="player.currentClass == 'MAX'" src="../../../assets/ps2/max-logo.png">
-                            <label>
-                                    [{{player.outfitTag}}] {{player.name}}. Combat Effectiveness = {{ player.combatEffectiveness | number: '1.2-2' }}
-                                </label>
-                        </div>
-                    </mat-list-option>
-                </mat-selection-list>
+                <table mat-table [dataSource]="trackedPlayers" matSort style="width: 100%;">
+
+                    <ng-container matColumnDef="class">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header="currentClass">Class</th>
+                        <td mat-cell *matCellDef="let element">
+                            <img class="class-logo" *ngIf="element.currentClass == 'Infiltrator'" src="../../../assets/ps2/infiltrator-logo.png">
+                            <img class="class-logo" *ngIf="element.currentClass == 'Light Assault'" src="../../../assets/ps2/la-logo.png">
+                            <img class="class-logo" *ngIf="element.currentClass == 'Combat Medic'" src="../../../assets/ps2/medic-logo.png">
+                            <img class="class-logo" *ngIf="element.currentClass == 'Engineer'" src="../../../assets/ps2/engi-logo.png">
+                            <img class="class-logo" *ngIf="element.currentClass == 'Heavy Assault'" src="../../../assets/ps2/heavy-logo.png">
+                            <img class="class-logo" *ngIf="element.currentClass == 'MAX'" src="../../../assets/ps2/max-logo.png">
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header="name">Name</th>
+                        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="comef">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header="combatEffectiveness">Combat Effectiveness</th>
+                        <td mat-cell *matCellDef="let element"> {{ element.combatEffectiveness | number: '1.2-2' }} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef></th>
+                        <td mat-cell *matCellDef="let element">
+                            <button mat-icon-button (click)="removePlayer(element)" matTolltip="Stop tracking">
+                                <mat-icon>highlight_off</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+
+                <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
             </mat-card-content>
         </mat-card>
     </div>

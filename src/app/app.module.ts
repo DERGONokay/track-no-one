@@ -25,6 +25,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { GtagModule } from 'angular-gtag';
 import { environment } from 'src/environments/environment';
+import { MatSortModule } from '@angular/material/sort';
 
 
 @NgModule({
@@ -57,7 +58,8 @@ import { environment } from 'src/environments/environment';
     ReactiveFormsModule,
     MatTableModule,
     MatPaginatorModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatSortModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
