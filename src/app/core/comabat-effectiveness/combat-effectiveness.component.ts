@@ -44,11 +44,18 @@ export class CombatEffectivenessComponent implements OnInit {
     this.trackingService.connect()
     this.playerEventsListener.stratListening()
     this.combatEffectivenessService.playersCombatEffectivenessObservable.subscribe(
-      playersComef => { this.trackedPlayers = playersComef }
+      playersComef => { 
+        this.trackedPlayers = playersComef
+      }
     )
 
     this.lastEventsService.eventDescription.subscribe(
-      description => { this.lastEvents.unshift(description) }
+      description => { 
+        this.lastEvents.unshift(description)
+        if(this.lastEvents.length > 50) {
+          this.lastEvents.pop()
+        }
+      }
     )
 
     this.trackingService.connectionStatus.subscribe(
