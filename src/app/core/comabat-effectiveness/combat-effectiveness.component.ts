@@ -44,9 +44,7 @@ export class CombatEffectivenessComponent implements OnInit {
     this.trackingService.connect()
     this.playerEventsListener.stratListening()
     this.combatEffectivenessService.playersCombatEffectivenessObservable.subscribe(
-      playersComef => { 
-        this.trackedPlayers = playersComef
-      }
+      playersComef => { this.trackedPlayers = playersComef }
     )
 
     this.lastEventsService.eventDescription.subscribe(
@@ -119,9 +117,8 @@ export class CombatEffectivenessComponent implements OnInit {
               })
           })
 
-          outfit.offlinePlayers?.forEach(player => {
-            this.trackingService.startTrackingById(player.id)
-          })
+          const offlineMembers = outfit.offlinePlayers!!.map(p => p.id)
+          this.trackingService.startTrackingIds(offlineMembers)
         }
       })
       .catch(() => {

@@ -72,6 +72,15 @@ export class TrackingService {
     })
   }
 
+  startTrackingIds(playerIds: String[]) {
+    this.subject.next({
+      service: CensusService.EVENT,
+      action: CensusAction.SUBSCRIBE,
+      characters: playerIds,
+      eventNames: this.EVENTS
+    })
+  }
+
   stopTracking(playerComef: PlayerCombatEffectiveness) {
     console.log("Stop tracking player ID = " + playerComef.id)
     this.subject.next({
