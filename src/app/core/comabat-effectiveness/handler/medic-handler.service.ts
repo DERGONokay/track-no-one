@@ -50,7 +50,7 @@ export class MedicHandler {
       const revivedPlayer = this.trackedPlayers.find(d => d.id == event.revivedPlayerId);
 
       if(revivedPlayer) {
-        console.log(`${revivedPlayer.name} took a ress`)
+        this.description.eventDescriptionData = `${revivedPlayer.name} took a ress`
         revivedPlayer.killerStats.deaths -= 1;
         this.combatEffectivenessService.updateCombatEffectiveness(revivedPlayer)
       }
