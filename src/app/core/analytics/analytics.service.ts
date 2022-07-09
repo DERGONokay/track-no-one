@@ -119,14 +119,14 @@ export class AnalyticsService {
 
   private parseFaction(faction: Faction): String {
     switch(faction) {
-      case Faction.NSO:
-        return "NSO"
       case Faction.TR:
         return "TR"
       case Faction.VS:
         return "VS"
       case Faction.NC:
         return "NC"
+      default:
+        return "NSO"
     }
   }
 
