@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import Swal from 'sweetalert2';
 import { TrackingService } from '../event/tracking/tracking.service';
 import { PlayerRepository } from '../player/player.repository';
@@ -48,6 +48,7 @@ export class CombatEffectivenessComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.analytics.trackPageShow("comef")
     this.trackingService.connect()
     this.playerEventsListener.stratListening()
     this.combatEffectivenessService.playersCombatEffectivenessObservable.subscribe(
@@ -94,6 +95,7 @@ export class CombatEffectivenessComponent implements OnInit {
     this.playerRepository.findByName(this.playerName.value)
       .then(player => { this.startTracking(player) })
       .catch(() => {
+        this.analytics.trackPlayerError("2000", "Player not found", this.playerName.value)
         Swal.fire({
           icon: "error",
           title: "Couldn't find " + this.playerName.value
@@ -116,6 +118,7 @@ export class CombatEffectivenessComponent implements OnInit {
         console.log("Outfit found", outfit);
 
         if(!outfit.onlinePlayers || outfit.onlinePlayers.length == 0) {
+          this.analytics.trackOutfitError("1001", "Outfit does not have online members", this.outfitTag.value)
           Swal.fire({
             icon: "info",
             title: "No online members found in " + outfit.name,
@@ -140,6 +143,7 @@ export class CombatEffectivenessComponent implements OnInit {
         }
       })
       .catch(() => {
+        this.analytics.trackOutfitError("1000", "Failed to find outfit by tag", this.outfitTag.value)
         Swal.fire({
           icon: "error",
           title: "Couldn't find outfit with tag " + this.outfitTag.value

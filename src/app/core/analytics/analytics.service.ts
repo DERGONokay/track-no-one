@@ -10,12 +10,15 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class AnalyticsService {
-
   private playersTracking: Map<String, number>
 
   constructor(private playerRepository: PlayerRepository) {
     amplitude.init(environment.amplitudeApiKey);
     this.playersTracking = new Map()
+  }
+
+  trackPageShow(pageName: String) {
+    amplitude.track(pageName + "_show")
   }
 
   trackPlayerComef(playerComef: PlayerCombatEffectiveness) {
@@ -24,7 +27,7 @@ export class AnalyticsService {
       this.playersTracking.set(playerComef.id, playerComef.sessionLenghtInSeconds)
       this.playerRepository.findById(playerComef.id)
       .then(player => {
-        amplitude.track("update_player_combat_effectiveness", {
+        amplitude.track("comef_refresh", {
           player_name: player.name,
           outfit_name: player.outfit?.name,
           faction: this.parseFaction(player.faction),
@@ -43,7 +46,7 @@ export class AnalyticsService {
   }
 
   startTrackingPlayer(player: Player) {
-    amplitude.track("start_tracking_player", {
+    amplitude.track("comef_start_tracking_player", {
       player_name: player.name,
       outfit_name: player.outfit?.name,
       faction: player.faction
@@ -52,7 +55,7 @@ export class AnalyticsService {
 
   playerSessionEnded(playerComef: PlayerCombatEffectiveness) {
     this.playerRepository.findById(playerComef.id).then(player => {
-      amplitude.track("stop_tracking_player", {
+      amplitude.track("comef_stop_tracking_player", {
         player_name: player.name,
         outfit_name: player.outfit?.name,
         faction: this.parseFaction(player.faction),
@@ -70,13 +73,13 @@ export class AnalyticsService {
   }
 
   addPlayerClick(playerName: String) {
-    amplitude.track("start_tracking_player_click", {
+    amplitude.track("comef_start_tracking_player_click", {
       player_name: playerName.toLowerCase()
     })
   }
 
   addOutfitClick(outfitTag: String){
-    amplitude.track("start_tracking_outfit_click", {
+    amplitude.track("comef_start_tracking_outfit_click", {
       outfit_tag: outfitTag
     })
   }
@@ -84,6 +87,23 @@ export class AnalyticsService {
   comefHelpShow() {
     amplitude.track("comef_help_show")
   }
+  
+  trackOutfitError(code: String, description: String, outfitTag: String) {
+    amplitude.track("comef_error", {
+      code: code,
+      description: description,
+      outfit_tag: outfitTag
+    })
+  }
+
+  trackPlayerError(code: String, description: String, playerName: String) {
+    amplitude.track("comef_error", {
+      code: code,
+      description: description,
+      player_name: playerName
+    })
+  }
+
 
   private parseFaction(faction: Faction): String {
     switch(faction) {
