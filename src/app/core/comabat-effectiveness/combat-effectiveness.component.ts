@@ -14,6 +14,7 @@ import { OutfitEvents } from '../event/outfit/player.event';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { stat } from 'fs';
 
 @Component({
   selector: 'app-combat-effectiveness',
@@ -128,6 +129,7 @@ export class CombatEffectivenessComponent implements OnInit {
           if(!this.isAlreadyTracked(outfit)) {
             this.trackedOutfits.push(outfit)
             this.outfitEvents.outfitsTrackedData = this.trackedOutfits
+            this.analytics.startTrackingOutfit(outfit)
           }
           
           outfit.onlinePlayers.forEach(member => {
@@ -181,6 +183,10 @@ export class CombatEffectivenessComponent implements OnInit {
             "SCOUT_STATS = QS * MS<br>" +
             "LOGISTIC_STATS = (SS + SQ*2) + TA + (BK + RK*4) * 20<br>"
     })
+  }
+
+  connectionCheck(status: String) {
+    this.analytics.trackConnectionCheck(status)
   }
 
   private startTracking(player: Player) {

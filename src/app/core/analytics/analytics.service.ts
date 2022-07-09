@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { PlayerCombatEffectiveness } from '../comabat-effectiveness/combat-effectiveness.model';
-import { Player, Faction } from '../player/player.model';
+import { Player, Faction, Outfit } from '../player/player.model';
 import { PlayerRepository } from '../player/player.repository';
 
 import * as amplitude from '@amplitude/analytics-browser';
@@ -33,7 +33,7 @@ export class AnalyticsService {
           faction: this.parseFaction(player.faction),
           class: playerComef.currentClass,
           combat_effectiveness: playerComef.combatEffectiveness,
-          seesion_lenght: playerComef.sessionLenghtInSeconds,
+          session_lenght: playerComef.sessionLenghtInSeconds,
           killer_score: playerComef.killerStats.score,
           medic_score: playerComef.medicStats.score,
           scout_score: playerComef.scoutStats.score,
@@ -53,6 +53,13 @@ export class AnalyticsService {
     })
   }
 
+  startTrackingOutfit(outfit: Outfit) {
+    amplitude.track("comef_start_tracking_outfit", {
+      outfit_name: outfit.name,
+      outfit_tag: outfit.tag
+    })
+  }
+
   playerSessionEnded(playerComef: PlayerCombatEffectiveness) {
     this.playerRepository.findById(playerComef.id).then(player => {
       amplitude.track("comef_stop_tracking_player", {
@@ -61,7 +68,7 @@ export class AnalyticsService {
         faction: this.parseFaction(player.faction),
         class: playerComef.currentClass,
         combat_effectiveness: playerComef.combatEffectiveness,
-        seesion_lenght: playerComef.sessionLenghtInSeconds,
+        session_lenght: playerComef.sessionLenghtInSeconds,
         killer_score: playerComef.killerStats.score,
         medic_score: playerComef.medicStats.score,
         scout_score: playerComef.scoutStats.score,
@@ -104,6 +111,11 @@ export class AnalyticsService {
     })
   }
 
+  trackConnectionCheck(status: String) {
+    amplitude.track("comef_connection_check", {
+      status: status
+    })
+  }
 
   private parseFaction(faction: Faction): String {
     switch(faction) {

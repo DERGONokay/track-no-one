@@ -9,8 +9,8 @@
 <mat-divider class="divider"></mat-divider>
 
 <div class="connection-ready-icon">
-    <mat-icon *ngIf="!connectionReady" color="warn" matTooltip="PS2 Event streaming connection PENDING">sensors</mat-icon>
-    <mat-icon *ngIf="connectionReady" color="accent" matTooltip="PS2 Event streaming connection READY">sensors</mat-icon>
+    <mat-icon *ngIf="!connectionReady" color="warn" matTooltip="PS2 Event streaming connection PENDING" (mouseenter)="connectionCheck('pending')">sensors</mat-icon>
+    <mat-icon *ngIf="connectionReady" color="accent" matTooltip="PS2 Event streaming connection READY" (mouseenter)="connectionCheck('ready')">sensors</mat-icon>
 </div>
 
 <mat-form-field class="inputs">
