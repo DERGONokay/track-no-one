@@ -7,4 +7,5 @@ export const environment = {
   googleAnalyticsId: "G-5CQ03MW07F",
   trackPageviews: true,
   debugGoogleAnalytics: false,
+  amplitudeApiKey: "410676ec8dd5bee8e63855c5287ea79d",
 };

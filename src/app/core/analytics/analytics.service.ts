@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Gtag } from 'angular-gtag';
 import { PlayerCombatEffectiveness } from '../comabat-effectiveness/combat-effectiveness.model';
-import { Player } from '../player/player.model';
+import { Player, Faction } from '../player/player.model';
 import { PlayerRepository } from '../player/player.repository';
-import { EventCategory } from './analytics.model';
+
+import * as amplitude from '@amplitude/analytics-browser';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,8 @@ export class AnalyticsService {
 
   private playersTracking: Map<String, number>
 
-  constructor(private gtag: Gtag, private playerRepository: PlayerRepository) {
+  constructor(private playerRepository: PlayerRepository) {
+    amplitude.init(environment.amplitudeApiKey);
     this.playersTracking = new Map()
   }
 
@@ -22,12 +24,10 @@ export class AnalyticsService {
       this.playersTracking.set(playerComef.id, playerComef.sessionLenghtInSeconds)
       this.playerRepository.findById(playerComef.id)
       .then(player => {
-        this.gtag.event("update_player_combat_effectiveness", {
-          event_category: EventCategory.COMEF_TRACKING,
-          event_label: "Player combat effectiveness updated",
-          value: player.name,
-          outfit: player.outfit?.name,
-          faction: player.faction,
+        amplitude.track("update_player_combat_effectiveness", {
+          player_name: player.name,
+          outfit_name: player.outfit?.name,
+          faction: this.parseFaction(player.faction),
           class: playerComef.currentClass,
           combat_effectiveness: playerComef.combatEffectiveness,
           seesion_lenght: playerComef.sessionLenghtInSeconds,
@@ -43,23 +43,19 @@ export class AnalyticsService {
   }
 
   startTrackingPlayer(player: Player) {
-    this.gtag.event("start_tracking_player", {
-      event_category: EventCategory.COMEF_TRACKING,
-      event_label: "Started to track a player",
-      value: player.name,
-      outfit: player.outfit?.name,
+    amplitude.track("start_tracking_player", {
+      player_name: player.name,
+      outfit_name: player.outfit?.name,
       faction: player.faction
     })
   }
 
   playerSessionEnded(playerComef: PlayerCombatEffectiveness) {
     this.playerRepository.findById(playerComef.id).then(player => {
-      this.gtag.event("stop_tracking_player", {
-        event_category: EventCategory.COMEF_TRACKING,
-        event_label: "Stop tracking a player",
-        value: player.name,
-        outfit: player.outfit?.name,
-        faction: player.faction,
+      amplitude.track("stop_tracking_player", {
+        player_name: player.name,
+        outfit_name: player.outfit?.name,
+        faction: this.parseFaction(player.faction),
         class: playerComef.currentClass,
         combat_effectiveness: playerComef.combatEffectiveness,
         seesion_lenght: playerComef.sessionLenghtInSeconds,
@@ -74,26 +70,32 @@ export class AnalyticsService {
   }
 
   addPlayerClick(playerName: String) {
-    this.gtag.event("start_tracking_player_click", {
-      event_category: EventCategory.INTERACTION,
-      event_label: "Add a single player to the tracking list",
-      value: playerName.toLowerCase()
+    amplitude.track("start_tracking_player_click", {
+      player_name: playerName.toLowerCase()
     })
   }
 
   addOutfitClick(outfitTag: String){
-    this.gtag.event("start_tracking_outfit_click", {
-      event_category: EventCategory.INTERACTION,
-      event_label: "Add entire outfit to tracking list",
-      value: outfitTag.toUpperCase()
+    amplitude.track("start_tracking_outfit_click", {
+      outfit_tag: outfitTag
     })
   }
 
   comefHelpShow() {
-    this.gtag.event("comef_help_show", {
-      event_category: EventCategory.INTERACTION,
-      event_label: "Show Combat Effectiveness calculation dialog",
-    })
+    amplitude.track("comef_help_show")
+  }
+
+  private parseFaction(faction: Faction): String {
+    switch(faction) {
+      case Faction.NSO:
+        return "NSO"
+      case Faction.TR:
+        return "TR"
+      case Faction.VS:
+        return "VS"
+      case Faction.NC:
+        return "NC"
+    }
   }
 
 }
