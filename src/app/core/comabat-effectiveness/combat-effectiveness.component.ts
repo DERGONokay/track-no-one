@@ -28,7 +28,7 @@ export class CombatEffectivenessComponent implements OnInit {
   playerName = new UntypedFormControl()
   outfitTag = new UntypedFormControl()
 
-  displayedColumns = ["class", "name", "comef", "actions"]
+  displayedColumns = ["class", "name", "killer_score", "medic_score", "scout_score", "engi_score", "logistics_score", "objective_score", "comef", "actions"]
   trackedPlayers = new MatTableDataSource<PlayerCombatEffectiveness>()
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined
   @ViewChild(MatSort) sort: MatSort | undefined

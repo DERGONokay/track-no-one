@@ -54,6 +54,36 @@
                         <td mat-cell *matCellDef="let element"> {{element.name}} </td>
                     </ng-container>
 
+                    <ng-container matColumnDef="killer_score">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header="killerStats.score">Killer Score</th>
+                        <td mat-cell *matCellDef="let element"> {{ element.killerStats.score | number: '1.2-2' }} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="medic_score">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header="medicStats.score">Medic Score</th>
+                        <td mat-cell *matCellDef="let element"> {{ element.medicStats.score | number: '1.2-2' }} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="scout_score">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header="scoutStats.score">Scout Score</th>
+                        <td mat-cell *matCellDef="let element"> {{ element.scoutStats.score | number: '1.2-2' }} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="engi_score">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header="engiStats.score">Engi Score</th>
+                        <td mat-cell *matCellDef="let element"> {{ element.engiStats.score | number: '1.2-2' }} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="logistics_score">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header="logisticsStats.score">Logistics Score</th>
+                        <td mat-cell *matCellDef="let element"> {{ element.logisticsStats.score | number: '1.2-2' }} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="objective_score">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header="objectiveStats.score">Objective Score</th>
+                        <td mat-cell *matCellDef="let element"> {{ element.objectiveStats.score | number: '1.2-2' }} </td>
+                    </ng-container>
+
                     <ng-container matColumnDef="comef">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header="combatEffectiveness">Combat Effectiveness</th>
                         <td mat-cell *matCellDef="let element"> {{ element.combatEffectiveness | number: '1.2-2' }} </td>
