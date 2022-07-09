@@ -125,8 +125,10 @@ export class AnalyticsService {
         return "VS"
       case Faction.NC:
         return "NC"
-      default:
+      case Faction.NSO:
         return "NSO"
+      default:
+        return "NONE"
     }
   }
 

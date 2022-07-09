@@ -12,14 +12,13 @@ export class OutfitRepository {
 
   async findByTag(tag: String): Promise<Outfit> {
     const response = await this.outfirService.findMembersByTag(tag).toPromise()
-
     if(!response || response.returned == 0) {
       throw new Error("Outfit not found. TAG = " + tag)
     }
 
     const outfitRepresentation = response.outfit_list[0]
-    const onlineMembers = outfitRepresentation.members.filter(m => m.online_status == OnlineStatus.ONLINE )
-    const offlineMembers = outfitRepresentation.members.filter(m => m.online_status == OnlineStatus.OFFLINE )
+    const onlineMembers = outfitRepresentation.members.filter(m => m.online_status == OnlineStatus.ONLINE && m.name)
+    const offlineMembers = outfitRepresentation.members.filter(m => m.online_status == OnlineStatus.OFFLINE && m.name)
     const onlinePlayers = onlineMembers.map(m => this.parseToPlayer(m, outfitRepresentation))
     const offlinePlayers = offlineMembers.map(m => this.parseToPlayer(m, outfitRepresentation))
 

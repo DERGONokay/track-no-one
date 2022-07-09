@@ -144,11 +144,12 @@ export class CombatEffectivenessComponent implements OnInit {
           this.trackingService.startTrackingIds(offlineMembers)
         }
       })
-      .catch(() => {
+      .catch(error => {
         this.analytics.trackOutfitError("1000", "Failed to find outfit by tag", this.outfitTag.value)
         Swal.fire({
           icon: "error",
-          title: "Couldn't find outfit with tag " + this.outfitTag.value
+          title: "Couldn't find outfit with tag " + this.outfitTag.value,
+          text: error
         });
       })
       .finally(() => {

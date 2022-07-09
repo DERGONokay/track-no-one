@@ -17,8 +17,9 @@ export interface Outfit {
 }
 
 export enum Faction {
-    NSO = "0",
+    NONE = "0",
     VS = "1",
     NC = "2",
-    TR = "3"
+    TR = "3",
+    NSO = "4"
 }
