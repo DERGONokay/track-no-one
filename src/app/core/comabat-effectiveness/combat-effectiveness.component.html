@@ -40,23 +40,30 @@
                     <ng-container matColumnDef="class">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header="currentClass">Class</th>
                         <td mat-cell *matCellDef="let element">
-                            <img class="class-logo" *ngIf="element.currentClass == 'Infiltrator'" src="../../../assets/ps2/infiltrator-logo.png">
-                            <img class="class-logo" *ngIf="element.currentClass == 'Light Assault'" src="../../../assets/ps2/la-logo.png">
-                            <img class="class-logo" *ngIf="element.currentClass == 'Combat Medic'" src="../../../assets/ps2/medic-logo.png">
-                            <img class="class-logo" *ngIf="element.currentClass == 'Engineer'" src="../../../assets/ps2/engi-logo.png">
-                            <img class="class-logo" *ngIf="element.currentClass == 'Heavy Assault'" src="../../../assets/ps2/heavy-logo.png">
-                            <img class="class-logo" *ngIf="element.currentClass == 'MAX'" src="../../../assets/ps2/max-logo.png">
+                            <img class="class-logo" *ngIf="element.currentClass == 'Infiltrator'" src="../../../assets/ps2/infiltrator-logo.png" type="image/png">
+                            <img class="class-logo" *ngIf="element.currentClass == 'Light Assault'" src="../../../assets/ps2/la-logo.png" type="image/png">
+                            <img class="class-logo" *ngIf="element.currentClass == 'Combat Medic'" src="../../../assets/ps2/medic-logo.png" type="image/png">
+                            <img class="class-logo" *ngIf="element.currentClass == 'Engineer'" src="../../../assets/ps2/engi-logo.png" type="image/png">
+                            <img class="class-logo" *ngIf="element.currentClass == 'Heavy Assault'" src="../../../assets/ps2/heavy-logo.png" type="image/png">
+                            <img class="class-logo" *ngIf="element.currentClass == 'MAX'" src="../../../assets/ps2/max-logo.png" type="image/png">
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="outfit">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header="outfitTag">Outfit</th>
+                        <td mat-cell *matCellDef="let element">
+                            <a *ngIf="element.outfitTag"> [{{ element.outfitTag }}] </a>
                         </td>
                     </ng-container>
 
                     <ng-container matColumnDef="name">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header="name">Name</th>
-                        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="killer_score">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header="killerStats.score">Killer Score</th>
-                        <td mat-cell *matCellDef="let element"> {{ element.killerStats.score | number: '1.2-2' }} </td>
+                        <td mat-cell *matCellDef="let element" style="padding-left: 5px;"> {{ element.killerStats.score | number: '1.2-2' }} </td>
                     </ng-container>
 
                     <ng-container matColumnDef="medic_score">
@@ -85,7 +92,7 @@
                     </ng-container>
 
                     <ng-container matColumnDef="comef">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header="combatEffectiveness">Combat Effectiveness</th>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header="combatEffectiveness">COMEF</th>
                         <td mat-cell *matCellDef="let element"> {{ element.combatEffectiveness | number: '1.2-2' }} </td>
                     </ng-container>
 
