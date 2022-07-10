@@ -14,7 +14,6 @@ import { OutfitEvents } from '../event/outfit/player.event';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { stat } from 'fs';
 
 @Component({
   selector: 'app-combat-effectiveness',

@@ -8,11 +8,17 @@
 }
 
 .tracking-list {
-    margin: 1rem;
+    margin-left: 1rem;
     display: inline-block;
-    width: 45%;
-    min-height: 500px;
-    max-height: 600px;
+    width: 55%;
+    vertical-align: top;
+}
+
+.last-events-list {
+    margin-left: 1rem;
+    display: inline-block;
+    width: 40%;
+    max-height: 625px;
     overflow: scroll;
     vertical-align: top;
 }
